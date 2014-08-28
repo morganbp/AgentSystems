@@ -1,5 +1,7 @@
 package no.agentsystems_dhom.server;
 
+import TACSCMApp.SCM;
+
 
 public class SCM_Server extends Thread{
 	private SCM server;
@@ -31,18 +33,22 @@ public class SCM_Server extends Thread{
 	
 	public double getInterestRate(){
 		//TODO return interest rate 
+		return 0.0;
 	}
 	
 	public double getLoanInterestRate(){
 		//TODO return loan interest rate
+		return 0.0;
 	}
 	
 	public double getStorageCosts(){
 		//TODO return storage costs
+		return 0.0;
 	}
 	
 	public Message agentRegistering(Message kqml){
 		//TODO register agent
+		return null;
 	}
 	
 }
