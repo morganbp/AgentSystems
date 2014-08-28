@@ -1,0 +1,12 @@
+module TACSCMApp
+{
+	interface SCM
+	{
+		string send(in string str);
+		boolean status();
+		short getTime();
+		double getInterestRate();
+		double getLoanInterestRate();
+		double getStorageCost();
+	};
+};
