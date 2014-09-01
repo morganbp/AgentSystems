@@ -12,6 +12,7 @@ public class SCM_Server extends Thread{
 	
 	public SCM_Server(){
 		// added a new comment
+		// added another comment
 	}
 	
 	public static void main(String[] args){
