@@ -1,8 +1,7 @@
 package no.agentsystems_dhom.server;
 
-import java.rmi.server.ServerCloneException;
+import org.omg.CORBA.ORB;
 
-import org.omg.CORBA_2_3.ORB;
 
 public class TACSSCMImpl extends SCMPOA{
 	//Corba_2_3
