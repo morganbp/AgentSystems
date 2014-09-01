@@ -11,7 +11,7 @@ public class SCM_Server extends Thread{
 	private boolean isOn;
 	
 	public SCM_Server(){
-		//TODO construction of the object
+		// added a new comment
 	}
 	
 	public static void main(String[] args){
