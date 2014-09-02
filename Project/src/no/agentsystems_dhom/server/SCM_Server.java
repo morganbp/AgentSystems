@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.rmi.CORBA.Util;
-
 import no.agentsystems_dhom.game_elements.Agent;
 import no.agentsystems_dhom.game_elements.Bank;
 import no.agentsystems_dhom.game_elements.BankAccount;
@@ -21,11 +19,12 @@ import org.omg.PortableServer.Servant;
 
 import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
-
 public class SCM_Server extends Thread {
 	// private variables
 
 	private GUI serverView;
+
+	 
 
 	// gameId is the date and time for a game round
 
@@ -45,9 +44,13 @@ public class SCM_Server extends Thread {
 
 	private boolean isOn = false;
 
+	 
+
 	// an agent list
 
 	private ArrayList<Agent> agentList = new ArrayList<Agent>();
+
+	 
 
 	// Bank
 
@@ -69,68 +72,46 @@ public class SCM_Server extends Thread {
 
 	public static void main(String[] args) {
 		try {
-
 			SCM_Server server = new SCM_Server();
-
 			server.start();
 
 			// create and initialize the ORB
-
 			ORB orb = ORB.init(args, null);
 
 			// get reference to root poa & activate the POAManager
-
 			POA rootpoa = POAHelper.narrow(orb
 					.resolve_initial_references("RootPOA"));
-
 			rootpoa.the_POAManager().activate();
 
 			// create servant and register it with the ORB
-
 			TACSCMImpl SCMImpl = new TACSCMImpl(orb, server);
-
+			
+			
 			// get object reference from the servant
-
 			org.omg.CORBA.Object ref = rootpoa.servant_to_reference(SCMImpl);
-
 			SCM href = SCMHelper.narrow(ref);
 
 			// get the root naming context
-
 			// NameService invokes the name service
-
 			org.omg.CORBA.Object objRef =
-
 			orb.resolve_initial_references("NameService");
 
 			// Use NamingContextExt which is part of the network-operable
-
 			// Naming Service (INS) specification.
-
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
 			// bind the Object Reference in Naming
-
 			String name = "TACSCM";
-
 			NameComponent path[] = ncRef.to_name(name);
-
 			ncRef.rebind(path, href);
-
 			System.out.println("TACServer starting ...");
 
 			// wait for invocations from clients
-
 			orb.run();
 
-		}
-
-		catch (Exception e) {
-
+		}catch (Exception e) {
 			System.err.println("ERROR: " + e);
-
 			e.printStackTrace(System.out);
-
 		}
 
 		System.out.println("TACServer Exiting ...");
@@ -497,7 +478,7 @@ class TACSCMImpl extends SCMPOA {
 
 	public double getStorageCost() {
 
-		return server.getStorageCost();
+		return server.getStorageCosts();
 
 	}
 
