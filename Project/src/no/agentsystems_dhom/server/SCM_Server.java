@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import no.agentsystems_dhom.game_elements.Agent;
+import no.agentsystems_dhom.agent.Agent;
 import no.agentsystems_dhom.game_elements.Bank;
 import no.agentsystems_dhom.game_elements.BankAccount;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
