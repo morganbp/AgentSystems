@@ -2,6 +2,8 @@ package no.agentsystems_dhom.server;
 
 import org.omg.CORBA.ORB;
 
+import TACSCMApp.SCMPOA;
+
 
 public class TACSSCMImpl extends SCMPOA{
 	private ORB orb;
