@@ -8,15 +8,15 @@ public class SCM_Customer {
 	private boolean has_started;
 	private GUI gui;
 	
-	public void startTheGame(){
+	protected void startTheGame(){
 		
 	}
 	
-	public void closeTheGame(){
+	protected void closeTheGame(){
 		
 	}
 	
-	public boolean getStatus(){
+	protected boolean getStatus(){
 		return has_started;
 	}
 }

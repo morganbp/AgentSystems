@@ -8,6 +8,7 @@ import no.agentsystems_dhom.game_elements.Agent;
 import no.agentsystems_dhom.game_elements.Bank;
 import no.agentsystems_dhom.game_elements.BankAccount;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
+import no.agentsystems_dhom.yinyang.Message;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -15,10 +16,10 @@ import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
-import org.omg.PortableServer.Servant;
 
 import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
+import TACSCMApp.SCMPOA;
 public class SCM_Server extends Thread {
 	// private variables
 
