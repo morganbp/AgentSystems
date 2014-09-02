@@ -4,7 +4,6 @@ import org.omg.CORBA.ORB;
 
 
 public class TACSSCMImpl extends SCMPOA{
-	//Corba_2_3
 	private ORB orb;
 	private SCM_Server server;
 	
@@ -15,7 +14,7 @@ public class TACSSCMImpl extends SCMPOA{
 		return false;
 	}
 	public short getTime(){
-		return server.getTime();
+		return (short) server.getTime();
 	}
 	public double getInterestRate(){
 		return 0;
