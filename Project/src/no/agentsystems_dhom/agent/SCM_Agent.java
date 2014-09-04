@@ -1,6 +1,6 @@
 package no.agentsystems_dhom.agent;
 
-import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.game_elements.GUI;
 import TACSCMApp.SCM;
 
 public class SCM_Agent {

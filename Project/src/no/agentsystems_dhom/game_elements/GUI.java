@@ -1,4 +1,4 @@
-package no.agentsystems_dhom.server;
+package no.agentsystems_dhom.game_elements;
 
 import java.awt.BorderLayout;
 import java.awt.Container;

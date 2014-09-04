@@ -7,6 +7,20 @@ import no.agentsystems_dhom.agent.Agent;
 
 public class Bank {
 
+	private ArrayList<BankAccount> accounts = new ArrayList<BankAccount>();
+	private double interestRate;
+	private double loanInterestRate;
+	
+	public void add(BankAccount acc){
+		accounts.add(acc);
+	}
+	
+	public void updateBalance(){
+		for(BankAccount b : accounts){
+			b.updateBalance(interestRate, loanInterestRate);
+		}
+	}
+	
 	public void setInterestRate(double interestRate) {
 		// TODO Auto-generated method stub
 		

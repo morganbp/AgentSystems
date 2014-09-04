@@ -1,6 +1,6 @@
 package no.agentsystem_dhom.supplier;
 
-import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.server.SCM_Server;
 
 public class SCM_Supplier {

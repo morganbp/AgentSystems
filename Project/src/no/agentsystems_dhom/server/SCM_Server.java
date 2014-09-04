@@ -7,6 +7,7 @@ import java.util.Date;
 import no.agentsystems_dhom.agent.Agent;
 import no.agentsystems_dhom.game_elements.Bank;
 import no.agentsystems_dhom.game_elements.BankAccount;
+import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
 import no.agentsystems_dhom.yinyang.Message;
 
@@ -24,8 +25,6 @@ public class SCM_Server extends Thread {
 	// private variables
 
 	private GUI serverView;
-
-	 
 
 	// gameId is the date and time for a game round
 
