@@ -33,11 +33,16 @@ public class SCM_Customer {
 	        String name = "TACSCM";
 	        scmImpl = SCMHelper.narrow(ncRef.resolve_str(name));
 	        custgui = new GUI("SCM_C1");
+
+        	short curTime = scmImpl.getTime();
+        	custgui.setText("---->> Time: "+Short.toString(curTime) + " seconds");
+        	
 	        for(;;){
 	        	
-	        	short curTime = scmImpl.getTime();
-	        	custgui.setText("---->> Time: "+Short.toString(curTime) + " seconds");
 	        	
+	        	if(curTime % 9 == 0){
+	        		custgui.append(Integer.toString(curTime/9));
+	        	}
 	        	
 	        	
 	        	Thread.sleep(TAC_Ontology.sec);
