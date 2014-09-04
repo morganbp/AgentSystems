@@ -39,9 +39,9 @@ public class SCM_Customer {
         	
 	        for(;;){
 	        	
-	        	
+	        	System.out.println();
 	        	if(curTime % 9 == 0){
-	        		custgui.append(Integer.toString(curTime/9));
+	        		custgui.append("\nDay: " + Integer.toString(curTime/9));
 	        	}
 	        	
 	        	
