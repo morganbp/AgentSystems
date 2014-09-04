@@ -5,11 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import no.agentsystems_dhom.agent.Agent;
-import no.agentsystems_dhom.game_elements.Bank;
-import no.agentsystems_dhom.game_elements.BankAccount;
 import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
-import no.agentsystems_dhom.yinyang.Message;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -18,6 +15,7 @@ import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
+import yinyang.Message;
 import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 import TACSCMApp.SCMPOA;

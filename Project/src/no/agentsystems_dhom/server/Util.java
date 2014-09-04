@@ -3,7 +3,7 @@ package no.agentsystems_dhom.server;
 import java.util.Random;
 
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
-import no.agentsystems_dhom.yinyang.Message;
+import yinyang.Message;
 
 public class Util {
 	   public static int poisson(double averageNumber)

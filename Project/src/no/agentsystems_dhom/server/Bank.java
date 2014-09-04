@@ -1,4 +1,4 @@
-package no.agentsystems_dhom.game_elements;
+package no.agentsystems_dhom.server;
 
 import java.awt.List;
 import java.util.ArrayList;
