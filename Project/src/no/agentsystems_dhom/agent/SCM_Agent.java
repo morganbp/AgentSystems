@@ -12,7 +12,7 @@ public class SCM_Agent {
 	private SCM server;
 	protected int interval;
 	private boolean has_started;
-	private GUI agentView;
+	protected GUI agentView;
 	static TACSCMApp.SCM scmImpl;
 	
 	public static void initSCMImpl(String[] args){
@@ -51,5 +51,8 @@ public class SCM_Agent {
 	}
 	protected boolean getStatus(){
 		return has_started;
+	}
+	protected void setStatus(boolean status) {
+		has_started = status;
 	}
 }

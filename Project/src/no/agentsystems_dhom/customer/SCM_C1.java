@@ -30,8 +30,7 @@ public class SCM_C1 extends SCM_Customer {
 
 				if (time == 0 && getStatus()) {
 					int day = interval / TAC_Ontology.lengthOfADay;
-					guiField += "\nday : " + day;
-					
+					guiField += "\nday : " + day;	
 				}
 				custView.append(guiField);
 				interval++;
