@@ -56,5 +56,9 @@ public class SCM_Customer {
 		return has_started;
 	}
 	
+	protected void setStatus(boolean status){
+		has_started = status;
+	}
+	
 
 }

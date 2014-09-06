@@ -42,19 +42,23 @@ public class SCM_Supplier {
 		return scmImpl;
 	}
 	
-	public void startTheGame(){
+	protected void startTheGame(){
 		has_started = true;
 		interval = 0;
 		suplView.setText("---> TAC Game started.");
 	}
 	
-	public void closeTheGame()	{
+	protected void closeTheGame()	{
 		has_started = false;
 		suplView.append("\n\n---> The TAC Game is closed");
 	}
 	
-	public boolean getStatus(){
+	protected boolean getStatus(){
 		return has_started;
+	}
+	
+	protected void setStatus(boolean status){
+		has_started = status;
 	}
 
 }

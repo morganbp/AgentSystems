@@ -8,6 +8,9 @@ public class SCM_S1 extends SCM_Supplier {
 	
 	public SCM_S1(SCM scmImpl){
 		interval = scmImpl.getTime();
+		if(interval > 0 && scmImpl.status()){
+			setStatus(true);
+		}
 		suplView = new GUI("SCM_S1");
 		try{
 			suplView.setText("SCM_S1 is connected");
