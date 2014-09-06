@@ -7,16 +7,18 @@ public class SCM_C1 extends SCM_Customer {
 
 
 	public SCM_C1() {
+		String guiField = ""; 
 		interval = scmImpl.getTime();
 		if(interval > 0 && scmImpl.status()){
 			setStatus(true);
 		}
 		custView = new GUI("SCM_C1");
 		try {
-			custView.setText("SCM_C1 is connected!");
+			
 
 			for (;;) {
-
+				custView.setText("---> Time : " + interval + " seconds ");
+				
 				if (scmImpl.status() && !getStatus()) {
 					startTheGame();
 				}else if(interval == TAC_Ontology.gameLength){
@@ -28,9 +30,10 @@ public class SCM_C1 extends SCM_Customer {
 
 				if (time == 0 && getStatus()) {
 					int day = interval / TAC_Ontology.lengthOfADay;
-					custView.append("\nday : " + day);
+					guiField += "\nday : " + day;
+					
 				}
-
+				custView.append(guiField);
 				interval++;
 
 				Thread.sleep(TAC_Ontology.sec);
