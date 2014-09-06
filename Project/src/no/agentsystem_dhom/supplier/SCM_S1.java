@@ -7,16 +7,17 @@ import TACSCMApp.SCM;
 public class SCM_S1 extends SCM_Supplier {
 	
 	public SCM_S1(SCM scmImpl){
+		String guiField = ""; 
 		interval = scmImpl.getTime();
 		if(interval > 0 && scmImpl.status()){
 			setStatus(true);
 		}
 		suplView = new GUI("SCM_S1");
 		try{
-			suplView.setText("SCM_S1 is connected");
+			
 			
 			for(;;){
-				
+				suplView.setText("---> Time : " + interval + " seconds ");
 				if(scmImpl.status() && !getStatus()){
 					startTheGame();
 				}else if(interval == TAC_Ontology.gameLength){
@@ -27,9 +28,9 @@ public class SCM_S1 extends SCM_Supplier {
 				
 				if(time == 0 && getStatus()){
 					int day = interval / TAC_Ontology.lengthOfADay;
-					suplView.append("\nday: " + day);
+					guiField += "\nday : " + day;
 				}
-				
+				suplView.append(guiField);
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);
