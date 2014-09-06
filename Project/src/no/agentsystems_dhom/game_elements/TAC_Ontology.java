@@ -41,7 +41,7 @@ public class TAC_Ontology {
 	public static int min = 60*sec;
     // numbers of TAC days
 //  public static int numberOfTacDays = 220; 
-	public static int numberOfTacDays = 5; 
+	public static int numberOfTacDays = 30; 
     // The length of a TAC day in second
 //  public static int lengthOfADay = 15; 
   public static int lengthOfADay = 10; 
