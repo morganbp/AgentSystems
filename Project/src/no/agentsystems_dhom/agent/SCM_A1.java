@@ -7,6 +7,8 @@ public class SCM_A1 extends SCM_Agent{
 	public SCM_A1(){
 		String guiField = "";
 		interval = scmImpl.getTime();
+		// skal kalle denne, men hva skal inni?
+		//scmImpl.send("");
 		if(interval > 0 && scmImpl.status()){
 			setStatus(true);
 		}
