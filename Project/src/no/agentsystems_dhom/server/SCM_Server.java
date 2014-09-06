@@ -19,6 +19,7 @@ import yinyang.Message;
 import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 import TACSCMApp.SCMPOA;
+
 public class SCM_Server extends Thread {
 	// private variables
 
@@ -42,13 +43,9 @@ public class SCM_Server extends Thread {
 
 	private boolean isOn = false;
 
-	 
-
 	// an agent list
 
 	private ArrayList<Agent> agentList = new ArrayList<Agent>();
-
-	 
 
 	// Bank
 
@@ -83,16 +80,15 @@ public class SCM_Server extends Thread {
 
 			// create servant and register it with the ORB
 			TACSCMImpl SCMImpl = new TACSCMImpl(orb, server);
-			
-			
+
 			// get object reference from the servant
 			org.omg.CORBA.Object ref = rootpoa.servant_to_reference(SCMImpl);
 			SCM href = SCMHelper.narrow(ref);
 
 			// get the root naming context
 			// NameService invokes the name service
-			org.omg.CORBA.Object objRef =
-			orb.resolve_initial_references("NameService");
+			org.omg.CORBA.Object objRef = orb
+					.resolve_initial_references("NameService");
 
 			// Use NamingContextExt which is part of the network-operable
 			// Naming Service (INS) specification.
@@ -107,7 +103,7 @@ public class SCM_Server extends Thread {
 			// wait for invocations from clients
 			orb.run();
 
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR: " + e);
 			e.printStackTrace(System.out);
 		}
@@ -121,20 +117,14 @@ public class SCM_Server extends Thread {
 
 			try {
 
-				if (interval < 0)
+				if (interval < 0) {
 					serverView.setText("Server is waiting ... ");
-
-				else
-
-				if (interval == 0 || interval == TAC_Ontology.gameInterval) {
+				} else if (interval == 0
+						|| interval == TAC_Ontology.gameInterval) {
 
 					startTheGame(); // start the game at a specific time
 
-				}
-
-				else
-
-				if (interval == TAC_Ontology.gameLength) {
+				}else if (interval == TAC_Ontology.gameLength) {
 
 					endTheGame(); // close the game
 

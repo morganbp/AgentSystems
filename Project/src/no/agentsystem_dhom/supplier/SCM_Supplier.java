@@ -5,23 +5,30 @@ import no.agentsystems_dhom.server.SCM_Server;
 
 public class SCM_Supplier {
 	private SCM_Server server;
-	private int interval;
-	boolean has_started;
-	GUI gui;
+	private boolean has_started;
+	protected GUI suplView;
+	protected int interval;
 	
-	public void startTheGame()
-	{
-		
+	public void initSCMImpl(String[] args){
+		try{
+			
+		}catch(Exception e){
+			System.out.println();
+		}
 	}
 	
-	public void closeTheGame()
-	{
-		
+	public void startTheGame(){
+		has_started = true;
+		interval = 0;
+		suplView.setText("---> TAC Game started.");
 	}
 	
-	public boolean getStatus()
-	{
-		return true;
+	public void closeTheGame()	{
+		has_started = false;
+	}
+	
+	public boolean getStatus(){
+		return has_started;
 	}
 
 }

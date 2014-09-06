@@ -5,13 +5,10 @@ import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
 public class SCM_C1 extends SCM_Customer {
 
-	private int interval;
-	private int time;
-	private int day;
 
 	public SCM_C1() {
 		interval = scmImpl.getTime();
-		GUI custView = new GUI("SCM_C1");
+		custView = new GUI("SCM_C1");
 		try {
 			custView.setText("SCM_C1 is connected!");
 
@@ -24,10 +21,10 @@ public class SCM_C1 extends SCM_Customer {
 				}
 				
 
-				time = interval % TAC_Ontology.lengthOfADay;
+				int time = interval % TAC_Ontology.lengthOfADay;
 
 				if (time == 0 && getStatus()) {
-					day = interval / TAC_Ontology.lengthOfADay;
+					int day = interval / TAC_Ontology.lengthOfADay;
 					custView.append("\nday : " + day);
 				}
 

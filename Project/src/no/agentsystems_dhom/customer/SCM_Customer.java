@@ -14,6 +14,8 @@ public class SCM_Customer {
 	
 	private boolean has_started;
 	static TACSCMApp.SCM scmImpl;
+	protected GUI custView;
+	protected int interval;
 	
 	public static void initSCMImpl(String[] args){
 		try{
@@ -39,15 +41,20 @@ public class SCM_Customer {
 	
 	protected void startTheGame(){
 		has_started = true;
-		
+		interval = 0;
+		custView.setText("--> Game has started");
 	}
 	
 	protected void closeTheGame(){
 		has_started = false;
+		
+		custView.append("\n\n---> The TAC Game is closed");
 		
 	}
 	
 	protected boolean getStatus(){
 		return has_started;
 	}
+	
+
 }

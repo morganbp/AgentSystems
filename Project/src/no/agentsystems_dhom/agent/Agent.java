@@ -55,7 +55,6 @@ public class Agent extends Thread{
 		for(;;){
 			try {
 			agentView.setText(Integer.toString(scmImpl.getTime()));
-			//agentView.append("\nHei");
 			sleep(TAC_Ontology.sec);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
