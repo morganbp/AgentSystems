@@ -1,7 +1,6 @@
 package no.agentsystems_dhom.customer;
 
 import no.agentsystems_dhom.game_elements.GUI;
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
