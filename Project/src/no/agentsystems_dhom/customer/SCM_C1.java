@@ -2,19 +2,22 @@ package no.agentsystems_dhom.customer;
 
 import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
+import TACSCMApp.SCM;
 
 public class SCM_C1 extends SCM_Customer {
 
 
-	public SCM_C1() {
-		interval = scmImpl.getTime();
+	public SCM_C1(SCM _server) {
+		server = _server;
+		
+		interval = server.getTime();
 		custView = new GUI("SCM_C1");
 		try {
 			
 
 			for (;;) {
 				
-				if (scmImpl.status() && !getStatus()) {
+				if (server.status() && !getStatus()) {
 					startTheGame();
 				}else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -37,8 +40,8 @@ public class SCM_C1 extends SCM_Customer {
 	}
 
 	public static void main(String[] args) {
-		initSCMImpl(args);
-		new SCM_C1();
+		SCM ser = initSCMImpl(args);
+		new SCM_C1(ser);
 	}
 
 }

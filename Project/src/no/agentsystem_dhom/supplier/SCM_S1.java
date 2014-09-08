@@ -6,12 +6,12 @@ import TACSCMApp.SCM;
 
 public class SCM_S1 extends SCM_Supplier {
 	
-	public SCM_S1(SCM server){
+	public SCM_S1(SCM _server){
+		server = _server;
 		interval = server.getTime();
 		
 		suplView = new GUI("SCM_S1");
 		try{
-			
 			
 			for(;;){
 				if(server.status() && !getStatus()){
@@ -38,8 +38,8 @@ public class SCM_S1 extends SCM_Supplier {
 	}
 	
 	public static void main(String[] args){
-		SCM server = initSCMImpl(args);
-		new SCM_S1(server);
+		SCM ser = initServer(args);
+		new SCM_S1(ser);
 	}
 	
 	
