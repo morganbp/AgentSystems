@@ -1,4 +1,4 @@
-package no.agentsystem_dhom.supplier;
+package no.agentsystems_dhom.supplier;
 
 import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
