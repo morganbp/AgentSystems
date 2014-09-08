@@ -34,7 +34,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -10;
+	private int interval = -30;
 
 	private int day = 0;
 
@@ -326,8 +326,6 @@ public class SCM_Server extends Thread {
 			name += " is already registered!";
 
 		else {
-			
-			System.out.println("Regsiter Agent");
 			
 			agentList.add(a);
 
