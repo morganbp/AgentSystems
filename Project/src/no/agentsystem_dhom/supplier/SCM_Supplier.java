@@ -11,7 +11,6 @@ import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 
 public class SCM_Supplier {
-	private SCM_Server server;
 	private boolean has_started;
 	protected GUI suplView;
 	protected int interval;
@@ -45,7 +44,7 @@ public class SCM_Supplier {
 	protected void startTheGame(){
 		has_started = true;
 		interval = 0;
-		suplView.setText("---> TAC Game started.");
+		suplView.setText("---> Time : " + interval + " seconds ");
 	}
 	
 	protected void closeTheGame()	{

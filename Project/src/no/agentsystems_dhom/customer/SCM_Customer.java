@@ -41,7 +41,7 @@ public class SCM_Customer {
 	protected void startTheGame(){
 		has_started = true;
 		interval = 0;
-		custView.setText("---> TAC Game started.");
+		custView.setText("---> Time : " + interval + " seconds ");
 	}
 	
 	protected void closeTheGame(){

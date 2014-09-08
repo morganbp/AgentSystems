@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import no.agentsystems_dhom.agent.Agent;
 import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
@@ -35,7 +34,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -30;
+	private int interval = -10;
 
 	private int day = 0;
 
@@ -320,13 +319,16 @@ public class SCM_Server extends Thread {
 		int id = Integer.parseInt(kqml.getContent());
 
 		Agent a = new Agent(name, id);
-
+		
+		
 		if (agentRegistered(name, agentList))
 
 			name += " is already registered!";
 
 		else {
-
+			
+			System.out.println("Regsiter Agent");
+			
 			agentList.add(a);
 
 			bank.getBankAccounts().add(new BankAccount(a));

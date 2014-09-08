@@ -2,23 +2,22 @@ package no.agentsystems_dhom.agent;
 
 import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
+import TACSCMApp.SCM;
 
 public class SCM_A1 extends SCM_Agent{
-	public SCM_A1(){
-		String guiField = "";
-		interval = scmImpl.getTime();
-		// skal kalle denne, men hva skal inni?
-		//scmImpl.send("");
-		if(interval > 0 && scmImpl.status()){
-			setStatus(true);
-		}
+	
+	public SCM_A1(SCM _server){
+		server = _server;
+
 		agentView = new GUI("SCM_A1");
+		interval = server.getTime();
+		
 		try{
 			for(;;){
-				agentView.setText("---> Time : " + interval + " seconds ");
 				
-				if(scmImpl.status() && !getStatus()){
+				if(server.status() && !getStatus()){
 					startTheGame();
+					agentRegistering("SCM_A1", 1512631);
 				}
 				else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -27,9 +26,8 @@ public class SCM_A1 extends SCM_Agent{
 				int time = interval % TAC_Ontology.lengthOfADay;
 				if(time == 0 && getStatus()){
 					int day = interval / TAC_Ontology.lengthOfADay;
-					guiField += ("\nday : " + day);
+					agentView.append("\nday : " + day);
 				}
-				agentView.append(guiField);
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);
@@ -42,8 +40,8 @@ public class SCM_A1 extends SCM_Agent{
 	}
 
 	public static void main(String[] args){
-		initSCMImpl(args);
-		new SCM_A1();
+		SCM ser = initServer(args);
+		new SCM_A1(ser);
 	}
 
 }

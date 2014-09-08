@@ -1,9 +1,6 @@
 package no.agentsystems_dhom.server;
 
-import java.awt.List;
 import java.util.ArrayList;
-
-import no.agentsystems_dhom.agent.Agent;
 
 public class Bank {
 
@@ -33,11 +30,15 @@ public class Bank {
 
 	public ArrayList<BankAccount> getBankAccounts() {
 		// TODO Auto-generated method stub
-		return null;
+		return accounts;
 	}
 
 	public BankAccount getBankAccount(Agent a) {
-		// TODO Auto-generated method stub
+		for(BankAccount b : accounts){
+			if(b.getAgent().getId() == a.getId()){
+				return b;
+			}
+		}
 		return null;
 	}
 
