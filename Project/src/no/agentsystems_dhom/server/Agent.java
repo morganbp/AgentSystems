@@ -1,4 +1,4 @@
-package no.agentsystems_dhom.agent;
+package no.agentsystems_dhom.server;
 
 public class Agent {
 

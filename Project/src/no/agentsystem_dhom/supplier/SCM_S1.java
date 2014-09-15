@@ -6,19 +6,15 @@ import TACSCMApp.SCM;
 
 public class SCM_S1 extends SCM_Supplier {
 	
-	public SCM_S1(SCM scmImpl){
-		String guiField = ""; 
-		interval = scmImpl.getTime();
-		if(interval > 0 && scmImpl.status()){
-			setStatus(true);
-		}
+	public SCM_S1(SCM _server){
+		server = _server;
+		interval = server.getTime();
+		
 		suplView = new GUI("SCM_S1");
 		try{
 			
-			
 			for(;;){
-				suplView.setText("---> Time : " + interval + " seconds ");
-				if(scmImpl.status() && !getStatus()){
+				if(server.status() && !getStatus()){
 					startTheGame();
 				}else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -28,9 +24,8 @@ public class SCM_S1 extends SCM_Supplier {
 				
 				if(time == 0 && getStatus()){
 					int day = interval / TAC_Ontology.lengthOfADay;
-					guiField += "\nday : " + day;
+					suplView.append("\nday: " + day);
 				}
-				suplView.append(guiField);
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);
@@ -43,8 +38,8 @@ public class SCM_S1 extends SCM_Supplier {
 	}
 	
 	public static void main(String[] args){
-		SCM scmImpl = initSCMImpl(args);
-		new SCM_S1(scmImpl);
+		SCM ser = initServer(args);
+		new SCM_S1(ser);
 	}
 	
 	

@@ -1,23 +1,24 @@
 package no.agentsystems_dhom.agent;
 
+import TACSCMApp.SCM;
 import no.agentsystems_dhom.game_elements.GUI;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
 public class SCM_A3 extends SCM_Agent{
 	
-	public SCM_A3(){
-		String guiField = "";
-		interval = scmImpl.getTime();
-		if(interval > 0 && scmImpl.status()){
-			setStatus(true);
-		}
+	public SCM_A3(SCM _server){
+		server = _server;
+
 		agentView = new GUI("SCM_A3");
+		interval = server.getTime();
+		
 		try{
 			for(;;){
-				agentView.setText("---> Time : " + interval + " seconds ");
 				
-				if(scmImpl.status() && !getStatus()){
+				
+				if(server.status() && !getStatus()){
 					startTheGame();
+					agentRegistering("SCM_A3", 1512633);
 				}
 				else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -26,9 +27,8 @@ public class SCM_A3 extends SCM_Agent{
 				int time = interval % TAC_Ontology.lengthOfADay;
 				if(time == 0 && getStatus()){
 					int day = interval / TAC_Ontology.lengthOfADay;
-					guiField += ("\nday : " + day);
+					agentView.append("\nday : " + day);
 				}
-				agentView.append(guiField);
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);
@@ -37,10 +37,12 @@ public class SCM_A3 extends SCM_Agent{
 		catch(InterruptedException e){
 			
 		}
+		
 	}
+
 	public static void main(String[] args){
-		initSCMImpl(args);
-		new SCM_A3();
+		SCM ser = initServer(args);
+		new SCM_A3(ser);
 	}
 
 }

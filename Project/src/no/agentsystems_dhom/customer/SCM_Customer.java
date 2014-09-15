@@ -1,22 +1,25 @@
 package no.agentsystems_dhom.customer;
 
 import no.agentsystems_dhom.game_elements.GUI;
+import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 
+import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 
 
 public class SCM_Customer {
 	
 	private boolean has_started;
-	static TACSCMApp.SCM scmImpl;
+	protected SCM server;
 	protected  GUI custView;
 	protected int interval;
 	
-	public static void initSCMImpl(String[] args){
+	public static SCM initSCMImpl(String[] args){
+		SCM server = null;
 		try{
 			// create and initialize the ORB
 	        ORB orb = ORB.init(args, null);
@@ -30,18 +33,20 @@ public class SCM_Customer {
 					
 	        // resolve the Object Reference in Naming
 	        String name = "TACSCM";
-	        scmImpl = SCMHelper.narrow(ncRef.resolve_str(name));
+	        server = SCMHelper.narrow(ncRef.resolve_str(name));
 	
 		}catch(Exception e){
 			System.out.println("ERROR : " + e);
 			e.printStackTrace();
+			return null;
 		}
+		return server;
 	}
 	
 	protected void startTheGame(){
 		has_started = true;
-		interval = 0;
-		custView.setText("---> TAC Game started.");
+		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0 : interval;
+		custView.setText("---> Time : " + interval + " seconds ");
 	}
 	
 	protected void closeTheGame(){

@@ -1,6 +1,5 @@
 package no.agentsystems_dhom.server;
 
-import no.agentsystems_dhom.agent.Agent;
 import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
 public class BankAccount {
@@ -11,7 +10,7 @@ public class BankAccount {
 	
 	
 	public BankAccount(Agent a) {
-		
+		agent = a;
 	}
 
 	public void addCredit(double c){
@@ -20,7 +19,7 @@ public class BankAccount {
 	
 	public Agent getAgent() {
 		// TODO Auto-generated method stub
-		return null;
+		return agent;
 	}
 
 	public void updateBalance(double loanInterestRate, double interestRate) {
