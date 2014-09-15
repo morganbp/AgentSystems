@@ -9,7 +9,7 @@ import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 
 public class SCM_Agent {
-	private SCM server;
+	protected SCM server;
 	protected int interval;
 	private boolean has_started;
 	protected GUI agentView;
