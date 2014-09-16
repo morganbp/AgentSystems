@@ -51,12 +51,34 @@ public class SCM_C1 extends SCM_Customer {
 		new SCM_C1(ser);
 	}
 	
+	
+	//W.I.P. 
 	public void sendDailyRFQs(int RFQQuantity, int currentDay)
 	{
 		Random rand = new Random();
 		List<RFQ> RFQs = new ArrayList<RFQ>();
 		
-		//Low Segment
+		//Decide the number of RFQs to send to the server
+		double trend = 1;
+		trend = Math.max(TAC_Ontology.Tmin,  Math.min(TAC_Ontology.Tmax, trend + (0.02*rand.nextDouble() - 0.01)));
+		double RFQavg = TAC_Ontology.HLRFQmin + (TAC_Ontology.HLRFQmax - TAC_Ontology.HLRFQmin)* rand.nextDouble(); 
+		//Setting trend to 1 if it exceeds the boundaries
+		if(trend*RFQavg < TAC_Ontology.HLRFQmin || trend*RFQavg > TAC_Ontology.HLRFQmax)
+		{
+			trend = 1;
+		}
+		
+		//Compute the number of RFQs for the current day for each segment(high, low, mid)
+		//Low and high segment
+		double HLRFQavg = Math.min(TAC_Ontology.HLRFQmax,  Math.max(TAC_Ontology.HLRFQmin, RFQavg)*trend); 
+		//DO POISSON
+		
+		
+		//Mid segment
+		double MRFQavg = Math.min(TAC_Ontology.MRFQmax, Math.max(TAC_Ontology.MRFQmin, RFQavg)*trend);
+		//DO POISSON
+		
+		//Add RFQs with random content to the list
 		for(int i = 0; i < RFQQuantity; i++)
 		{
 			//NOT FINISHED HERE
