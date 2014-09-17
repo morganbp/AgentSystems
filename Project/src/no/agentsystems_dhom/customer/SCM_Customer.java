@@ -90,18 +90,21 @@ public class SCM_Customer {
 
 		// Compute the number of RFQs for the current day for each segment
 		// High segment
+		//HRFQavg is the number of RFQs we are going to make for this segment
 		double HRFQavg = Math.min(TAC_Ontology.HLRFQmax,
 		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
 		List<RFQ> highSegmentRFQs = createRFQs(HRFQavg, TAC_Ontology.high, currentDay);
 		// DO POISSON?
 
 		// Low segment
+		//LRFQavg is the number of RFQs we are going to make for this segment
 		double LRFQavg = Math.min(TAC_Ontology.HLRFQmax,
 		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
 		List<RFQ> lowSegmentRFQs = createRFQs(LRFQavg, TAC_Ontology.low, currentDay);
 		// DO POISSON?
 		
 		// Mid segment
+		//MRFQavg is the number of RFQs we are going to make for this segment
 		double MRFQavg = Math.min(TAC_Ontology.MRFQmax,
 		Math.max(TAC_Ontology.MRFQmin, RFQavg) * trend);
 		List<RFQ> midSegmentRFQs = createRFQs(MRFQavg, TAC_Ontology.mid, currentDay);
