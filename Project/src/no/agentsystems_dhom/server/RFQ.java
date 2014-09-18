@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RFQ {
-
 	private static int nextId = 1;
 	private int RFQId;
 	private int PC;
@@ -64,6 +63,10 @@ public class RFQ {
 		return reservePrice;
 	}
 
+	public int getRFQId(){
+		return RFQId;
+	}
+	
 	public static String listToString(List<RFQ> RFQs) {
 		StringBuilder string = new StringBuilder();
 		boolean firstRun = true;
@@ -75,7 +78,6 @@ public class RFQ {
 
 			string.append(rfq.toString());
 		}
-		System.out.println(string);
 		return string.toString();
 	}
 
