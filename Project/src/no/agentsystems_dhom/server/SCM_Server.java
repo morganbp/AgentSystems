@@ -349,12 +349,10 @@ public class SCM_Server extends Thread {
 		resp.setReceiver(name);
 		String stringRFQs = kqml.getContent();
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
-		for(RFQ rfq :RFQs)
-		{
-			serverView.append("\nRFQ from " + name + ". Due date: " + rfq.getDueDate() + ". Quantity: " + rfq.getQuantity() + ". ID: " + rfq.getRFQId());
-		}
+		serverView.append("\n#RFQs From " + name + ": " + RFQs.size());
+		System.out.println(resp.toString());
 		
-		
+		resp.setContent("Message has been send");
 		return resp;
 	}
 
