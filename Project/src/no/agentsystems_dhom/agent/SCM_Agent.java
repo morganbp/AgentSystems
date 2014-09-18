@@ -67,7 +67,6 @@ public class SCM_Agent {
 
 		Message response = Message.buildMessage(resp);
 		agentView.append("\n" + response.getContent());
-
 	}
 
 }

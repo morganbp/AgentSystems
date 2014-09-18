@@ -1,14 +1,8 @@
 package no.agentsystems_dhom.customer;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-import TACSCMApp.SCM;
 import no.agentsystems_dhom.server.GUI;
-import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
+import TACSCMApp.SCM;
 
 public class SCM_C1 extends SCM_Customer {
 
@@ -20,7 +14,7 @@ public class SCM_C1 extends SCM_Customer {
 		custView = new GUI("SCM_C1");
 		try {
 			
-
+			int day;
 			for (;;) {
 				
 				if (server.status() && !getStatus()) {
@@ -29,13 +23,13 @@ public class SCM_C1 extends SCM_Customer {
 					closeTheGame();
 				}
 				
-
+				
 				int time = interval % TAC_Ontology.lengthOfADay;
 
 				if (time == 0 && getStatus()) {
-					int day = interval / TAC_Ontology.lengthOfADay;	
+					day = interval / TAC_Ontology.lengthOfADay;	
 					custView.append("\nday: " + day);
-					//Send RFQs to server
+					sendDailyRFQs(day, "C1");
 				}
 				interval++;
 
