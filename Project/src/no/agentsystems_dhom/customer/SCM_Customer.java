@@ -7,11 +7,13 @@ import java.util.Random;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
+import no.agentsystems_dhom.server.Util;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 
+import yinyang.Message;
 import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 
@@ -118,7 +120,8 @@ public class SCM_Customer {
 		//Logic to send the RFQs to the server
 		// IMPLEMENT THIS
 		//server.send(RFQs, className)
-		
+		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, ""
+				+ RFQs.toString());
 	}
 
 	//create RFQ based on segment, what day it is and how many we want to create.
