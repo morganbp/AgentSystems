@@ -96,21 +96,18 @@ public class SCM_Customer {
 		double HRFQavg = Math.min(TAC_Ontology.HLRFQmax,
 		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
 		List<RFQ> highSegmentRFQs = createRFQs(HRFQavg, TAC_Ontology.high, currentDay);
-		// DO POISSON?
 
 		// Low segment
 		//LRFQavg is the number of RFQs we are going to make for this segment
 		double LRFQavg = Math.min(TAC_Ontology.HLRFQmax,
 		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
 		List<RFQ> lowSegmentRFQs = createRFQs(LRFQavg, TAC_Ontology.low, currentDay);
-		// DO POISSON?
-		
+
 		// Mid segment
 		//MRFQavg is the number of RFQs we are going to make for this segment
 		double MRFQavg = Math.min(TAC_Ontology.MRFQmax,
 		Math.max(TAC_Ontology.MRFQmin, RFQavg) * trend);
 		List<RFQ> midSegmentRFQs = createRFQs(MRFQavg, TAC_Ontology.mid, currentDay);
-		// DO POISSON?
 
 		//Adding RFQs from each segment to the main list
 		RFQs.addAll(lowSegmentRFQs);
@@ -118,8 +115,6 @@ public class SCM_Customer {
 		RFQs.addAll(highSegmentRFQs);
 		
 		//Logic to send the RFQs to the server
-		// IMPLEMENT THIS
-		//server.send(RFQs, className)
 		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, ""
 				+ RFQs.toString());
 	}
@@ -134,7 +129,7 @@ public class SCM_Customer {
 			int SKU =  PC.SKU(segment);
 			PC pc = new PC(SKU);
 			
-			// NOT FINISHED HERE
+
 			int reservePrice = pc.getbasePrice()*((rand.nextInt(TAC_Ontology.PCpmax
 					- TAC_Ontology.PCpmin)
 					+ TAC_Ontology.PCpmin)/100);
