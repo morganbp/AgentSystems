@@ -32,7 +32,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -30;
+	private int interval = -10;
 
 	private int day = 0;
 
@@ -344,7 +344,6 @@ public class SCM_Server extends Thread {
 	//Run this when customer RFQs have arrived 
 	public synchronized Message customer_RFQs(Message kqml)
 	{
-		
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -356,7 +355,7 @@ public class SCM_Server extends Thread {
 		}
 		
 		
-		return null;
+		return resp;
 	}
 
 	// get bank account balance
@@ -447,9 +446,7 @@ class TACSCMImpl extends SCMPOA {
 		{
 			Message resp = server.customer_RFQs(kqml);
 			if(resp != null)
-			{
 				return resp.toString();
-			}
 		}
 
 		return null;
