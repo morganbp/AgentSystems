@@ -116,14 +116,14 @@ public class SCM_Customer {
 		
 		//Logic to send the RFQs to the server
 		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, ""
-				+ RFQs.toString());
+				+ RFQ.listToString(RFQs));
 	}
 
 	//create RFQ based on segment, what day it is and how many we want to create.
 	protected List<RFQ> createRFQs(double RFQquantity, int segment, int currentDay) {
 		Random rand = new Random();
 		List<RFQ> RFQs = new ArrayList<RFQ>();
-		
+		custView.append("\n#RFQs: ");
 		for (int i = 0; i < RFQquantity; i++) {
 			//Get SKU and create PC in chosen segment
 			int SKU =  PC.SKU(segment);
@@ -147,6 +147,7 @@ public class SCM_Customer {
 					+ TAC_Ontology.Dmin;
 			
 			RFQ tempRFQ = new RFQ(PCsku, quantity, dueDate, penalty, reservePrice);
+			custView.append(tempRFQ.getRFQId() + " ");
 			RFQs.add(tempRFQ);
 		}
 		return RFQs;

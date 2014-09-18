@@ -39,6 +39,10 @@ public class RFQ {
 		this.reservePrice = reservePrice;
 	}
 
+	public int getRFQId(){
+		return RFQId;
+	}
+	
 	public static String listToString(List<RFQ> RFQs) {
 		StringBuilder string = new StringBuilder();
 		boolean firstRun = true;
@@ -50,7 +54,6 @@ public class RFQ {
 
 			string.append(rfq.toString());
 		}
-		System.out.println(string);
 		return string.toString();
 	}
 
