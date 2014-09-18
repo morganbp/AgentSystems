@@ -3,6 +3,7 @@ package no.agentsystems_dhom.server;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -339,6 +340,24 @@ public class SCM_Server extends Thread {
 		return resp;
 
 	}
+	
+	//Run this when customer RFQs have arrived 
+	public synchronized Message customer_RFQs(Message kqml)
+	{
+		
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String stringRFQs = kqml.getContent();
+		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
+		for(RFQ rfq :RFQs)
+		{
+			serverView.append("\nRFQ from " + name + ". Due date: " + rfq.getDueDate() + ". Quantity: " + rfq.getQuantity() + ". ID: " + rfq.getRFQId());
+		}
+		
+		
+		return null;
+	}
 
 	// get bank account balance
 
@@ -421,6 +440,16 @@ class TACSCMImpl extends SCMPOA {
 			if (resp != null)
 				return resp.toString();
 
+		}
+		
+		//server has received customer RFQs
+		else if(performative.equals(TAC_Ontology.Customer_RFQs))
+		{
+			Message resp = server.customer_RFQs(kqml);
+			if(resp != null)
+			{
+				return resp.toString();
+			}
 		}
 
 		return null;

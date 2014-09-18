@@ -38,6 +38,31 @@ public class RFQ {
 		this.penalty = penalty;
 		this.reservePrice = reservePrice;
 	}
+	
+	public int getRFQId()
+	{
+		return RFQId;
+	}
+	public int getPC()
+	{
+		return PC;
+	}
+	public int getQuantity()
+	{
+		return quantity;
+	}
+	public int getDueDate()
+	{
+		return dueDate;
+	}
+	public int getPenalty()
+	{
+		return penalty;
+	}
+	public int getReservePrice()
+	{
+		return reservePrice;
+	}
 
 	public static String listToString(List<RFQ> RFQs) {
 		StringBuilder string = new StringBuilder();
