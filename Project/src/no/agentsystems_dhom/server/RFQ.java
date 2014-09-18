@@ -63,9 +63,6 @@ public class RFQ {
 		return reservePrice;
 	}
 
-	public int getRFQId(){
-		return RFQId;
-	}
 	
 	public static String listToString(List<RFQ> RFQs) {
 		StringBuilder string = new StringBuilder();
