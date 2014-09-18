@@ -12,8 +12,8 @@ public class RFQ {
 	private int penalty;
 	private int reservePrice;
 
-	public static final String RFQ_DIVIDER = "#";
-	public static final String RFQ_FIELDS_DIVIDER = ":";
+	public static final String RFQ_DIVIDER = "-";
+	public static final String RFQ_FIELDS_DIVIDER = " ";
 
 	public RFQ(int PC, int quantity, int dueDate, int penalty, int reservePrice) {
 		// Setting a unique ID for the RFQ

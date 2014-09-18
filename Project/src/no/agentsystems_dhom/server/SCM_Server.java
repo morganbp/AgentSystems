@@ -443,7 +443,7 @@ class TACSCMImpl extends SCMPOA {
 		}
 		
 		//server has received customer RFQs
-		else if(performative.equals(TAC_Ontology.Customer_RFQs))
+		if(performative.equals(TAC_Ontology.Customer_RFQs))
 		{
 			Message resp = server.customer_RFQs(kqml);
 			if(resp != null)

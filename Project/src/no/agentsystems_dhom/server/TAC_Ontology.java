@@ -48,7 +48,7 @@ public class TAC_Ontology {
     // the game length in seconds
 	public static int gameLength= numberOfTacDays*lengthOfADay;
     // the game interval in seconds
-	public static int gameInterval= gameLength + 10;	
+	public static int gameInterval= gameLength + 1;	
 	
 	// High, Mid, Low range
 	public static int high = 0;
