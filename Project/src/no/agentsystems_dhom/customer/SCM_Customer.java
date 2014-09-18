@@ -152,5 +152,4 @@ public class SCM_Customer {
 		}
 		return RFQs;
 	}
-
 }
