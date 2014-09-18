@@ -1,8 +1,8 @@
 package no.agentsystems_dhom.agent;
 
 import TACSCMApp.SCM;
-import no.agentsystems_dhom.game_elements.GUI;
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
+import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class SCM_A3 extends SCM_Agent{
 	

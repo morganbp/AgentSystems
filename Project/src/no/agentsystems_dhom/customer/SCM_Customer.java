@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import no.agentsystems_dhom.game_elements.GUI;
-import no.agentsystems_dhom.game_elements.RFQ;
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
+import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.RFQ;
+import no.agentsystems_dhom.server.TAC_Ontology;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;

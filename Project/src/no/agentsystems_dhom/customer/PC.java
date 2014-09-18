@@ -1,6 +1,6 @@
 package no.agentsystems_dhom.customer;
 
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
+import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
 import no.agentsystems_dhom.supplier.Component;
 

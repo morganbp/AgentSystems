@@ -9,7 +9,7 @@
    Date: 16.01.2013
 *******************************************************************/
 
-package no.agentsystems_dhom.game_elements;
+package no.agentsystems_dhom.server;
 
 public class TAC_Ontology {
 	// Ontology name

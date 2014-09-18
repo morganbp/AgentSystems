@@ -1,6 +1,5 @@
 package no.agentsystems_dhom.server;
 
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
 
 public class BankAccount {
 	private Agent agent;

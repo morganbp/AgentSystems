@@ -2,7 +2,6 @@ package no.agentsystems_dhom.server;
 
 import java.util.Random;
 
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
 import yinyang.Message;
 
 public class Util {

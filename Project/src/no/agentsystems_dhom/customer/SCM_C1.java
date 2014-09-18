@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import no.agentsystems_dhom.game_elements.GUI;
-import no.agentsystems_dhom.game_elements.TAC_Ontology;
 import TACSCMApp.SCM;
-import no.agentsystems_dhom.game_elements.RFQ;;
+import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.RFQ;
+import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class SCM_C1 extends SCM_Customer {
 
