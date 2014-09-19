@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RFQ {
-
 	private static int nextId = 1;
 	private int RFQId;
 	private int PC;

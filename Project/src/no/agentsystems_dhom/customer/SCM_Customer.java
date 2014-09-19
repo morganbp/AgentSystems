@@ -86,67 +86,80 @@ public class SCM_Customer {
 				+ (TAC_Ontology.HLRFQmax - TAC_Ontology.HLRFQmin)
 				* rand.nextDouble();
 		// Setting trend to 1 if it exceeds the boundaries
-		if (trend * RFQavg < TAC_Ontology.HLRFQmin || trend * RFQavg > TAC_Ontology.HLRFQmax) {
+		if (trend * RFQavg < TAC_Ontology.HLRFQmin
+				|| trend * RFQavg > TAC_Ontology.HLRFQmax) {
 			trend = 1;
 		}
 
 		// Compute the number of RFQs for the current day for each segment
 		// High segment
-		//HRFQavg is the number of RFQs we are going to make for this segment
+		// HRFQavg is the number of RFQs we are going to make for this segment
 		double HRFQavg = Math.min(TAC_Ontology.HLRFQmax,
-		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
-		List<RFQ> highSegmentRFQs = createRFQs(HRFQavg, TAC_Ontology.high, currentDay);
+				Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
+		List<RFQ> highSegmentRFQs = createRFQs(HRFQavg, TAC_Ontology.high,
+				currentDay);
 
 		// Low segment
-		//LRFQavg is the number of RFQs we are going to make for this segment
+		// LRFQavg is the number of RFQs we are going to make for this segment
 		double LRFQavg = Math.min(TAC_Ontology.HLRFQmax,
-		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
-		List<RFQ> lowSegmentRFQs = createRFQs(LRFQavg, TAC_Ontology.low, currentDay);
+				Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
+		List<RFQ> lowSegmentRFQs = createRFQs(LRFQavg, TAC_Ontology.low,
+				currentDay);
 
 		// Mid segment
-		//MRFQavg is the number of RFQs we are going to make for this segment
+		// MRFQavg is the number of RFQs we are going to make for this segment
 		double MRFQavg = Math.min(TAC_Ontology.MRFQmax,
-		Math.max(TAC_Ontology.MRFQmin, RFQavg) * trend);
-		List<RFQ> midSegmentRFQs = createRFQs(MRFQavg, TAC_Ontology.mid, currentDay);
+				Math.max(TAC_Ontology.MRFQmin, RFQavg) * trend);
+		List<RFQ> midSegmentRFQs = createRFQs(MRFQavg, TAC_Ontology.mid,
+				currentDay);
 
-		//Adding RFQs from each segment to the main list
+		// Adding RFQs from each segment to the main list
 		RFQs.addAll(lowSegmentRFQs);
 		RFQs.addAll(midSegmentRFQs);
 		RFQs.addAll(highSegmentRFQs);
+
+		// Logic to send the RFQs to the server
 		
-		//Logic to send the RFQs to the server
-		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, ""
-				+ RFQ.listToString(RFQs));
+		sendRFQToServer(className, RFQs);
 	}
 
-	//create RFQ based on segment, what day it is and how many we want to create.
-	protected List<RFQ> createRFQs(double RFQquantity, int segment, int currentDay) {
+	private void sendRFQToServer(String className, List<RFQ> RFQs) {
+		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, RFQ.listToString(RFQs));
+		String resp = server.send(kqml.toString());
+		Message response = Message.buildMessage(resp);
+		custView.append("\n" + response.getContent());
+		
+	}
+
+	// create RFQ based on segment, what day it is and how many we want to
+	// create.
+	protected List<RFQ> createRFQs(double RFQquantity, int segment,
+			int currentDay) {
 		Random rand = new Random();
 		List<RFQ> RFQs = new ArrayList<RFQ>();
 		custView.append("\n#RFQs: ");
 		for (int i = 0; i < RFQquantity; i++) {
-			//Get SKU and create PC in chosen segment
-			int SKU =  PC.SKU(segment);
+			// Get SKU and create PC in chosen segment
+			int SKU = PC.SKU(segment);
 			PC pc = new PC(SKU);
-			
 
-			int reservePrice = pc.getbasePrice()*((rand.nextInt(TAC_Ontology.PCpmax
-					- TAC_Ontology.PCpmin)
-					+ TAC_Ontology.PCpmin)/100);
-			
-			int penalty = (rand.nextInt(TAC_Ontology.Pmax - TAC_Ontology.Pmin)
-					+ TAC_Ontology.Pmin) * reservePrice/100;
+			int reservePrice = pc.getbasePrice()
+					* ((rand.nextInt(TAC_Ontology.PCpmax - TAC_Ontology.PCpmin) + TAC_Ontology.PCpmin) / 100);
+
+			int penalty = (rand.nextInt(TAC_Ontology.Pmax - TAC_Ontology.Pmin) + TAC_Ontology.Pmin)
+					* reservePrice / 100;
 
 			int PCsku = pc.getSKU();
-			
+
 			int quantity = rand.nextInt(TAC_Ontology.Qmax - TAC_Ontology.Qmin)
 					+ TAC_Ontology.Qmin;
-			
+
 			int dueDate = currentDay
 					+ rand.nextInt(TAC_Ontology.Dmax - TAC_Ontology.Dmin)
 					+ TAC_Ontology.Dmin;
-			
-			RFQ tempRFQ = new RFQ(PCsku, quantity, dueDate, penalty, reservePrice);
+
+			RFQ tempRFQ = new RFQ(PCsku, quantity, dueDate, penalty,
+					reservePrice);
 			custView.append(tempRFQ.getRFQId() + " ");
 			RFQs.add(tempRFQ);
 		}

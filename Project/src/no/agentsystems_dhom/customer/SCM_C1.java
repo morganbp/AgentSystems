@@ -29,7 +29,7 @@ public class SCM_C1 extends SCM_Customer {
 				if (time == 0 && getStatus()) {
 					day = interval / TAC_Ontology.lengthOfADay;	
 					custView.append("\nday: " + day);
-					sendDailyRFQs(day, "C1");
+					sendDailyRFQs(day, "SCM_C1");
 				}
 				interval++;
 
