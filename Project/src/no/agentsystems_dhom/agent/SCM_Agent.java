@@ -43,6 +43,12 @@ public class SCM_Agent {
 		}
 		return rtnServer;
 	}
+	
+	private void getRFQsFromServer(String className){
+		String content = "";
+		Message kqml = Util.buildKQML(TAC_Ontology.getCustomer_RFQs, className, content);
+		String resp = server.send(kqml);
+	}
 
 	protected void startTheGame() {
 		has_started = true;
