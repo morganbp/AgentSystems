@@ -57,7 +57,7 @@ public class SCM_Agent {
 		return RFQList;
 	}
 	
-	protected void sendRFQsToServer(){
+	protected void sendOffersToServer(){
 		
 	}
 
