@@ -1,5 +1,7 @@
 package no.agentsystems_dhom.server;
 
+import java.util.List;
+
 public class Offer {
 	private String bidder;
 	private String receiver;
@@ -37,5 +39,9 @@ public class Offer {
 		return bidder + OFFER_FIELD_SEPERATOR + receiver
 				+ OFFER_FIELD_SEPERATOR + Double.toString(offer)
 				+ OFFER_FIELD_SEPERATOR + rfq.toString();
+	}
+	
+	public static List<Offer> stringToList(String offerString){
+		return null;
 	}
 }

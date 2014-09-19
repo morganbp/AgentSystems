@@ -74,7 +74,9 @@ public class RFQ {
 	}
 
 	public static RFQ toRFQ(String rfqstring) {
-		String[] RFQs = rfqstring.split(":");
+		String[] RFQs = rfqstring.split(RFQ_FIELDS_DIVIDER);
+		if(RFQs.length != 6) return null;
+		
 		return new RFQ(Integer.parseInt(RFQs[0]), Integer.parseInt(RFQs[1]),
 				Integer.parseInt(RFQs[2]), Integer.parseInt(RFQs[3]),
 				Integer.parseInt(RFQs[4]), Integer.parseInt(RFQs[5]));
