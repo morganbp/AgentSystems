@@ -376,6 +376,18 @@ public class SCM_Server extends Thread {
 		
 	}
 	
+	//Run this when we receive Offers from Agent
+	public synchronized Message agentOffers(Message kqml)
+	{
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String messageContent = kqml.getContent();
+		serverView.append("\n" + name + " has sent the server " + 1 + " offers.");
+		resp.setContent("1");
+		return resp;
+	}
+	
 	// get bank account balance
 
 	public double getBalance(String agentName, int id) {
@@ -468,12 +480,22 @@ class TACSCMImpl extends SCMPOA {
 		}
 		
 		//server has received customer RFQs
-				if(performative.equals(TAC_Ontology.getCustomer_RFQs))
-				{
-					Message resp = server.getCustomer_RFQs(kqml);
-					if(resp != null)
-						return resp.toString();
-				}
+		if(performative.equals(TAC_Ontology.getCustomer_RFQs))
+		{
+			Message resp = server.getCustomer_RFQs(kqml);
+			if(resp != null)
+				return resp.toString();
+		}
+				
+		//server has received offers from 
+		if(performative.equals(TAC_Ontology.agentOffers))
+		{
+			Message resp = server.agentOffers(kqml);
+			if(resp != null)
+			{
+				return resp.toString();
+			}
+		}
 
 		return null;
 
