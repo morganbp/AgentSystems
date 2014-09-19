@@ -64,7 +64,7 @@ public class SCM_Agent {
 				+ id);
 
 		String resp = server.send(kqml.toString());
-		System.out.println(kqml.toString());
+
 		Message response = Message.buildMessage(resp);
 		agentView.append("\n" + response.getContent());
 	}
