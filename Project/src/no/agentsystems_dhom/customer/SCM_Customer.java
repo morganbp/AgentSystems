@@ -129,7 +129,7 @@ public class SCM_Customer {
 
 	private void sendRFQToServer(String className, List<RFQ> RFQs) {
 		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className,
-				RFQ.listToString(RFQs));
+		RFQ.listToString(RFQs));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
 		custView.append("\n#RFQs: " + response.getContent());
