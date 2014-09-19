@@ -133,7 +133,6 @@ public class SCM_Customer {
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
 		custView.append("\n#RFQs: " + response.getContent());
-
 	}
 
 	// create RFQ based on segment, what day it is and how many we want to

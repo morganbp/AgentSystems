@@ -21,7 +21,10 @@ public class SCM_Server extends Thread {
 	// private variables
 
 	private GUI serverView;
-
+	
+	//RFQ list to keep track of todays RFQs
+	private List<RFQ> TodaysRFQs = new ArrayList<RFQ>();
+	
 	// gameId is the date and time for a game round
 
 	private String gameId;
@@ -138,6 +141,7 @@ public class SCM_Server extends Thread {
 				if (time == 0 && isOn) {
 
 					serverView.append("\nday: " + day);
+					
 
 				}
 
@@ -344,18 +348,34 @@ public class SCM_Server extends Thread {
 	//Run this when customer RFQs have arrived 
 	public synchronized Message customer_RFQs(Message kqml)
 	{
+		TodaysRFQs.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String stringRFQs = kqml.getContent();
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
+		//Saving the RFQs to the server's RFQ list
+		TodaysRFQs = RFQs;
 		serverView.append("\n#RFQs From " + name + ": " + RFQs.size());
 		System.out.println(resp.toString());
 		
-		resp.setContent("Message has been send");
+		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
 	}
 
+	//Run this when agent requests RFQs
+	public synchronized Message getCustomer_RFQs(Message kqml)
+	{
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String messageContent = kqml.getContent();
+		serverView.append(name + " requested todays RFQs from customers");
+		resp.setContent(RFQ.listToString(TodaysRFQs));
+		return resp;
+		
+	}
+	
 	// get bank account balance
 
 	public double getBalance(String agentName, int id) {
@@ -446,6 +466,14 @@ class TACSCMImpl extends SCMPOA {
 			if(resp != null)
 				return resp.toString();
 		}
+		
+		//server has received customer RFQs
+				if(performative.equals(TAC_Ontology.getCustomer_RFQs))
+				{
+					Message resp = server.getCustomer_RFQs(kqml);
+					if(resp != null)
+						return resp.toString();
+				}
 
 		return null;
 
