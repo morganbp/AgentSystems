@@ -118,8 +118,9 @@ public class SCM_Customer {
 		RFQs.addAll(midSegmentRFQs);
 		RFQs.addAll(highSegmentRFQs);
 
-		custView.append("#RFQs: " + lowSegmentRFQs.size() + " "
-				+ midSegmentRFQs.size() + " " + highSegmentRFQs);
+		custView.append("\n#RFQs: " + lowSegmentRFQs.size() + " "
+				+ midSegmentRFQs.size() + " " + highSegmentRFQs.size() + " "
+				+ RFQs.size());
 
 		// Logic to send the RFQs to the server
 
@@ -131,7 +132,7 @@ public class SCM_Customer {
 				RFQ.listToString(RFQs));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		custView.append("\n" + response.getContent());
+		custView.append("\n#RFQs: " + response.getContent());
 
 	}
 
@@ -163,7 +164,6 @@ public class SCM_Customer {
 
 			RFQ tempRFQ = new RFQ(PCsku, quantity, dueDate, penalty,
 					reservePrice);
-			custView.append(tempRFQ.getRFQId() + " ");
 			RFQs.add(tempRFQ);
 		}
 		return RFQs;
