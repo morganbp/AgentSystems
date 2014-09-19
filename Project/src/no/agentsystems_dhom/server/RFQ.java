@@ -61,8 +61,13 @@ public class RFQ {
 		// RFQ String List
 		String[] rfqsl = RFQs.split(RFQ_DIVIDER);
 		for (String rfq : rfqsl) {
-			rfqList.add(toRFQ(rfq));
+			RFQ r = toRFQ(rfq);
+			if(r == null) continue;
+			rfqList.add(r);
 		}
+		
+		if(rfqList.size() == 0) return null;
+		
 		return rfqList;
 	}
 
