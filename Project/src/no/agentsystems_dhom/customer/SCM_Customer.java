@@ -127,7 +127,7 @@ public class SCM_Customer {
 		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, RFQ.listToString(RFQs));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		custView.append("\n" + response.getContent());
+		custView.append("\n" + response.getContent().replaceAll("_", " "));
 		
 	}
 
