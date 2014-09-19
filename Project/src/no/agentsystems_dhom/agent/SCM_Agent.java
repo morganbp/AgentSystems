@@ -3,6 +3,7 @@ package no.agentsystems_dhom.agent;
 import java.util.List;
 
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
@@ -57,7 +58,10 @@ public class SCM_Agent {
 		return RFQList;
 	}
 	
-	protected void sendOffersToServer(){
+	protected void sendOffersToServer(String className,Offer offer){
+		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className, Offer.);
+		String resp = server.send(kqml.toString());
+		Message response = Message.buildMessage(resp);
 		
 	}
 
