@@ -6,10 +6,12 @@ import TACSCMApp.SCM;
 
 public class SCM_A1 extends SCM_Agent{
 	
+	private static final String CLASSNAME = "SCM_A1";
+	
 	public SCM_A1(SCM _server){
 		server = _server;
 
-		agentView = new GUI("SCM_A1");
+		agentView = new GUI(CLASSNAME);
 		interval = server.getTime();
 		
 		try{
@@ -17,7 +19,7 @@ public class SCM_A1 extends SCM_Agent{
 				
 				if(server.status() && !getStatus()){
 					startTheGame();
-					agentRegistering("SCM_A1", 1512631);
+					agentRegistering(CLASSNAME, 1512631);
 				}
 				else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -27,6 +29,9 @@ public class SCM_A1 extends SCM_Agent{
 				if(time == 0 && getStatus()){
 					int day = interval / TAC_Ontology.lengthOfADay;
 					agentView.append("\nday : " + day);
+				}
+				if(time == 1 && getStatus()){
+					getRFQsFromServer(CLASSNAME);
 				}
 				interval++;
 				

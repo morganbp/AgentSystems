@@ -59,7 +59,7 @@ public class RFQ {
 	public static List<RFQ> stringToList(String RFQs) {
 		List<RFQ> rfqList = new ArrayList<RFQ>();
 		// RFQ String List
-		String[] rfqsl = RFQs.split("#");
+		String[] rfqsl = RFQs.split(RFQ_DIVIDER);
 		for (String rfq : rfqsl) {
 			rfqList.add(toRFQ(rfq));
 		}

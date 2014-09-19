@@ -1,6 +1,9 @@
 package no.agentsystems_dhom.agent;
 
+import java.util.List;
+
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
 
@@ -42,6 +45,20 @@ public class SCM_Agent {
 			return null;
 		}
 		return rtnServer;
+	}
+	
+	protected List<RFQ> getRFQsFromServer(String className){
+		String content = "";
+		Message kqml = Util.buildKQML(TAC_Ontology.getCustomer_RFQs, className, content);
+		String resp = server.send(kqml.toString());
+		Message response = Message.buildMessage(resp);
+		System.out.println(resp);
+		List<RFQ> RFQList = RFQ.stringToList(response.getContent());
+		return RFQList;
+	}
+	
+	protected void sendOffersToServer(){
+		
 	}
 
 	protected void startTheGame() {

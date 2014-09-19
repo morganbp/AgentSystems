@@ -356,7 +356,7 @@ public class SCM_Server extends Thread {
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		//Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		serverView.append("\n#RFQs From " + name + ": " + RFQs.size());
+		serverView.append("\nRFQs From " + name + ": " + RFQs.size());
 		System.out.println(resp.toString());
 		
 		resp.setContent(TodaysRFQs.size() + "");
@@ -370,10 +370,22 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
-		serverView.append(name + " requested todays RFQs from customers");
+		serverView.append("\n" + name + " requested customer RFQs");
 		resp.setContent(RFQ.listToString(TodaysRFQs));
 		return resp;
 		
+	}
+	
+	//Run this when we receive Offers from Agent
+	public synchronized Message agentOffers(Message kqml)
+	{
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String messageContent = kqml.getContent();
+		serverView.append("\n" + name + " has sent the server " + 1 + " offers.");
+		resp.setContent("1");
+		return resp;
 	}
 	
 	// get bank account balance
@@ -468,12 +480,22 @@ class TACSCMImpl extends SCMPOA {
 		}
 		
 		//server has received customer RFQs
-				if(performative.equals(TAC_Ontology.getCustomer_RFQs))
-				{
-					Message resp = server.getCustomer_RFQs(kqml);
-					if(resp != null)
-						return resp.toString();
-				}
+		if(performative.equals(TAC_Ontology.getCustomer_RFQs))
+		{
+			Message resp = server.getCustomer_RFQs(kqml);
+			if(resp != null)
+				return resp.toString();
+		}
+				
+		//server has received offers from 
+		if(performative.equals(TAC_Ontology.agentOffers))
+		{
+			Message resp = server.agentOffers(kqml);
+			if(resp != null)
+			{
+				return resp.toString();
+			}
+		}
 
 		return null;
 

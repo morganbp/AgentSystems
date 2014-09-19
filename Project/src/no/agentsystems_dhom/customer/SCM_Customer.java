@@ -129,7 +129,7 @@ public class SCM_Customer {
 
 	private void sendRFQToServer(String className, List<RFQ> RFQs) {
 		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className,
-				RFQ.listToString(RFQs));
+		RFQ.listToString(RFQs));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
 		custView.append("\n#RFQs: " + response.getContent());
@@ -145,7 +145,7 @@ public class SCM_Customer {
 			// Get SKU and create PC in chosen segment
 			int SKU = PC.SKU(segment);
 			PC pc = new PC(SKU);
-
+			
 			int reservePrice = pc.getbasePrice()
 					* ((rand.nextInt(TAC_Ontology.PCpmax - TAC_Ontology.PCpmin) + TAC_Ontology.PCpmin) / 100);
 
