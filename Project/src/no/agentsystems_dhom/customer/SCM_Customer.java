@@ -145,7 +145,7 @@ public class SCM_Customer {
 			// Get SKU and create PC in chosen segment
 			int SKU = PC.SKU(segment);
 			PC pc = new PC(SKU);
-
+			
 			int reservePrice = pc.getbasePrice()
 					* ((rand.nextInt(TAC_Ontology.PCpmax - TAC_Ontology.PCpmin) + TAC_Ontology.PCpmin) / 100);
 

@@ -356,7 +356,7 @@ public class SCM_Server extends Thread {
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		//Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		serverView.append("\n#RFQs From " + name + ": " + RFQs.size());
+		serverView.append("\nRFQs From " + name + ": " + RFQs.size());
 		System.out.println(resp.toString());
 		
 		resp.setContent(TodaysRFQs.size() + "");
@@ -370,7 +370,7 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
-		serverView.append(name + " requested todays RFQs from customers");
+		serverView.append("\n" + name + " requested customer RFQs");
 		resp.setContent(RFQ.listToString(TodaysRFQs));
 		return resp;
 		
