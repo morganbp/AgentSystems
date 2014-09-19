@@ -12,8 +12,8 @@ public class RFQ {
 	private int penalty;
 	private int reservePrice;
 
-	public static final String RFQ_DIVIDER = "@";
-	public static final String RFQ_FIELDS_DIVIDER = "-";
+	public static final String RFQ_DIVIDER = "#";
+	public static final String RFQ_FIELDS_DIVIDER = ":";
 
 	public RFQ(int PC, int quantity, int dueDate, int penalty, int reservePrice) {
 		// Setting a unique ID for the RFQ
@@ -37,32 +37,10 @@ public class RFQ {
 		this.penalty = penalty;
 		this.reservePrice = reservePrice;
 	}
-	
-	public int getRFQId()
-	{
+
+	public int getRFQId(){
 		return RFQId;
 	}
-	public int getPC()
-	{
-		return PC;
-	}
-	public int getQuantity()
-	{
-		return quantity;
-	}
-	public int getDueDate()
-	{
-		return dueDate;
-	}
-	public int getPenalty()
-	{
-		return penalty;
-	}
-	public int getReservePrice()
-	{
-		return reservePrice;
-	}
-
 	
 	public static String listToString(List<RFQ> RFQs) {
 		StringBuilder string = new StringBuilder();
@@ -81,7 +59,7 @@ public class RFQ {
 	public static List<RFQ> stringToList(String RFQs) {
 		List<RFQ> rfqList = new ArrayList<RFQ>();
 		// RFQ String List
-		String[] rfqsl = RFQs.split(RFQ_DIVIDER);
+		String[] rfqsl = RFQs.split("#");
 		for (String rfq : rfqsl) {
 			rfqList.add(toRFQ(rfq));
 		}
@@ -96,7 +74,7 @@ public class RFQ {
 	}
 
 	public static RFQ toRFQ(String rfqstring) {
-		String[] RFQs = rfqstring.split(RFQ_FIELDS_DIVIDER);
+		String[] RFQs = rfqstring.split(":");
 		return new RFQ(Integer.parseInt(RFQs[0]), Integer.parseInt(RFQs[1]),
 				Integer.parseInt(RFQs[2]), Integer.parseInt(RFQs[3]),
 				Integer.parseInt(RFQs[4]), Integer.parseInt(RFQs[5]));
