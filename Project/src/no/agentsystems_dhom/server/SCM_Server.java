@@ -370,7 +370,7 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
-		serverView.append(name + " requested todays RFQs from customers");
+		serverView.append(name + " requested customer RFQs");
 		resp.setContent(RFQ.listToString(TodaysRFQs));
 		return resp;
 		
