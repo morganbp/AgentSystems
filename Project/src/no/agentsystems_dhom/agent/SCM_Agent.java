@@ -52,8 +52,8 @@ public class SCM_Agent {
 		Message kqml = Util.buildKQML(TAC_Ontology.getCustomer_RFQs, className, content);
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		System.out.println(resp);
 		List<RFQ> RFQList = RFQ.stringToList(response.getContent());
+	
 		return RFQList;
 	}
 	

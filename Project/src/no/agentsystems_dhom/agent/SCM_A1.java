@@ -1,6 +1,9 @@
 package no.agentsystems_dhom.agent;
 
+import java.util.List;
+
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
 
@@ -31,7 +34,9 @@ public class SCM_A1 extends SCM_Agent{
 					agentView.append("\nday : " + day);
 				}
 				if(time == 1 && getStatus()){
-					getRFQsFromServer(CLASSNAME);
+					List<RFQ> rfqs = getRFQsFromServer(CLASSNAME);
+					if(rfqs != null)
+						agentView.append("\nNumber of RFQ: " + rfqs.size());
 				}
 				interval++;
 				
