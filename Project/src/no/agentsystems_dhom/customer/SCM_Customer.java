@@ -118,17 +118,21 @@ public class SCM_Customer {
 		RFQs.addAll(midSegmentRFQs);
 		RFQs.addAll(highSegmentRFQs);
 
+		custView.append("\n#RFQs: " + lowSegmentRFQs.size() + " "
+				+ midSegmentRFQs.size() + " " + highSegmentRFQs.size() + " "
+				+ RFQs.size());
+
 		// Logic to send the RFQs to the server
-		
+
 		sendRFQToServer(className, RFQs);
 	}
 
 	private void sendRFQToServer(String className, List<RFQ> RFQs) {
-		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className, RFQ.listToString(RFQs));
+		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className,
+				RFQ.listToString(RFQs));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		custView.append("\n" + response.getContent());
-		
+		custView.append("\n#RFQs: " + response.getContent());
 	}
 
 	// create RFQ based on segment, what day it is and how many we want to
@@ -137,7 +141,6 @@ public class SCM_Customer {
 			int currentDay) {
 		Random rand = new Random();
 		List<RFQ> RFQs = new ArrayList<RFQ>();
-		custView.append("\n#RFQs: ");
 		for (int i = 0; i < RFQquantity; i++) {
 			// Get SKU and create PC in chosen segment
 			int SKU = PC.SKU(segment);
@@ -160,7 +163,6 @@ public class SCM_Customer {
 
 			RFQ tempRFQ = new RFQ(PCsku, quantity, dueDate, penalty,
 					reservePrice);
-			custView.append(tempRFQ.getRFQId() + " ");
 			RFQs.add(tempRFQ);
 		}
 		return RFQs;
