@@ -37,6 +37,7 @@ public class SCM_A1 extends SCM_Agent{
 					List<RFQ> rfqs = getRFQsFromServer(CLASSNAME);
 					if(rfqs != null)
 						agentView.append("\nNumber of RFQ: " + rfqs.size());
+				
 				}
 				interval++;
 				

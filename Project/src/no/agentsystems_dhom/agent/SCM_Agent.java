@@ -1,5 +1,6 @@
 package no.agentsystems_dhom.agent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import no.agentsystems_dhom.server.GUI;
@@ -21,6 +22,7 @@ public class SCM_Agent {
 	protected int interval;
 	private boolean has_started;
 	protected GUI agentView;
+	protected List<Offer> todaysOffers;
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -58,14 +60,19 @@ public class SCM_Agent {
 		return RFQList;
 	}
 	
-	protected void sendOffersToServer(String className,Offer offer){
-		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className, Offer.);
+	protected void sendOffersToServer(String className){
+		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className, Offer.listToString(todaysOffers));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		
+		todaysOffers.clear();
+	}
+	
+	protected void createOffer(String bidder, String reciever, double offerPrice, RFQ rfq){
+		todaysOffers.add(new Offer(bidder, reciever, offerPrice, rfq));
 	}
 
 	protected void startTheGame() {
+		todaysOffers = new ArrayList<Offer>();
 		has_started = true;
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0 : interval;
 		agentView.setText("---> Time : " + interval + " seconds ");
