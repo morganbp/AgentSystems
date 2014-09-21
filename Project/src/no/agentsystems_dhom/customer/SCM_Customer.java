@@ -79,10 +79,10 @@ public class SCM_Customer {
 		// Decide the number of RFQs to send to the server
 		double trend = 1;
 		trend = Math.max(
-				TAC_Ontology.Tmin,
-				Math.min(TAC_Ontology.Tmax, trend
-						+ (0.02 * rand.nextDouble() - 0.01)));
-		double RFQavg = TAC_Ontology.HLRFQmin
+				TAC_Ontology.Tmin,//Tmin: 0.95 Tmax: 1/0.95
+				Math.min(TAC_Ontology.Tmax, trend 
+						+ (0.02 * rand.nextDouble() - 0.01))); //0,99-1,01
+		double RFQavg = TAC_Ontology.HLRFQmin // 25  - 100
 				+ (TAC_Ontology.HLRFQmax - TAC_Ontology.HLRFQmin)
 				* rand.nextDouble();
 		// Setting trend to 1 if it exceeds the boundaries
@@ -94,25 +94,30 @@ public class SCM_Customer {
 		// Compute the number of RFQs for the current day for each segment
 		// High segment
 		// HRFQavg is the number of RFQs we are going to make for this segment
-		double HRFQavg = Math.min(TAC_Ontology.HLRFQmax,
-				Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
+		//double HRFQavg = Math.min(TAC_Ontology.HLRFQmax,
+		//		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
+		double HRFQavg = Util.poisson(RFQavg);
 		List<RFQ> highSegmentRFQs = createRFQs(HRFQavg, TAC_Ontology.high,
 				currentDay);
 
 		// Low segment
 		// LRFQavg is the number of RFQs we are going to make for this segment
-		double LRFQavg = Math.min(TAC_Ontology.HLRFQmax,
-				Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
+		//double LRFQavg = Math.min(TAC_Ontology.HLRFQmax,
+		//		Math.max(TAC_Ontology.HLRFQmin, RFQavg) * trend);
+		double LRFQavg = Util.poisson(RFQavg);
 		List<RFQ> lowSegmentRFQs = createRFQs(LRFQavg, TAC_Ontology.low,
 				currentDay);
 
 		// Mid segment
 		// MRFQavg is the number of RFQs we are going to make for this segment
-		double MRFQavg = Math.min(TAC_Ontology.MRFQmax,
-				Math.max(TAC_Ontology.MRFQmin, RFQavg) * trend);
+		//	double MRFQavg = Math.min(TAC_Ontology.MRFQmax,
+		//		Math.max(TAC_Ontology.MRFQmin, RFQavg) * trend);
+		double MRFQavg = Util.poisson(RFQavg);
 		List<RFQ> midSegmentRFQs = createRFQs(MRFQavg, TAC_Ontology.mid,
 				currentDay);
 
+		
+		
 		// Adding RFQs from each segment to the main list
 		RFQs.addAll(lowSegmentRFQs);
 		RFQs.addAll(midSegmentRFQs);
@@ -147,7 +152,7 @@ public class SCM_Customer {
 			PC pc = new PC(SKU);
 			
 			int reservePrice = pc.getbasePrice()
-					* ((rand.nextInt(TAC_Ontology.PCpmax - TAC_Ontology.PCpmin) + TAC_Ontology.PCpmin) / 100);
+					* ((rand.nextInt(TAC_Ontology.PCpmax - TAC_Ontology.PCpmin) + TAC_Ontology.PCpmin) / 100); // 0,75-1,25
 
 			int penalty = (rand.nextInt(TAC_Ontology.Pmax - TAC_Ontology.Pmin) + TAC_Ontology.Pmin)
 					* reservePrice / 100;

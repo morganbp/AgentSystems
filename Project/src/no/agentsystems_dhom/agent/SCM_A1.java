@@ -39,15 +39,14 @@ public class SCM_A1 extends SCM_Agent{
 					// Get RFQS From server
 					// and bid send offers
 					// back to server
-					List<RFQ> rfqs = getRFQsFromServer(CLASSNAME);
-					if(rfqs != null){
-						agentView.append("\nNumber of RFQ: " + rfqs.size());
-						for(RFQ rfq : rfqs){
+					List<RFQ> RFQList = getRFQsFromServer(CLASSNAME);
+					if(RFQList != null){
+						agentView.append("\nNumber of RFQ: " + RFQList.size());
+						for(RFQ rfq : RFQList){
 							createOffer(CLASSNAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 						}
 						sendOffersToServer(CLASSNAME);
 					}
-				
 				}
 				interval++;
 				
