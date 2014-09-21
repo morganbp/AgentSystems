@@ -35,7 +35,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -10;
+	private int interval = -30;
 
 	private int day = 0;
 
