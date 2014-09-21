@@ -23,7 +23,6 @@ public class GUI extends JFrame{
 			c.add (output, BorderLayout.CENTER);
 			JScrollPane scr = new JScrollPane(output);
 			c.add(scr);
-			scr.setAutoscrolls(true);
 			setVisible(true);
 	   }
 	   
@@ -33,6 +32,6 @@ public class GUI extends JFrame{
 	   
 	   public void append(String str) {
 		   output.append(str);
-//		   output.setCaretPosition(output.getDocument().getLength());
+		   output.setCaretPosition(output.getDocument().getLength());
 	   }
 }

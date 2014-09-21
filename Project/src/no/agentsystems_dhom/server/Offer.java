@@ -23,7 +23,7 @@ public class Offer {
 		return bidder;
 	}
 
-	public String getreciever() {
+	public String getReciever() {
 		return reciever;
 	}
 
