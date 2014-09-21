@@ -6,12 +6,13 @@ import TACSCMApp.SCM;
 
 public class SCM_C1 extends SCM_Customer {
 
-
+	private final static String CLASS_NAME = "SCM_C1";
+	
 	public SCM_C1(SCM _server) {
 		server = _server;
 		
 		interval = server.getTime();
-		custView = new GUI("SCM_C1");
+		custView = new GUI(CLASS_NAME);
 		try {
 			
 			int day;
@@ -25,11 +26,12 @@ public class SCM_C1 extends SCM_Customer {
 				
 				
 				int time = interval % TAC_Ontology.lengthOfADay;
-
+				day = interval / TAC_Ontology.lengthOfADay;	
 				if (time == 0 && getStatus()) {
-					day = interval / TAC_Ontology.lengthOfADay;	
 					custView.append("\nday: " + day);
-					sendDailyRFQs(day, "SCM_C1");
+				}
+				if(time == 1 && getStatus()){
+					sendDailyRFQs(day, CLASS_NAME);
 				}
 				interval++;
 

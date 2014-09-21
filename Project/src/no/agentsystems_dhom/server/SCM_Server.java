@@ -59,9 +59,13 @@ public class SCM_Server extends Thread {
 
 	private double loanInterestRate = 0;
 
+	// Store the offers from agents
+	
+	private List<Offer> agentOffers;
+	
+	
 	public SCM_Server() {
 		serverView = new GUI("SCM_server");
-
 		bank = new Bank();
 	}
 
@@ -205,6 +209,8 @@ public class SCM_Server extends Thread {
 		loanInterestRate = 2 * interestRate;
 
 		bank.setLoanInterestRate(loanInterestRate);
+		
+		agentOffers = new ArrayList<Offer>();
 
 	}
 
@@ -357,7 +363,6 @@ public class SCM_Server extends Thread {
 		//Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
 		serverView.append("\nRFQs From " + name + ": " + RFQs.size());
-		System.out.println(resp.toString());
 		
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
@@ -369,7 +374,6 @@ public class SCM_Server extends Thread {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
-		String messageContent = kqml.getContent();
 		serverView.append("\n" + name + " requested customer RFQs");
 		resp.setContent(RFQ.listToString(TodaysRFQs));
 		return resp;
@@ -384,6 +388,7 @@ public class SCM_Server extends Thread {
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<Offer> offers = Offer.stringToList(messageContent);
+		agentOffers.addAll(offers);
 		serverView.append("\n" + name + " has sent the server " + offers.size() + " offers.");
 		resp.setContent(""+offers.size());
 		return resp;

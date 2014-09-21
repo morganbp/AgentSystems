@@ -33,7 +33,12 @@ public class SCM_A1 extends SCM_Agent{
 					int day = interval / TAC_Ontology.lengthOfADay;
 					agentView.append("\nday : " + day);
 				}
-				if(time == 1 && getStatus()){
+				
+				
+				if(time == 2 && getStatus()){
+					// Get RFQS From server
+					// and bid send offers
+					// back to server
 					List<RFQ> rfqs = getRFQsFromServer(CLASSNAME);
 					if(rfqs != null){
 						agentView.append("\nNumber of RFQ: " + rfqs.size());
