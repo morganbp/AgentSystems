@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
@@ -171,5 +172,18 @@ public class SCM_Customer {
 			RFQs.add(tempRFQ);
 		}
 		return RFQs;
+	}
+	
+	protected List<Offer> getAgentOffers(String className)
+	{
+		Message kqml = Util.buildKQML(TAC_Ontology.getAgentOffers, className, "NoContent");
+		List<Offer> offersList = Offer.stringToList(server.send(kqml.toString()));
+		
+		List<String> bidders = new ArrayList<String>();
+		for(Offer offer : offersList)
+		{
+			
+		}
+		return null;
 	}
 }
