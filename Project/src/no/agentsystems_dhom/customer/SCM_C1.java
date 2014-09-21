@@ -38,7 +38,7 @@ public class SCM_C1 extends SCM_Customer {
 				Thread.sleep(TAC_Ontology.sec);
 			}
 		} catch (InterruptedException e) {
-
+			e.printStackTrace();
 		}
 	}
 

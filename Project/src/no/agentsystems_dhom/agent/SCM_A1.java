@@ -60,7 +60,7 @@ public class SCM_A1 extends SCM_Agent{
 			}
 		}
 		catch(InterruptedException e){
-			
+			e.printStackTrace();
 		}
 		
 	}

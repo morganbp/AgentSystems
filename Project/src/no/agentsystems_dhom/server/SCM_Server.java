@@ -143,7 +143,6 @@ public class SCM_Server extends Thread {
 				int time = interval % TAC_Ontology.lengthOfADay;
 
 				if (time == 0 && isOn) {
-
 					serverView.append("\nday: " + day);
 					
 
@@ -162,6 +161,7 @@ public class SCM_Server extends Thread {
 			}
 
 			catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 
 		} // end while
@@ -362,7 +362,7 @@ public class SCM_Server extends Thread {
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		//Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		serverView.append("\nRFQs From " + name + ": " + RFQs.size());
+		serverView.append("\nRFQs from " + name + ": " + RFQs.size());
 		
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
@@ -374,7 +374,6 @@ public class SCM_Server extends Thread {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
-		serverView.append("\n" + name + " requested customer RFQs");
 		resp.setContent(RFQ.listToString(TodaysRFQs));
 		return resp;
 		

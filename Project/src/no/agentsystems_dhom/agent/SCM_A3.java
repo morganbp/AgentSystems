@@ -49,7 +49,7 @@ public class SCM_A3 extends SCM_Agent{
 			}
 		}
 		catch(InterruptedException e){
-			
+			e.printStackTrace();
 		}
 		
 	}

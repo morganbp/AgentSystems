@@ -54,7 +54,7 @@ public class SCM_A2 extends SCM_Agent{
 			}
 		}
 		catch(InterruptedException e){
-			
+			e.printStackTrace();
 		}
 		
 	}
