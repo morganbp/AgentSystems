@@ -23,6 +23,7 @@ public class GUI extends JFrame{
 			c.add (output, BorderLayout.CENTER);
 			JScrollPane scr = new JScrollPane(output);
 			c.add(scr);
+			scr.setAutoscrolls(true);
 			setVisible(true);
 	   }
 	   

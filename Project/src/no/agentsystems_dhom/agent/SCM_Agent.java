@@ -27,7 +27,6 @@ public class SCM_Agent {
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
 		try {
-
 			// create and initialize the ORB
 			ORB orb = ORB.init(args, null);
 

@@ -35,7 +35,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -10;
+	private int interval = -30;
 
 	private int day = 0;
 
@@ -143,7 +143,6 @@ public class SCM_Server extends Thread {
 				int time = interval % TAC_Ontology.lengthOfADay;
 
 				if (time == 0 && isOn) {
-
 					serverView.append("\nday: " + day);
 					
 
@@ -162,6 +161,7 @@ public class SCM_Server extends Thread {
 			}
 
 			catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 
 		} // end while
@@ -362,7 +362,7 @@ public class SCM_Server extends Thread {
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		//Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		serverView.append("\nRFQs From " + name + ": " + RFQs.size());
+		serverView.append("\nRFQs from " + name + ": " + RFQs.size());
 		
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
@@ -374,7 +374,6 @@ public class SCM_Server extends Thread {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
-		serverView.append("\n" + name + " requested customer RFQs");
 		resp.setContent(RFQ.listToString(TodaysRFQs));
 		return resp;
 		
@@ -391,6 +390,15 @@ public class SCM_Server extends Thread {
 		agentOffers.addAll(offers);
 		serverView.append("\n" + name + " has sent the server " + offers.size() + " offers.");
 		resp.setContent(""+offers.size());
+		return resp;
+	}
+	// The customer gets all the offers from agents
+	public synchronized Message getAgentOffers(Message kqml){
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String agentOffersStr = Offer.listToString(agentOffers);
+		resp.setContent(agentOffersStr);
 		return resp;
 	}
 	
@@ -502,7 +510,14 @@ class TACSCMImpl extends SCMPOA {
 				return resp.toString();
 			}
 		}
-
+		//Customer wants to get all the agent offers
+		if(performative.equals(TAC_Ontology.getAgentOffers)){
+			Message resp = server.getAgentOffers(kqml);
+			if(resp != null){
+				return resp.toString();
+			}
+		}
+		
 		return null;
 
 	}

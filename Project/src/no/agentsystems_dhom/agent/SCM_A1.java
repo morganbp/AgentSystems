@@ -2,6 +2,7 @@ package no.agentsystems_dhom.agent;
 
 import java.util.List;
 
+import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
@@ -9,12 +10,12 @@ import TACSCMApp.SCM;
 
 public class SCM_A1 extends SCM_Agent{
 	
-	private static final String CLASSNAME = "SCM_A1";
+	private static final String CLASS_NAME = "SCM_A1";
 	
 	public SCM_A1(SCM _server){
 		server = _server;
 
-		agentView = new GUI(CLASSNAME);
+		agentView = new GUI(CLASS_NAME);
 		interval = server.getTime();
 		
 		try{
@@ -22,7 +23,7 @@ public class SCM_A1 extends SCM_Agent{
 				
 				if(server.status() && !getStatus()){
 					startTheGame();
-					agentRegistering(CLASSNAME, 1512631);
+					agentRegistering(CLASS_NAME, 1512631);
 				}
 				else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -36,16 +37,21 @@ public class SCM_A1 extends SCM_Agent{
 				
 				
 				if(time == 2 && getStatus()){
-					// Get RFQS From server
-					// and bid send offers
+					// Get RFQS From server,
+					// bid and send offers
 					// back to server
-					List<RFQ> RFQList = getRFQsFromServer(CLASSNAME);
+					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);
 					if(RFQList != null){
-						agentView.append("\nNumber of RFQ: " + RFQList.size());
 						for(RFQ rfq : RFQList){
-							createOffer(CLASSNAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
+							PC pc = new PC(rfq.getPC());
+							if(rfq.getQuantity() < 10) continue;
+							
+							if(pc.getbasePrice() > rfq.getReservePrice())
+								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
+							else
+								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)pc.getbasePrice() * 0.95, rfq);
 						}
-						sendOffersToServer(CLASSNAME);
+						sendOffersToServer(CLASS_NAME);
 					}
 				}
 				interval++;
@@ -54,7 +60,7 @@ public class SCM_A1 extends SCM_Agent{
 			}
 		}
 		catch(InterruptedException e){
-			
+			e.printStackTrace();
 		}
 		
 	}
