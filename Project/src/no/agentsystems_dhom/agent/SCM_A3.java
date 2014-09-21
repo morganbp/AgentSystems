@@ -9,7 +9,7 @@ import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class SCM_A3 extends SCM_Agent{
 	
-	private static final String CLASSNAME = "SCM_A3";
+	private static final String CLASS_NAME = "SCM_A3";
 	
 	public SCM_A3(SCM _server){
 		server = _server;
@@ -35,12 +35,12 @@ public class SCM_A3 extends SCM_Agent{
 					agentView.append("\nday : " + day);
 				}
 				if(time == 2 && getStatus()){
-					List<RFQ> RFQList = getRFQsFromServer(CLASSNAME);
+					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);
 					if(RFQList != null){
 						for(RFQ rfq : RFQList){
-							createOffer(CLASSNAME, Integer.toString(rfq.getRFQId()),rfq.getReservePrice(), rfq);
+							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()),rfq.getReservePrice(), rfq);
 						}
-						sendOffersToServer(CLASSNAME);
+						sendOffersToServer(CLASS_NAME);
 					}
 				}
 				interval++;

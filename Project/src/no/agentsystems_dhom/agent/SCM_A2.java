@@ -9,12 +9,12 @@ import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class SCM_A2 extends SCM_Agent{
 	
-	private static final String CLASSNAME = "SCM_A2";
+	private static final String CLASS_NAME = "SCM_A2";
 	
 	public SCM_A2(SCM _server){
 		server = _server;
 
-		agentView = new GUI(CLASSNAME);
+		agentView = new GUI(CLASS_NAME);
 		interval = server.getTime();
 		
 		try{
@@ -23,7 +23,7 @@ public class SCM_A2 extends SCM_Agent{
 				
 				if(server.status() && !getStatus()){
 					startTheGame();
-					agentRegistering(CLASSNAME, 1512632);
+					agentRegistering(CLASS_NAME, 1512632);
 				}
 				else if(interval == TAC_Ontology.gameLength){
 					closeTheGame();
@@ -38,14 +38,14 @@ public class SCM_A2 extends SCM_Agent{
 				if(time == 2 && getStatus())
 				{
 					//GET RFQs. Bid on them and send offers back to server.
-					List<RFQ> rfqs = getRFQsFromServer(CLASSNAME);
-					if(rfqs != null)
+					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);
+					if(RFQList != null)
 					{
-						for(RFQ rfq : rfqs)
+						for(RFQ rfq : RFQList)
 						{
-							createOffer(CLASSNAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
+							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 						}
-						sendOffersToServer(CLASSNAME);
+						sendOffersToServer(CLASS_NAME);
 					}
 				}
 				interval++;
