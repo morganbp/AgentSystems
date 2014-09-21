@@ -392,6 +392,15 @@ public class SCM_Server extends Thread {
 		resp.setContent(""+offers.size());
 		return resp;
 	}
+	// The customer gets all the offers from agents
+	public synchronized Message getAgentOffers(Message kqml){
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String agentOffersStr = Offer.listToString(agentOffers);
+		resp.setContent(agentOffersStr);
+		return resp;
+	}
 	
 	// get bank account balance
 
@@ -501,7 +510,14 @@ class TACSCMImpl extends SCMPOA {
 				return resp.toString();
 			}
 		}
-
+		//Customer wants to get all the agent offers
+		if(performative.equals(TAC_Ontology.getAgentOffers)){
+			Message resp = server.getAgentOffers(kqml);
+			if(resp != null){
+				return resp.toString();
+			}
+		}
+		
 		return null;
 
 	}
