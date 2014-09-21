@@ -174,8 +174,18 @@ public class SCM_Customer {
 		List<String> bidders = new ArrayList<String>();
 		for(Offer offer : offersList)
 		{
-			
+			//Counting unique bidders
+			if(bidders.contains(offer.getBidder()))
+			{
+						//do nothing
+			}
+			else
+			{
+				bidders.add(offer.getBidder());
+			}
 		}
-		return null;
+		custView.append("\nThe number of agents that send offers: " + bidders.size());
+		custView.append("\n#Offers: " + offersList.size());
+		return offersList;
 	}
 }
