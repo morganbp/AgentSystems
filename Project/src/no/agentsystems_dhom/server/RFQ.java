@@ -42,6 +42,10 @@ public class RFQ {
 		return RFQId;
 	}
 	
+	public int getReservePrice(){
+		return reservePrice;
+	}
+	
 	public static String listToString(List<RFQ> RFQs) {
 		StringBuilder string = new StringBuilder();
 		boolean firstRun = true;

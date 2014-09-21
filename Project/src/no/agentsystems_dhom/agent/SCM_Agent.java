@@ -64,6 +64,7 @@ public class SCM_Agent {
 		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className, Offer.listToString(todaysOffers));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
+		agentView.append("\n" + className + "bid on " + todaysOffers.size() + " RFQs");
 		todaysOffers.clear();
 	}
 	
