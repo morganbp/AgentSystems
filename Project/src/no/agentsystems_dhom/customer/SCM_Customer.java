@@ -168,24 +168,30 @@ public class SCM_Customer {
 	
 	protected List<Offer> getAgentOffers(String className)
 	{
-		Message kqml = Util.buildKQML(TAC_Ontology.getAgentOffers, className, "NoContent");
-		List<Offer> offersList = Offer.stringToList(server.send(kqml.toString()));
+		Message kqml = Util.buildKQML(TAC_Ontology.getAgentOffers, className, "");
 		
+		String resp = server.send(kqml.toString());
+		Message respond = Message.buildMessage(resp);
+		
+		List<Offer> offersList = Offer.stringToList(respond.getContent());
+		
+		List<String> bidders = getBidders(offersList);
+		
+		custView.append("\nThe number of agents that send offers: " + bidders.size());
+		custView.append("\n#Offers: " + offersList.size());
+		return offersList;
+	}
+
+	private List<String> getBidders(List<Offer> offersList) {
 		List<String> bidders = new ArrayList<String>();
 		for(Offer offer : offersList)
 		{
 			//Counting unique bidders
-			if(bidders.contains(offer.getBidder()))
-			{
-						//do nothing
-			}
-			else
+			if(!bidders.contains(offer.getBidder()))
 			{
 				bidders.add(offer.getBidder());
 			}
 		}
-		custView.append("\nThe number of agents that send offers: " + bidders.size());
-		custView.append("\n#Offers: " + offersList.size());
-		return offersList;
+		return bidders;
 	}
 }

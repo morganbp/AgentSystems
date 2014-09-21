@@ -1,6 +1,9 @@
 package no.agentsystems_dhom.customer;
 
+import java.util.List;
+
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
 
@@ -33,6 +36,10 @@ public class SCM_C1 extends SCM_Customer {
 				if(time == 1 && getStatus()){
 					sendDailyRFQs(day, CLASS_NAME);
 				}
+				if(time == 3 && getStatus()){
+					List<Offer> offers = getAgentOffers(CLASS_NAME);
+				}
+				
 				interval++;
 
 				Thread.sleep(TAC_Ontology.sec);

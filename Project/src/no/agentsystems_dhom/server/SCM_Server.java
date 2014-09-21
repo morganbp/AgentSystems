@@ -144,7 +144,7 @@ public class SCM_Server extends Thread {
 
 				if (time == 0 && isOn) {
 					serverView.append("\nday: " + day);
-					
+					agentOffers.clear();
 
 				}
 

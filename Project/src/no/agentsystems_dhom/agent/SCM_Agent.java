@@ -60,6 +60,8 @@ public class SCM_Agent {
 	}
 	
 	protected void sendOffersToServer(String className){
+		if(todaysOffers == null) return;
+		
 		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className, Offer.listToString(todaysOffers));
 		server.send(kqml.toString());
 		agentView.append("\nNumber of Offers: " + todaysOffers.size());

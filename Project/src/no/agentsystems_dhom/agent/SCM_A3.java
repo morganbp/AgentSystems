@@ -3,6 +3,7 @@ package no.agentsystems_dhom.agent;
 import java.util.List;
 
 import TACSCMApp.SCM;
+import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
@@ -38,7 +39,10 @@ public class SCM_A3 extends SCM_Agent{
 					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);
 					if(RFQList != null){
 						for(RFQ rfq : RFQList){
-							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()),rfq.getReservePrice(), rfq);
+							PC pc = new PC(rfq.getPC());
+							if(pc.getCycles() > 4) continue;
+							if(rfq.getReservePrice() < pc.getbasePrice())
+								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()),rfq.getReservePrice(), rfq);
 						}
 						sendOffersToServer(CLASS_NAME);
 					}
