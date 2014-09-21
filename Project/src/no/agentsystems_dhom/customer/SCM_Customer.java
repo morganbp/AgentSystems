@@ -159,7 +159,7 @@ public class SCM_Customer {
 
 			int PCsku = pc.getSKU();
 
-			int quantity = rand.nextInt(TAC_Ontology.Qmax - TAC_Ontology.Qmin)
+			int quantity = rand.nextInt(TAC_Ontology.Qmax - TAC_Ontology.Qmin) // 1-20
 					+ TAC_Ontology.Qmin;
 
 			int dueDate = currentDay

@@ -42,9 +42,10 @@ public class SCM_A1 extends SCM_Agent{
 					// back to server
 					List<RFQ> RFQList = getRFQsFromServer(CLASSNAME);
 					if(RFQList != null){
-						agentView.append("\nNumber of RFQ: " + RFQList.size());
 						for(RFQ rfq : RFQList){
 							PC pc = new PC(rfq.getPC());
+							if(rfq.getQuantity() < 10) continue;
+							
 							if(pc.getbasePrice() > rfq.getReservePrice())
 								createOffer(CLASSNAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 							else

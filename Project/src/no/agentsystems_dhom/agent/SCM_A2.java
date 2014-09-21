@@ -41,7 +41,6 @@ public class SCM_A2 extends SCM_Agent{
 					List<RFQ> rfqs = getRFQsFromServer(CLASSNAME);
 					if(rfqs != null)
 					{
-						agentView.append("\nNumber of RFQ: " + rfqs.size());
 						for(RFQ rfq : rfqs)
 						{
 							createOffer(CLASSNAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
