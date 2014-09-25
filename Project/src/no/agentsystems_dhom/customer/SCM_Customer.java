@@ -25,6 +25,11 @@ public class SCM_Customer {
 	protected GUI custView;
 	protected int interval;
 
+	// Average RFQ values
+	private double RFQAvgH, RFQAvgL, RFQAvgM;
+	// Trend values
+	private double trendH, trendL, trendM;
+
 	public static SCM initSCMImpl(String[] args) {
 		SCM server = null;
 		try {
@@ -54,6 +59,7 @@ public class SCM_Customer {
 		has_started = true;
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;
+		initRFQandTrends();
 		custView.setText("---> Time : " + interval + " seconds ");
 	}
 
@@ -72,45 +78,94 @@ public class SCM_Customer {
 		has_started = status;
 	}
 
-	// W.I.P.
-	protected void sendDailyRFQs(int currentDay, String className) {
-		Random rand = new Random();
-		List<RFQ> RFQs = new ArrayList<RFQ>();
+	protected void initRFQandTrends() {
+		// Generate trends for each of the segments.
+		trendH = generateTrend();
 
-		// Decide the number of RFQs to send to the server
-		double trend = 1;
-		trend = Math.max(
-				TAC_Ontology.Tmin,//Tmin: 0.95 Tmax: 1/0.95
-				Math.min(TAC_Ontology.Tmax, trend 
-						+ (0.02 * rand.nextDouble() - 0.01))); //0,99-1,01
+		trendL = generateTrend();
+
+		trendM = generateTrend();
+		// Generate a RFQavg between 25 and 100 
+		RFQAvgH = generateAverageRFQ();
+		
+		RFQAvgL = generateAverageRFQ();
+		
+		RFQAvgM = generateAverageRFQ();
+		
+	}
+	
+	private double getRFQ(double RFQavg, double trend) {
+		double newTrend = checkBoundaries(RFQavg, trend);
+		return Math.min(TAC_Ontology.HLRFQmax, Math.max(TAC_Ontology.HLRFQmin, RFQavg * newTrend));
+	}
+
+	private double checkBoundaries(double RFQavg, double trend){
+		if (trend * RFQavg < TAC_Ontology.HLRFQmin
+				|| trend * RFQavg > TAC_Ontology.HLRFQmax) {
+			return 1.0;
+		}
+		return trend;
+	}
+	
+	private double generateAverageRFQ() {
+		Random rand = new Random();
 		double RFQavg = TAC_Ontology.HLRFQmin // 25  - 100
 				+ (TAC_Ontology.HLRFQmax - TAC_Ontology.HLRFQmin)
 				* rand.nextDouble();
-		// Setting trend to 1 if it exceeds the boundaries
-		if (trend * RFQavg < TAC_Ontology.HLRFQmin
-				|| trend * RFQavg > TAC_Ontology.HLRFQmax) {
-			trend = 1;
-		}
+		return RFQavg;
+	}
 
+	private double generateTrend() {
+		Random rand = new Random();
+		double trend = 1;
+		
+		double rtnVal = Math.max(
+				TAC_Ontology.Tmin,
+				Math.min(TAC_Ontology.Tmax, trend
+						+ (0.02 * rand.nextDouble() - 0.01)));
+		return rtnVal;
+	}
+	
+	private double generateTrend(double trend) {
+		Random rand = new Random();
+		
+		double rtnVal = Math.max(
+				TAC_Ontology.Tmin,
+				Math.min(TAC_Ontology.Tmax, trend
+						+ (0.02 * rand.nextDouble() - 0.01)));
+		return rtnVal;
+	}
+
+	protected void sendDailyRFQs(int currentDay, String className) {
+
+		List<RFQ> RFQs = new ArrayList<RFQ>();
+
+		//Do random walk
+		trendH = generateTrend(trendH);
+		
+		trendL = generateTrend(trendL);
+		
+		trendM = generateTrend(trendM);
+		
 		// Compute the number of RFQs for the current day for each segment
 		// High segment
 		// HRFQavg is the number of RFQs we are going to make for this segment
-		double HRFQavg = Util.poisson(RFQavg);
-		List<RFQ> highSegmentRFQs = createRFQs(HRFQavg, TAC_Ontology.high,
+		double HRFQ = Util.poisson(getRFQ(RFQAvgH, trendH));
+		List<RFQ> highSegmentRFQs = createRFQs(HRFQ, TAC_Ontology.high,
 				currentDay);
 
 		// Low segment
 		// LRFQavg is the number of RFQs we are going to make for this segment
-		double LRFQavg = Util.poisson(RFQavg);
-		List<RFQ> lowSegmentRFQs = createRFQs(LRFQavg, TAC_Ontology.low,
+		double LRFQ = Util.poisson(getRFQ(RFQAvgL, trendL));
+		List<RFQ> lowSegmentRFQs = createRFQs(LRFQ, TAC_Ontology.low,
 				currentDay);
 
 		// Mid segment
 		// MRFQavg is the number of RFQs we are going to make for this segment
-		double MRFQavg = Util.poisson(RFQavg);
-		List<RFQ> midSegmentRFQs = createRFQs(MRFQavg, TAC_Ontology.mid,
+		double MRFQ = Util.poisson(getRFQ(RFQAvgM, trendM));
+		List<RFQ> midSegmentRFQs = createRFQs(MRFQ, TAC_Ontology.mid,
 				currentDay);
-		
+
 		// Adding RFQs from each segment to the main list
 		RFQs.addAll(lowSegmentRFQs);
 		RFQs.addAll(midSegmentRFQs);
@@ -127,7 +182,7 @@ public class SCM_Customer {
 
 	private void sendRFQToServer(String className, List<RFQ> RFQs) {
 		Message kqml = Util.buildKQML(TAC_Ontology.Customer_RFQs, className,
-		RFQ.listToString(RFQs));
+				RFQ.listToString(RFQs));
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
 		custView.append("\n#RFQs: " + response.getContent());
@@ -143,7 +198,7 @@ public class SCM_Customer {
 			// Get SKU and create PC in chosen segment
 			int SKU = PC.SKU(segment);
 			PC pc = new PC(SKU);
-			
+
 			int reservePrice = pc.getbasePrice()
 					* ((rand.nextInt(TAC_Ontology.PCpmax - TAC_Ontology.PCpmin) + TAC_Ontology.PCpmin) / 100); // 0,75-1,25
 
@@ -165,30 +220,29 @@ public class SCM_Customer {
 		}
 		return RFQs;
 	}
-	
-	protected List<Offer> getAgentOffers(String className)
-	{
-		Message kqml = Util.buildKQML(TAC_Ontology.getAgentOffers, className, "");
-		
+
+	protected List<Offer> getAgentOffers(String className) {
+		Message kqml = Util.buildKQML(TAC_Ontology.getAgentOffers, className,
+				"");
+
 		String resp = server.send(kqml.toString());
 		Message respond = Message.buildMessage(resp);
-		
+
 		List<Offer> offersList = Offer.stringToList(respond.getContent());
-		
+
 		List<String> bidders = getBidders(offersList);
-		
-		custView.append("\nThe number of agents that send offers: " + bidders.size());
+
+		custView.append("\nThe number of agents that send offers: "
+				+ bidders.size());
 		custView.append("\n#Offers: " + offersList.size());
 		return offersList;
 	}
 
 	private List<String> getBidders(List<Offer> offersList) {
 		List<String> bidders = new ArrayList<String>();
-		for(Offer offer : offersList)
-		{
-			//Counting unique bidders
-			if(!bidders.contains(offer.getBidder()))
-			{
+		for (Offer offer : offersList) {
+			// Counting unique bidders
+			if (!bidders.contains(offer.getBidder())) {
 				bidders.add(offer.getBidder());
 			}
 		}
