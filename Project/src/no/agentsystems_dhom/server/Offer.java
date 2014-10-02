@@ -9,8 +9,8 @@ public class Offer {
 	private double offer;
 	private RFQ rfq;
 
-	protected static String OFFER_FIELD_SEPERATOR = "&";
-	protected static String OFFER_OBJECT_SEPERATOR = "¤";
+	protected static String OFFER_FIELD_SEPERATOR = "<offer_field_seperator>";
+	protected static String OFFER_OBJECT_SEPERATOR = "<offer_object_seperator>";
 
 	public Offer(String bidder, String reciever, double offer, RFQ rfq) {
 		this.bidder = bidder;

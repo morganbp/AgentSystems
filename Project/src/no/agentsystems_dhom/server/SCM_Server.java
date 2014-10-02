@@ -63,6 +63,10 @@ public class SCM_Server extends Thread {
 	
 	private List<Offer> agentOffers;
 	
+	// Store the orders from custommer 
+	
+	private List<Order> customerOrders;
+	
 	
 	public SCM_Server() {
 		serverView = new GUI("SCM_server");
@@ -401,6 +405,30 @@ public class SCM_Server extends Thread {
 		resp.setContent(agentOffersStr);
 		return resp;
 	}
+	// the customer sends orders to agents
+	public synchronized Message customerOrders(Message kqml){
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String messageContent = kqml.getContent();
+		List<Order> orders = Order.stringToList(messageContent);
+		customerOrders.addAll(orders);
+		serverView.append("\n" + name + " has sent the server " + orders.size() + " orders.");
+		
+		return resp;
+	}
+	// The agent gets the orders from customers
+	public synchronized Message getCustomerOrders(Message kqml){ 
+		// TODO Må nok ha en sjekk om hvilken agent som spør etter dette.
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String customerOrderStr = Order.listToString(customerOrders);
+		resp.setContent(customerOrderStr);
+		return resp;
+	}
+	
+	
 	
 	// get bank account balance
 
@@ -518,6 +546,22 @@ class TACSCMImpl extends SCMPOA {
 			}
 		}
 		
+		// Agent gets the orders from customers
+		if(performative.equals(TAC_Ontology.getCustomerOrders)){
+			Message resp = server.getCustomerOrders(kqml);
+			if(resp != null){
+				return resp.toString();
+			}
+		}
+		
+		// Customer send orders to agent
+		if(performative.equals(TAC_Ontology.customerOrders)){
+			Message resp = server.customerOrders(kqml);
+			if(resp != null){
+				return resp.toString();
+			}
+			
+		}
 		return null;
 
 	}
