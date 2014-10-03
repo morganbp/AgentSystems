@@ -35,6 +35,13 @@ public class SCM_A3 extends SCM_Agent{
 					int day = interval / TAC_Ontology.lengthOfADay;
 					agentView.append("\nday : " + day);
 				}
+				
+				if(time == 1 && getStatus()){
+					// Get orders from the server, 
+					// and store them.
+					activeOrders.addAll(getOrderFromServer(CLASS_NAME));
+				}
+				
 				if(time == 2 && getStatus()){
 					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);
 					if(RFQList != null){
@@ -47,6 +54,9 @@ public class SCM_A3 extends SCM_Agent{
 						sendOffersToServer(CLASS_NAME);
 					}
 				}
+				
+			
+				
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
@@ -35,6 +36,11 @@ public class SCM_A1 extends SCM_Agent{
 					agentView.append("\nday : " + day);
 				}
 				
+				if(time == 1 && getStatus()){
+					// Get orders from the server, 
+					// and store them.
+					activeOrders.addAll(getOrderFromServer(CLASS_NAME));
+				}
 				
 				if(time == 2 && getStatus()){
 					// Get RFQS From server,
@@ -53,6 +59,10 @@ public class SCM_A1 extends SCM_Agent{
 						}
 						sendOffersToServer(CLASS_NAME);
 					}
+				}
+				
+				if(time == 4 && getStatus()){
+					
 				}
 				interval++;
 				

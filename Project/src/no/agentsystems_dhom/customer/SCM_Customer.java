@@ -152,19 +152,19 @@ public class SCM_Customer {
 		// HRFQavg is the number of RFQs we are going to make for this segment
 		double HRFQ = Util.poisson(getRFQ(RFQAvgH, trendH));
 		List<RFQ> highSegmentRFQs = createRFQs(HRFQ, TAC_Ontology.high,
-				currentDay);
+				currentDay, className);
 
 		// Low segment
 		// LRFQavg is the number of RFQs we are going to make for this segment
 		double LRFQ = Util.poisson(getRFQ(RFQAvgL, trendL));
 		List<RFQ> lowSegmentRFQs = createRFQs(LRFQ, TAC_Ontology.low,
-				currentDay);
+				currentDay, className);
 
 		// Mid segment
 		// MRFQavg is the number of RFQs we are going to make for this segment
 		double MRFQ = Util.poisson(getRFQ(RFQAvgM, trendM));
 		List<RFQ> midSegmentRFQs = createRFQs(MRFQ, TAC_Ontology.mid,
-				currentDay);
+				currentDay, className);
 
 		// Adding RFQs from each segment to the main list
 		RFQs.addAll(lowSegmentRFQs);
@@ -191,7 +191,7 @@ public class SCM_Customer {
 	// create RFQ based on segment, what day it is and how many we want to
 	// create.
 	protected List<RFQ> createRFQs(double RFQquantity, int segment,
-			int currentDay) {
+			int currentDay, String className) {
 		Random rand = new Random();
 		List<RFQ> RFQs = new ArrayList<RFQ>();
 		for (int i = 0; i < RFQquantity; i++) {
@@ -215,7 +215,7 @@ public class SCM_Customer {
 					+ TAC_Ontology.Dmin;
 
 			RFQ tempRFQ = new RFQ(PCsku, quantity, dueDate, penalty,
-					reservePrice);
+					reservePrice, className);
 			RFQs.add(tempRFQ);
 		}
 		return RFQs;

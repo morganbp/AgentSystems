@@ -36,6 +36,12 @@ public class SCM_A2 extends SCM_Agent{
 					agentView.append("\nday : " + day);
 				}
 				
+				if(time == 1 && getStatus()){
+					// Get orders from the server, 
+					// and store them.
+					activeOrders.addAll(getOrderFromServer(CLASS_NAME));
+				}
+				
 				if(time == 2 && getStatus())
 				{
 					//GET RFQs. Bid on them and send offers back to server.
@@ -54,6 +60,7 @@ public class SCM_A2 extends SCM_Agent{
 						sendOffersToServer(CLASS_NAME);
 					}
 				}
+				
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);

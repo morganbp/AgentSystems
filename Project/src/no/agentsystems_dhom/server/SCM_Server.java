@@ -23,7 +23,7 @@ public class SCM_Server extends Thread {
 	private GUI serverView;
 	
 	//RFQ list to keep track of todays RFQs
-	private List<RFQ> TodaysRFQs = new ArrayList<RFQ>();
+	private List<RFQ> TodaysRFQs;
 	
 	// gameId is the date and time for a game round
 
@@ -35,7 +35,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -30;
+	private int interval = -10;
 
 	private int day = 0;
 
@@ -124,7 +124,7 @@ public class SCM_Server extends Thread {
 		for (;;) {
 
 			try {
-
+				
 				if (interval < 0) {
 					serverView.setText("Server is waiting ... ");
 				} else if (interval == 0
@@ -149,6 +149,7 @@ public class SCM_Server extends Thread {
 				if (time == 0 && isOn) {
 					serverView.append("\nday: " + day);
 					agentOffers.clear();
+					TodaysRFQs.clear();
 
 				}
 
@@ -159,7 +160,7 @@ public class SCM_Server extends Thread {
 				}
 
 				interval++;
-
+				
 				sleep(TAC_Ontology.sec);
 
 			}
@@ -215,6 +216,10 @@ public class SCM_Server extends Thread {
 		bank.setLoanInterestRate(loanInterestRate);
 		
 		agentOffers = new ArrayList<Offer>();
+		
+		TodaysRFQs = new ArrayList<RFQ>();
+		
+		customerOrders = new ArrayList<Order>();
 
 	}
 
@@ -358,7 +363,6 @@ public class SCM_Server extends Thread {
 	//Run this when customer RFQs have arrived 
 	public synchronized Message customer_RFQs(Message kqml)
 	{
-		TodaysRFQs.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -411,6 +415,7 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
+		System.out.println("message content " + messageContent);
 		List<Order> orders = Order.stringToList(messageContent);
 		customerOrders.addAll(orders);
 		serverView.append("\n" + name + " has sent the server " + orders.size() + " orders.");
@@ -422,8 +427,15 @@ public class SCM_Server extends Thread {
 		// TODO Må nok ha en sjekk om hvilken agent som spør etter dette.
 		Message resp = new Message();
 		String name = kqml.getSender();
+		List<Order> ordersToSender = new ArrayList<Order>();
+		// Add all orders which are intended for the Sender 
+		// (or the one calling this method)
+		for(Order o : customerOrders){
+			if(o.getProvider().equals(name))
+				ordersToSender.add(o);
+		}
 		resp.setReceiver(name);
-		String customerOrderStr = Order.listToString(customerOrders);
+		String customerOrderStr = Order.listToString(ordersToSender);
 		resp.setContent(customerOrderStr);
 		return resp;
 	}

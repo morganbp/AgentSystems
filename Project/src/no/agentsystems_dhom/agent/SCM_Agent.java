@@ -5,6 +5,7 @@ import java.util.List;
 
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
+import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
@@ -23,6 +24,7 @@ public class SCM_Agent {
 	private boolean has_started;
 	protected GUI agentView;
 	protected List<Offer> todaysOffers;
+	protected List<Order> activeOrders;
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -55,7 +57,7 @@ public class SCM_Agent {
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
 		List<RFQ> RFQList = RFQ.stringToList(response.getContent());
-	
+		
 		return RFQList;
 	}
 	
@@ -71,9 +73,21 @@ public class SCM_Agent {
 	protected void createOffer(String bidder, String reciever, double offerPrice, RFQ rfq){
 		todaysOffers.add(new Offer(bidder, reciever, offerPrice, rfq));
 	}
+	
+	protected List<Order> getOrderFromServer(String className){
+		String content = "";
+		Message kqml = Util.buildKQML(TAC_Ontology.getCustomerOrders, className, content);
+		String respond = server.send(kqml.toString());
+		Message response = Message.buildMessage(respond);
+		List<Order> orderList = Order.stringToList(response.getContent());
+		
+		agentView.append("\n#Customer Orders: " + orderList.size());
+		return orderList;
+	}
 
 	protected void startTheGame() {
 		todaysOffers = new ArrayList<Offer>();
+		activeOrders = new ArrayList<Order>();
 		has_started = true;
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0 : interval;
 		agentView.setText("---> Time : " + interval + " seconds ");
