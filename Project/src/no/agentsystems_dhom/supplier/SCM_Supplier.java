@@ -15,6 +15,7 @@ public class SCM_Supplier {
 	protected GUI suplView;
 	protected int interval;
 	protected SCM server;
+	protected Supplier[] suppliers = new Supplier[8];
 	
 	public static SCM initServer(String[] args){
 		SCM server;
