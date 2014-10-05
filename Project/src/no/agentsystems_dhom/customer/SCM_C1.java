@@ -36,7 +36,7 @@ public class SCM_C1 extends SCM_Customer {
 				}
 				if(time == 1 && getStatus()){
 					//Send orders if there are any
-					
+					sendOrders(CLASS_NAME);
 				}
 				if(time == 2 && getStatus()){
 					//Send new RFQs for current day
@@ -45,15 +45,8 @@ public class SCM_C1 extends SCM_Customer {
 				
 				if(time == 8 && getStatus()){
 					List<Offer> offers = getAgentOffers(CLASS_NAME);
-					
-					Order o = 
-							new Order(CLASS_NAME, offers.get(0).getBidder(), offers.get(0));
-					
-					
-					// Loop gjennom offers
-						// hvis krav er tilfredstilt; lag en ordre
-					
-					// ferdig med loopen, send alle ofrene til server
+					Offer bestOffer = findBestOffer(offers);
+					Order order = makeOrder(CLASS_NAME, bestOffer);
 				}
 				
 				interval++;
@@ -69,8 +62,4 @@ public class SCM_C1 extends SCM_Customer {
 		SCM ser = initSCMImpl(args);
 		new SCM_C1(ser);
 	}
-	
-	
-	
-
 }

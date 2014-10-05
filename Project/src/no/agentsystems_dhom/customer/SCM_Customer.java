@@ -253,35 +253,26 @@ public class SCM_Customer {
 		}
 		return bidders;
 	}
-	protected ArrayList<Order> makeOrderList(){
-		Order o = new Order(null, null, null);
-		
-		//TAC_Ontology.customerOrders;
-		return null;
+	protected Order makeOrder(String customer, Offer offer){
+		Order o = new Order(customer,offer.getBidder(), offer);
+		return o;
 	}
-	/*
-	private ArrayList<Order> removeDuplicateOrders(ArrayList<Order> oc){
-		ArrayList<Order> tmp1 = new ArrayList<Order>(oc);
-		ArrayList<Order> tmp2 = new ArrayList<Order>();
-		while(tmp1.size() > 0){
-			Order o1 = tmp1.get(0);
-			tmp1.remove(0);
-			for(Order o2 : oc){
-				if(o1== null || o2 == null)
-					continue;
-				if(o2.equals(o1)){
-					if(o2.getPrice == o1.getPrice()){
-						tmp2.remove(o2);
-					}else{
-						oc = o2; //oc??
-						tmp2.remove(o2);
-					}
-				}
+	protected List<Order> makeOrderList(){
+		todaysOrders = Order.stringToList(TAC_Ontology.customerOrders);
+		return todaysOrders;
+	}
+	protected Offer findBestOffer(List<Offer> offers){
+		Offer currentBestOffer = null;
+		for(Offer o:offers){
+			if(currentBestOffer == null){
+				currentBestOffer = o;
+				
+			if(o.getOfferPrice() < currentBestOffer.getOfferPrice())
+				 currentBestOffer = o;
 			}
-			tmp1.add(o1);
 		}
-		return tmp1;
-	}*/
+		return currentBestOffer;
+	}
 	protected void sendOrders(String customer){
 		if(todaysOrders == null)
 			return;
