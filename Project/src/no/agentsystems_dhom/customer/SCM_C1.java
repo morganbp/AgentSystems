@@ -4,6 +4,7 @@ import java.util.List;
 
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
+import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
 
@@ -34,10 +35,25 @@ public class SCM_C1 extends SCM_Customer {
 					custView.append("\nday: " + day);
 				}
 				if(time == 1 && getStatus()){
+					//Send orders if there are any
+					
+				}
+				if(time == 2 && getStatus()){
+					//Send new RFQs for current day
 					sendDailyRFQs(day, CLASS_NAME);
 				}
-				if(time == 3 && getStatus()){
+				
+				if(time == 8 && getStatus()){
 					List<Offer> offers = getAgentOffers(CLASS_NAME);
+					
+					Order o = 
+							new Order(CLASS_NAME, offers.get(0).getBidder(), offers.get(0));
+					
+					
+					// Loop gjennom offers
+						// hvis krav er tilfredstilt; lag en ordre
+					
+					// ferdig med loopen, send alle ofrene til server
 				}
 				
 				interval++;

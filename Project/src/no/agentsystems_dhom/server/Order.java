@@ -40,8 +40,13 @@ public class Order {
 	public int getDueDate(){
 		return offer.getRFQ().getDueDate();
 	}
+	
 	public int getPenalty(){
 		return offer.getRFQ().getPenalty();
+	}
+	
+	public double getPrice(){
+		return offer.getOfferPrice();
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
+import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
@@ -24,7 +25,9 @@ public class SCM_Customer {
 	protected SCM server;
 	protected GUI custView;
 	protected int interval;
-
+	private List<Order> todaysOrders;
+	private List<Order> allOrders;
+	
 	// Average RFQ values
 	private double RFQAvgH, RFQAvgL, RFQAvgM;
 	// Trend values
@@ -60,6 +63,8 @@ public class SCM_Customer {
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;
 		initRFQandTrends();
+		allOrders = new ArrayList<Order>();
+		todaysOrders = new ArrayList<Order>();
 		custView.setText("---> Time : " + interval + " seconds ");
 	}
 
@@ -248,4 +253,47 @@ public class SCM_Customer {
 		}
 		return bidders;
 	}
+	protected ArrayList<Order> makeOrderList(){
+		Order o = new Order(null, null, null);
+		
+		//TAC_Ontology.customerOrders;
+		return null;
+	}
+	/*
+	private ArrayList<Order> removeDuplicateOrders(ArrayList<Order> oc){
+		ArrayList<Order> tmp1 = new ArrayList<Order>(oc);
+		ArrayList<Order> tmp2 = new ArrayList<Order>();
+		while(tmp1.size() > 0){
+			Order o1 = tmp1.get(0);
+			tmp1.remove(0);
+			for(Order o2 : oc){
+				if(o1== null || o2 == null)
+					continue;
+				if(o2.equals(o1)){
+					if(o2.getPrice == o1.getPrice()){
+						tmp2.remove(o2);
+					}else{
+						oc = o2; //oc??
+						tmp2.remove(o2);
+					}
+				}
+			}
+			tmp1.add(o1);
+		}
+		return tmp1;
+	}*/
+	protected void sendOrders(String customer){
+		if(todaysOrders == null)
+			return;
+		String allOrders = Order.listToString(todaysOrders);
+		
+		Message kqml = Util.buildKQML(TAC_Ontology.customerOrders, customer, allOrders);
+		if(kqml == null)
+			return;
+		try{
+			server.send(kqml.toString());
+		}
+		catch(Exception e){}
+		todaysOrders.clear();
+	} 
 }

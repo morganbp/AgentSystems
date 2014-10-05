@@ -415,7 +415,6 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
-		System.out.println("message content " + messageContent);
 		List<Order> orders = Order.stringToList(messageContent);
 		customerOrders.addAll(orders);
 		serverView.append("\n" + name + " has sent the server " + orders.size() + " orders.");

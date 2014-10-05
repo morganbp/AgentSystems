@@ -48,8 +48,8 @@ public class SCM_A3 extends SCM_Agent{
 						for(RFQ rfq : RFQList){
 							PC pc = new PC(rfq.getPC());
 							if(pc.getCycles() > 4) continue;
-							if(rfq.getReservePrice() < pc.getbasePrice())
-								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()),rfq.getReservePrice(), rfq);
+							
+							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()),rfq.getReservePrice(), rfq);
 						}
 						sendOffersToServer(CLASS_NAME);
 					}

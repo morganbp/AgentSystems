@@ -6,16 +6,16 @@ import java.util.List;
 public class Offer {
 	private String bidder;
 	private String reciever;
-	private double offer;
+	private double offerPrice;
 	private RFQ rfq;
 
-	protected static String OFFER_FIELD_SEPERATOR = "<offer_field_seperator>";
-	protected static String OFFER_OBJECT_SEPERATOR = "<offer_object_seperator>";
+	protected static String OFFER_FIELD_SEPERATOR = "<offerPrice_field_seperator>";
+	protected static String OFFER_OBJECT_SEPERATOR = "<offerPrice_object_seperator>";
 
-	public Offer(String bidder, String reciever, double offer, RFQ rfq) {
+	public Offer(String bidder, String reciever, double offerPrice, RFQ rfq) {
 		this.bidder = bidder;
 		this.reciever = reciever;
-		this.offer = offer;
+		this.offerPrice = offerPrice;
 		this.rfq = rfq;
 	}
 
@@ -27,8 +27,8 @@ public class Offer {
 		return reciever;
 	}
 
-	public double getOffer() {
-		return offer;
+	public double getOfferPrice() {
+		return offerPrice;
 	}
 
 	public RFQ getRFQ() {
@@ -38,37 +38,37 @@ public class Offer {
 	@Override
 	public String toString() {
 		return bidder + OFFER_FIELD_SEPERATOR + reciever
-				+ OFFER_FIELD_SEPERATOR + Double.toString(offer)
+				+ OFFER_FIELD_SEPERATOR + Double.toString(offerPrice)
 				+ OFFER_FIELD_SEPERATOR + rfq.toString();
 	}
 	
-	public static String listToString(List<Offer> offersList){
+	public static String listToString(List<Offer> offerPricesList){
 		StringBuilder builder = new StringBuilder();
 		boolean firstrun = true;
-		for(Offer offer : offersList){
+		for(Offer offerPrice : offerPricesList){
 			if(!firstrun)
 				builder.append(OFFER_OBJECT_SEPERATOR);
 			else
 				firstrun = false;
 			
-			builder.append(offer.toString());
+			builder.append(offerPrice.toString());
 		}
 		return builder.toString();
 	}
 	
-	public static List<Offer> stringToList(String offersString){
+	public static List<Offer> stringToList(String offerPricesString){
 		List<Offer> rtnList = new ArrayList<>();
-		String[] offers = offersString.split(OFFER_OBJECT_SEPERATOR);
-		for(String offer : offers ){
-			Offer o = toOffer(offer);
+		String[] offerPrices = offerPricesString.split(OFFER_OBJECT_SEPERATOR);
+		for(String offerPrice : offerPrices ){
+			Offer o = toOffer(offerPrice);
 			if(o == null) continue;
 			rtnList.add(o);
 		}
 		return rtnList;
 	}
 	
-	public static Offer toOffer(String offer){
-		String[] offFields = offer.split(OFFER_FIELD_SEPERATOR);
+	public static Offer toOffer(String offerPrice){
+		String[] offFields = offerPrice.split(OFFER_FIELD_SEPERATOR);
 		if(offFields.length != 4) return null;
 		
 		RFQ rfq = RFQ.toRFQ(offFields[3]);

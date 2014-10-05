@@ -52,10 +52,8 @@ public class SCM_A2 extends SCM_Agent{
 						{
 							PC pc = new PC(rfq.getPC());
 							if(pc.getSegment() != TAC_Ontology.low) continue; // only bid on PCs with low segment
-							if(rfq.getReservePrice() < pc.getbasePrice())
-								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice() * 0.95, rfq);
-							else
-								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)pc.getbasePrice() * 0.95, rfq);
+							
+							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 						}
 						sendOffersToServer(CLASS_NAME);
 					}

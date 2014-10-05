@@ -52,10 +52,7 @@ public class SCM_A1 extends SCM_Agent{
 							PC pc = new PC(rfq.getPC());
 							if(rfq.getQuantity() < 10) continue;
 							
-							if(pc.getbasePrice() > rfq.getReservePrice())
-								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
-							else
-								createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)pc.getbasePrice() * 0.95, rfq);
+							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 						}
 						sendOffersToServer(CLASS_NAME);
 					}
