@@ -44,9 +44,9 @@ public class SCM_C1 extends SCM_Customer {
 				}
 				
 				if(time == 8 && getStatus()){
-					List<Offer> offers = getAgentOffers(CLASS_NAME);
-					Offer bestOffer = findBestOffer(offers);
-					Order order = makeOrder(CLASS_NAME, bestOffer);
+					List<Offer> bestOffers = findBestOffers(getAgentOffers(CLASS_NAME));
+					List<Order> order = makeOrders(CLASS_NAME, bestOffers);
+					saveOrders(order);
 				}
 				
 				interval++;
