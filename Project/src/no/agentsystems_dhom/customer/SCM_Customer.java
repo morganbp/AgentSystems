@@ -27,7 +27,7 @@ public class SCM_Customer {
 	protected int interval;
 	private List<Order> todaysOrders;
 	private List<Order> allOrders;
-	
+
 	// Average RFQ values
 	private double RFQAvgH, RFQAvgL, RFQAvgM;
 	// Trend values
@@ -90,31 +90,32 @@ public class SCM_Customer {
 		trendL = generateTrend();
 
 		trendM = generateTrend();
-		// Generate a RFQavg between 25 and 100 
+		// Generate a RFQavg between 25 and 100
 		RFQAvgH = generateAverageRFQ();
-		
+
 		RFQAvgL = generateAverageRFQ();
-		
+
 		RFQAvgM = generateAverageRFQ();
-		
-	}
-	
-	private double getRFQ(double RFQavg, double trend) {
-		double newTrend = checkBoundaries(RFQavg, trend);
-		return Math.min(TAC_Ontology.HLRFQmax, Math.max(TAC_Ontology.HLRFQmin, RFQavg * newTrend));
+
 	}
 
-	private double checkBoundaries(double RFQavg, double trend){
+	private double getRFQ(double RFQavg, double trend) {
+		double newTrend = checkBoundaries(RFQavg, trend);
+		return Math.min(TAC_Ontology.HLRFQmax,
+				Math.max(TAC_Ontology.HLRFQmin, RFQavg * newTrend));
+	}
+
+	private double checkBoundaries(double RFQavg, double trend) {
 		if (trend * RFQavg < TAC_Ontology.HLRFQmin
 				|| trend * RFQavg > TAC_Ontology.HLRFQmax) {
 			return 1.0;
 		}
 		return trend;
 	}
-	
+
 	private double generateAverageRFQ() {
 		Random rand = new Random();
-		double RFQavg = TAC_Ontology.HLRFQmin // 25  - 100
+		double RFQavg = TAC_Ontology.HLRFQmin // 25 - 100
 				+ (TAC_Ontology.HLRFQmax - TAC_Ontology.HLRFQmin)
 				* rand.nextDouble();
 		return RFQavg;
@@ -123,17 +124,17 @@ public class SCM_Customer {
 	private double generateTrend() {
 		Random rand = new Random();
 		double trend = 1;
-		
+
 		double rtnVal = Math.max(
 				TAC_Ontology.Tmin,
 				Math.min(TAC_Ontology.Tmax, trend
 						+ (0.02 * rand.nextDouble() - 0.01)));
 		return rtnVal;
 	}
-	
+
 	private double generateTrend(double trend) {
 		Random rand = new Random();
-		
+
 		double rtnVal = Math.max(
 				TAC_Ontology.Tmin,
 				Math.min(TAC_Ontology.Tmax, trend
@@ -145,13 +146,13 @@ public class SCM_Customer {
 
 		List<RFQ> RFQs = new ArrayList<RFQ>();
 
-		//Do random walk
+		// Do random walk
 		trendH = generateTrend(trendH);
-		
+
 		trendL = generateTrend(trendL);
-		
+
 		trendM = generateTrend(trendM);
-		
+
 		// Compute the number of RFQs for the current day for each segment
 		// High segment
 		// HRFQavg is the number of RFQs we are going to make for this segment
@@ -253,38 +254,66 @@ public class SCM_Customer {
 		}
 		return bidders;
 	}
-	protected Order makeOrder(String customer, Offer offer){
-		Order o = new Order(customer,offer.getBidder(), offer);
+
+	protected List<Order> makeOrders(String customer, List<Offer> offers){
+		List<Order> orders = new ArrayList<Order>();
+		for(Offer offer : offers){
+			orders.add(makeOrder(customer, offer));
+		}
+		return orders;
+	}
+	
+	protected Order makeOrder(String customer, Offer offer) {
+		Order o = new Order(customer, offer.getBidder(), offer);
 		return o;
 	}
-	protected List<Order> makeOrderList(){
+
+	protected List<Order> makeOrderList() {
 		todaysOrders = Order.stringToList(TAC_Ontology.customerOrders);
 		return todaysOrders;
 	}
-	protected Offer findBestOffer(List<Offer> offers){
-		Offer currentBestOffer = null;
-		for(Offer o:offers){
-			if(currentBestOffer == null){
-				currentBestOffer = o;
-				
-			if(o.getOfferPrice() < currentBestOffer.getOfferPrice())
-				 currentBestOffer = o;
+
+	protected List<Offer> findBestOffers(List<Offer> offers) {
+		List<Offer> bestOffers = new ArrayList<Offer>();
+		for (Offer o : offers) {
+			if (isBestOffer(o, bestOffers)) {
+				bestOffers.add(o);
 			}
 		}
-		return currentBestOffer;
+		return bestOffers;
 	}
-	protected void sendOrders(String customer){
-		if(todaysOrders == null)
+
+	private boolean isBestOffer(Offer offer, List<Offer> offers) {
+		for(Offer o : offers){
+			if(offer.getRFQ().getRFQId() != o.getRFQ().getRFQId()) continue;
+			
+			if(offer.getOfferPrice() >= o.getOfferPrice()) 
+				return false;
+		}
+		return true;
+	}
+
+	protected void sendOrders(String customer) {
+		if (todaysOrders == null)
 			return;
 		String allOrders = Order.listToString(todaysOrders);
-		
-		Message kqml = Util.buildKQML(TAC_Ontology.customerOrders, customer, allOrders);
-		if(kqml == null)
+		Message kqml = Util.buildKQML(TAC_Ontology.customerOrders, customer,
+				allOrders);
+		if (kqml == null)
 			return;
-		try{
+		try {
 			server.send(kqml.toString());
+		} catch (Exception e) {
 		}
-		catch(Exception e){}
+
+		custView.append("\n#Orders: " + todaysOrders.size());
 		todaysOrders.clear();
-	} 
+	}
+	
+	protected void saveOrders(List<Order> orders){
+		if(orders == null) return;
+		
+		todaysOrders.addAll(orders);
+		allOrders.addAll(orders);
+	}
 }

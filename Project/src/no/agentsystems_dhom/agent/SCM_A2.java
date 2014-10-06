@@ -36,13 +36,13 @@ public class SCM_A2 extends SCM_Agent{
 					agentView.append("\nday : " + day);
 				}
 				
-				if(time == 1 && getStatus()){
+				if(time == 2 && getStatus()){
 					// Get orders from the server, 
 					// and store them.
 					activeOrders.addAll(getOrderFromServer(CLASS_NAME));
 				}
 				
-				if(time == 2 && getStatus())
+				if(time == 3 && getStatus())
 				{
 					//GET RFQs. Bid on them and send offers back to server.
 					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);

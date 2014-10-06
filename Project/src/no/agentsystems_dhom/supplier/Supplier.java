@@ -1,22 +1,15 @@
 package no.agentsystems_dhom.supplier;
 
 public class Supplier {
-	private Component product1;
-	private Component product2;
+	private Component[] products = new Component[2];
 	
 	public Supplier(int component1_ID, int component2_ID)
 	{
-		product1 = new Component(component1_ID);
-		product2 = new Component(component2_ID);
+		products[0] = new Component(component1_ID);
+		products[1] = new Component(component2_ID);
 	}
 	
-	protected Component GetComponent1()
-	{
-		return product1;
-	}
-	
-	protected Component GetComponent2()
-	{
-		return product2;
+	public Component[] getComponents(){
+		return products;
 	}
 }

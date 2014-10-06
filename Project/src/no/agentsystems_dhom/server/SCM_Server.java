@@ -35,7 +35,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -10;
+	private int interval = -30;
 
 	private int day = 0;
 
@@ -383,6 +383,7 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		resp.setContent(RFQ.listToString(TodaysRFQs));
+	
 		return resp;
 		
 	}
@@ -411,6 +412,7 @@ public class SCM_Server extends Thread {
 	}
 	// the customer sends orders to agents
 	public synchronized Message customerOrders(Message kqml){
+		customerOrders.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -423,7 +425,6 @@ public class SCM_Server extends Thread {
 	}
 	// The agent gets the orders from customers
 	public synchronized Message getCustomerOrders(Message kqml){ 
-		// TODO Må nok ha en sjekk om hvilken agent som spør etter dette.
 		Message resp = new Message();
 		String name = kqml.getSender();
 		List<Order> ordersToSender = new ArrayList<Order>();
