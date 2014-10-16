@@ -7,12 +7,13 @@ public class Component {
 	private int basePrice;
 	private String componentName;
 	private int capacity;
+	private int numOfComponents;
 
 	// constructor
 	public Component(int id) {
 		this.id = id;
 		capacity = (int) (TAC_Ontology.cNominal + ((Math.random() * 70) - 35));
-		
+		numOfComponents = 0;
 		initiate();
 	}
 
@@ -81,14 +82,14 @@ public class Component {
 	}
 	
 	public void addComponents(){
-		capacity += capacityRandomWalk();
+		capacity = capacityRandomWalk();
 	}
 	
 	public int capacityRandomWalk() {
 		int newComponents = (int) Math.max(1, capacity + ((((Math.random()*10)-5)/100)
 				* TAC_Ontology.cNominal) + (0.01
 				* (TAC_Ontology.cNominal - capacity)));
-		
+		numOfComponents += newComponents;
 		return newComponents;
 	}
 
