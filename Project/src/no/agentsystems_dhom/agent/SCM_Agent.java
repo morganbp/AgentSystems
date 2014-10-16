@@ -9,6 +9,8 @@ import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
+import no.agentsystems_dhom.supplier.Component;
+import no.agentsystems_dhom.supplier.Supplier;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
@@ -25,6 +27,8 @@ public class SCM_Agent {
 	protected GUI agentView;
 	protected List<Offer> todaysOffers;
 	protected List<Order> activeOrders;
+	protected int cDemand[][] = new int[10][TAC_Ontology.numberOfTacDays];
+	protected int components[] = {100,101,110,111,200,210,300,301,400,401};
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -51,6 +55,50 @@ public class SCM_Agent {
 		return rtnServer;
 	}
 	
+	protected String makeAgentRFQs(String agent){
+		ArrayList agentRFQs = new ArrayList<AgentRequest>();
+		String str = "";
+		ArrayList numberOfSuppliers = new ArrayList<Supplier>();
+		
+		int day = //get current day
+		for(int sId = 0; sId < numberOfSuppliers; sId++) {
+			//Burde ikke supplier støtte et parameter?
+			Supplier sup = new Supplier(sId);
+			Component prod[] = sup.getComponents();
+			int ol;
+			for (int j = 0; j<5; j++){
+				for(int k = 0; k<2; k++) {
+					int cid = prod[k].getId();
+					for(int i=day; i<TAC_Ontology.numberOfTacDays; i++){
+						if(cDemand[getIndex(cid)[i] > 0){
+							ol = i;
+							break;
+						}
+					}
+					//Lager en request
+					for (Order o : customerOrder) {
+					      int sku = o.getSku();
+					      int q = o.getQuantity();
+					      int d = o.getDueDate();
+					      if (sku == 1) {
+								int quantity = cDemand[getIndex(cid)][d];
+								int dueDate = d-2;
+								if(dueDate < day+2) continue;
+								//dueDate må være 2 dager før idag	
+								AgentRequest rfq = new AgentRequest(
+									sId, cid, quantity, dueDate, 0, agent);
+								agentRFQs.add(rfq);
+								str += rfq.toString() + "/";
+								cDemand[getIndex(cid)[d] = 0; 
+					      }
+					}
+				}
+			}
+		}
+
+	}
+	
+
 	protected List<RFQ> getRFQsFromServer(String className){
 		String content = "";
 		Message kqml = Util.buildKQML(TAC_Ontology.getCustomer_RFQs, className, content);
