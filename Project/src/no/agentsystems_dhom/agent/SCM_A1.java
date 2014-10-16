@@ -55,6 +55,7 @@ public class SCM_A1 extends SCM_Agent{
 							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 						}
 						sendOffersToServer(CLASS_NAME);
+						//mai
 					}
 				}
 				
