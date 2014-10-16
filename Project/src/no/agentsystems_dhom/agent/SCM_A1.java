@@ -4,7 +4,6 @@ import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.GUI;
-import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
