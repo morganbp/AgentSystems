@@ -3,6 +3,7 @@ package no.agentsystems_dhom.agent;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.Order;
@@ -28,7 +29,8 @@ public class SCM_Agent {
 	protected List<Offer> todaysOffers;
 	protected List<Order> activeOrders;
 	protected int cDemand[][] = new int[10][TAC_Ontology.numberOfTacDays];
-	protected int components[] = {100,101,110,111,200,210,300,301,400,401};
+	protected int components[] = { 100, 101, 110, 111, 200, 210, 300, 301, 400,
+			401 };
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -54,81 +56,185 @@ public class SCM_Agent {
 		}
 		return rtnServer;
 	}
-	
-	protected String makeAgentRFQs(String agent){
-		ArrayList agentRFQs = new ArrayList<AgentRequest>();
-		String str = "";
-		ArrayList numberOfSuppliers = new ArrayList<Supplier>();
+
+	protected String makeAgentRFQs(String agent, int day, List<Order> customerOrders){
+		int numberOfSuppliers = 8;
 		
-		int day = //get current day
 		for(int sId = 0; sId < numberOfSuppliers; sId++) {
 			//Burde ikke supplier støtte et parameter?
 			Supplier sup = new Supplier(sId);
 			Component prod[] = sup.getComponents();
-			int ol;
 			for (int j = 0; j<5; j++){
 				for(int k = 0; k<2; k++) {
 					int cid = prod[k].getId();
-					for(int i=day; i<TAC_Ontology.numberOfTacDays; i++){
+					/*for(int i=day; i<TAC_Ontology.numberOfTacDays; i++){
 						if(cDemand[getIndex(cid)[i] > 0){
 							ol = i;
 							break;
 						}
+					}*/
+					for (Order o : customerOrders) {
+						int sku = o.getOffer().getRFQ().getPC();
+						int q = o.getOffer().getRFQ().getQuantity();
+						int d = o.getDueDate();
+						switch (sku) {
+						case 1:
+							cDemand[getIndex(100)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 2:
+							cDemand[getIndex(100)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 3:
+							cDemand[getIndex(100)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 4:
+							cDemand[getIndex(100)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 5:
+							cDemand[getIndex(101)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 6:
+							cDemand[getIndex(101)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 7:
+							cDemand[getIndex(101)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 8:
+							cDemand[getIndex(101)][d] += q;
+							cDemand[getIndex(200)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 9:
+							cDemand[getIndex(110)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 10:
+							cDemand[getIndex(110)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 11:
+							cDemand[getIndex(110)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 12:
+							cDemand[getIndex(110)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 13:
+							cDemand[getIndex(111)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 14:
+							cDemand[getIndex(111)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(300)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						case 15:
+							cDemand[getIndex(111)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(400)][d] += q;
+							break;
+						case 16:
+							cDemand[getIndex(111)][d] += q;
+							cDemand[getIndex(210)][d] += q;
+							cDemand[getIndex(301)][d] += q;
+							cDemand[getIndex(401)][d] += q;
+							break;
+						}
+						int quantity = cDemand[getIndex(cid)][d];
+						int dueDate = d-2;
+						if(dueDate < day+2) continue;
+						//dueDate må være 2 dager før idag	
+						AgentRequest rfq = new AgentRequest(
+							sId, cid, quantity, dueDate, 0, agent);
+						agentRFQs.add(rfq);
+						cDemand[getIndex(cid)][d] = 0; 
 					}
-					//Lager en request
-					for (Order o : customerOrder) {
-					      int sku = o.getSku();
-					      int q = o.getQuantity();
-					      int d = o.getDueDate();
-					      if (sku == 1) {
-								int quantity = cDemand[getIndex(cid)][d];
-								int dueDate = d-2;
-								if(dueDate < day+2) continue;
-								//dueDate må være 2 dager før idag	
-								AgentRequest rfq = new AgentRequest(
-									sId, cid, quantity, dueDate, 0, agent);
-								agentRFQs.add(rfq);
-								str += rfq.toString() + "/";
-								cDemand[getIndex(cid)[d] = 0; 
-					      }
-					}
-				}
+					    	  
+						
+			      }
 			}
 		}
-
 	}
-	
 
-	protected List<RFQ> getRFQsFromServer(String className){
+
+	protected int getIndex(int cId) {
+		for (int i = 0; i < components.length; i++) {
+			if (components[i] == cId)
+				return i;
+		}
+		return -1;
+	}
+
+	protected List<RFQ> getRFQsFromServer(String className) {
 		String content = "";
-		Message kqml = Util.buildKQML(TAC_Ontology.getCustomer_RFQs, className, content);
+		Message kqml = Util.buildKQML(TAC_Ontology.getCustomer_RFQs, className,
+				content);
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
 		List<RFQ> RFQList = RFQ.stringToList(response.getContent());
-		
+
 		return RFQList;
 	}
-	
-	protected void sendOffersToServer(String className){
-		if(todaysOffers == null) return;
-		
-		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className, Offer.listToString(todaysOffers));
+
+	protected void sendOffersToServer(String className) {
+		if (todaysOffers == null)
+			return;
+
+		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className,
+				Offer.listToString(todaysOffers));
 		server.send(kqml.toString());
 		agentView.append("\nNumber of Offers: " + todaysOffers.size());
 		todaysOffers.clear();
 	}
-	
-	protected void createOffer(String bidder, String reciever, double offerPrice, RFQ rfq){
+
+	protected void createOffer(String bidder, String reciever,
+			double offerPrice, RFQ rfq) {
 		todaysOffers.add(new Offer(bidder, reciever, offerPrice, rfq));
 	}
-	
-	protected List<Order> getOrderFromServer(String className){
+
+	protected List<Order> getOrderFromServer(String className) {
 		String content = "";
-		Message kqml = Util.buildKQML(TAC_Ontology.getCustomerOrders, className, content);
+		Message kqml = Util.buildKQML(TAC_Ontology.getCustomerOrders,
+				className, content);
 		String respond = server.send(kqml.toString());
 		Message response = Message.buildMessage(respond);
 		List<Order> orderList = Order.stringToList(response.getContent());
-		
+
 		agentView.append("\n#Customer Orders: " + orderList.size());
 		return orderList;
 	}
@@ -137,7 +243,8 @@ public class SCM_Agent {
 		todaysOffers = new ArrayList<Offer>();
 		activeOrders = new ArrayList<Order>();
 		has_started = true;
-		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0 : interval;
+		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
+				: interval;
 		agentView.setText("---> Time : " + interval + " seconds ");
 	}
 

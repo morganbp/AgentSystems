@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import no.agentsystems_dhom.agent.AgentRequest;
-
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
@@ -463,7 +461,7 @@ public class SCM_Server extends Thread {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
-		String strAgentReq = AgentRequests.listToString(agentRequests);
+		String strAgentReq = AgentRequest.listToString(agentRequests);
 		resp.setContent(strAgentReq);
 		return resp;
 	}

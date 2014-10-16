@@ -17,6 +17,8 @@ public class SCM_Supplier {
 	protected SCM server;
 	protected Supplier[] suppliers;
 	
+	
+	
 	public static SCM initServer(String[] args){
 		SCM server;
 		try{
@@ -53,14 +55,14 @@ public class SCM_Supplier {
 	
 	private void initSuppliers() {
 		suppliers = new Supplier[8];
-		suppliers[0] = new Supplier(100, 101);
-		suppliers[1] = new Supplier(110, 111);
-		suppliers[2] = new Supplier(200, 210);
-		suppliers[3] = new Supplier(300, 301);
-		suppliers[4] = new Supplier(400, 401);
-		suppliers[5] = new Supplier(200, 101);
-		suppliers[6] = new Supplier(300, 210);
-		suppliers[7] = new Supplier(401, 111);
+		suppliers[0] = new Supplier(100, 101, 0);
+		suppliers[1] = new Supplier(110, 111, 1);
+		suppliers[2] = new Supplier(200, 210, 2);
+		suppliers[3] = new Supplier(300, 301, 3);
+		suppliers[4] = new Supplier(400, 401, 4);
+		suppliers[5] = new Supplier(200, 101, 5);
+		suppliers[6] = new Supplier(300, 210, 6);
+		suppliers[7] = new Supplier(401, 111, 7);
 	}
 
 	protected void closeTheGame()	{
