@@ -27,35 +27,35 @@ public class AgentRequest {
 	}
 	
 	
-	protected int getSupplierId() {
+	public int getSupplierId() {
 		return supplierId;
 	}
 
-	protected void setSupplierId(int supplierId) {
+	public void setSupplierId(int supplierId) {
 		this.supplierId = supplierId;
 	}
 
-	protected int getDueDate() {
+	public int getDueDate() {
 		return dueDate;
 	}
 
-	protected void setDueDate(int dueDate) {
+	public void setDueDate(int dueDate) {
 		this.dueDate = dueDate;
 	}
 
-	protected int getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	protected void setQuantity(int quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
-	protected double getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	protected void setPrice(double price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	

@@ -31,6 +31,7 @@ public class SCM_Agent {
 	protected int cDemand[][] = new int[10][TAC_Ontology.numberOfTacDays];
 	protected int components[] = { 100, 101, 110, 111, 200, 210, 300, 301, 400,
 			401 };
+	
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -57,140 +58,139 @@ public class SCM_Agent {
 		return rtnServer;
 	}
 
-	protected String makeAgentRFQs(String agent, int day, List<Order> customerOrders){
+	protected List<AgentRequest> makeAgentRFQs(String className, int day, List<Order> customerOrders){
 		int numberOfSuppliers = 8;
+		List<AgentRequest> agentRFQs = new ArrayList<AgentRequest>();
 		
 		for(int sId = 0; sId < numberOfSuppliers; sId++) {
-			//Burde ikke supplier støtte et parameter?
 			Supplier sup = new Supplier(sId);
 			Component prod[] = sup.getComponents();
 			for (int j = 0; j<5; j++){
 				for(int k = 0; k<2; k++) {
 					int cid = prod[k].getId();
-					/*for(int i=day; i<TAC_Ontology.numberOfTacDays; i++){
-						if(cDemand[getIndex(cid)[i] > 0){
-							ol = i;
-							break;
-						}
-					}*/
 					for (Order o : customerOrders) {
 						int sku = o.getOffer().getRFQ().getPC();
-						int q = o.getOffer().getRFQ().getQuantity();
+						int offerQuantity = o.getOffer().getRFQ().getQuantity();
 						int d = o.getDueDate();
 						switch (sku) {
 						case 1:
-							cDemand[getIndex(100)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(100)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 2:
-							cDemand[getIndex(100)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(100)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 3:
-							cDemand[getIndex(100)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(100)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 4:
-							cDemand[getIndex(100)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(100)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 5:
-							cDemand[getIndex(101)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(101)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 6:
-							cDemand[getIndex(101)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(101)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 7:
-							cDemand[getIndex(101)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(101)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 8:
-							cDemand[getIndex(101)][d] += q;
-							cDemand[getIndex(200)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(101)][d] += offerQuantity;
+							cDemand[getIndex(200)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 9:
-							cDemand[getIndex(110)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(110)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 10:
-							cDemand[getIndex(110)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(110)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 11:
-							cDemand[getIndex(110)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(110)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 12:
-							cDemand[getIndex(110)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(110)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 13:
-							cDemand[getIndex(111)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(111)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 14:
-							cDemand[getIndex(111)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(300)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(111)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(300)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						case 15:
-							cDemand[getIndex(111)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(400)][d] += q;
+							cDemand[getIndex(111)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(400)][d] += offerQuantity;
 							break;
 						case 16:
-							cDemand[getIndex(111)][d] += q;
-							cDemand[getIndex(210)][d] += q;
-							cDemand[getIndex(301)][d] += q;
-							cDemand[getIndex(401)][d] += q;
+							cDemand[getIndex(111)][d] += offerQuantity;
+							cDemand[getIndex(210)][d] += offerQuantity;
+							cDemand[getIndex(301)][d] += offerQuantity;
+							cDemand[getIndex(401)][d] += offerQuantity;
 							break;
 						}
 						int quantity = cDemand[getIndex(cid)][d];
 						int dueDate = d-2;
 						if(dueDate < day+2) continue;
-						//dueDate må være 2 dager før idag	
-						AgentRequest rfq = new AgentRequest(
-							sId, cid, quantity, dueDate, 0, agent);
-						agentRFQs.add(rfq);
+						agentRFQs.add(new AgentRequest(sId, cid, quantity, dueDate, 0, className));
 						cDemand[getIndex(cid)][d] = 0; 
-					}
-					    	  
-						
+					}					
 			      }
 			}
 		}
+		
+		return agentRFQs;
 	}
-
+	
+	protected String sendAgentRFQs(String className, List<AgentRequest> agentRequests)
+	{
+		String kqmlContent = AgentRequest.listToString(agentRequests);
+		Message kqml = Util.buildKQML(TAC_Ontology.Agent_RFQs, className, kqmlContent);
+		String resp = server.send(kqml.toString());
+		Message response = Message.buildMessage(resp);
+		return response.getContent(); 
+	}
 
 	protected int getIndex(int cId) {
 		for (int i = 0; i < components.length; i++) {

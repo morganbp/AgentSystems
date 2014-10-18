@@ -3,6 +3,7 @@ package no.agentsystems_dhom.agent;
 import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
+import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
@@ -58,7 +59,8 @@ public class SCM_A1 extends SCM_Agent{
 				}
 				
 				if(time == 4 && getStatus()){
-					
+					String response = sendAgentRFQs(CLASS_NAME,makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME)));
+					agentView.append("\nTodays RFQs for suppliers were sent to the server. Response: " + response);			
 				}
 				interval++;
 				
