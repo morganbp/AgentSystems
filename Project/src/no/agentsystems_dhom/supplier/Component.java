@@ -1,9 +1,10 @@
 package no.agentsystems_dhom.supplier;
 
-import javax.swing.text.html.MinimalHTMLWriter;
+import java.util.ArrayList;
+import java.util.List;
 
+import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.Offer;
-import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class Component {
@@ -12,6 +13,8 @@ public class Component {
 	private String componentName;
 	private int capacity;
 	private int inventory;
+	private List<AgentRequest> considerations;
+	private List<AgentRequest> commitedRequests;
 
 	// constructor
 	public Component(int id) {
@@ -35,6 +38,9 @@ public class Component {
 
 	// set up price and component name, see table 6: Component Catalog
 	private void initiate() {
+		considerations = new ArrayList<AgentRequest>();
+		commitedRequests = new ArrayList<AgentRequest>(); 
+		
 		switch (id) {
 		case 100:
 			basePrice = 1000;
@@ -115,33 +121,77 @@ public class Component {
 		return getExpectedCapacity(days - 1, newCapacity);
 	}
 	
-	private int availabilityPriorToDayI(int d){
+	private double availabilityPriorToDayI(int day, int dueDate){
 		int suppliersActualCapacity = getCapacity();
-		int i;
-		for(int j = d +1;j <= i; j++){
-			i = j;
+		int totalOfferQuantityToBeShipped = 0;
+		
+		for(int j = day+1;j <= dueDate; j++){
+			for(AgentRequest a : considerations){
+				totalOfferQuantityToBeShipped += a.getQuantity();
+			}
 		}
-		int totalOfferQuantityToBeShipped = whatafuck;
-		
-		int I = getInventory();
-		
-		
-		return suppliersActualCapacity - i *? totalOfferQuantityToBeShipped + Math.min(0, I - i *? ettellerannet)
+		int totalQuantityOfCommittedRequests = 0;
+		for(int j= day+1; j <= dueDate; j++){
+			for(AgentRequest a : commitedRequests){
+				totalQuantityOfCommittedRequests += a.getQuantity();
+			}
+		}
+		return day * suppliersActualCapacity - totalOfferQuantityToBeShipped + Math.min(0, inventory - totalQuantityOfCommittedRequests);
 	}
-	private int negativeOfCapacityRequiredOnOrBeforeDayI(){
+	
+	
+	private int negativeOfCapacityRequiredOnOrBeforeDayI(int day, int dueDate){
+		int k = day + dueDate + 1;
+		
 		int suppliersActualCapacity = getCapacity();
-		int totalOfferQuantityToBeShipped = whatafuck;
-		int I = getInventory();
-		int inventoryRemainingAfterComputingAvailabilityPriorToDayI = Math.max(0, I - enSUM *? etterllerannet);
-		return Math.min(0,(k - d - i) suppliersActualCapacity - enSUM *? totalOfferQuantityToBeShipped + Math.min(0, 
-				inventoryRemainingAfterComputingAvailabilityPriorToDayI - enSUM *? ettellerannet))
+		int totalOfferQuantityToBeShipped = 0;
+		
+		for(int i = day + dueDate + 1; i <= k; i++){
+			for(AgentRequest a : considerations){
+				totalOfferQuantityToBeShipped += a.getQuantity();
+			}
+		}
+		int totalQuantityOfCommittedRequests = 0;
+		for(int j= day + dueDate + 1; j <= k; j++){
+			for(AgentRequest a : commitedRequests){
+				totalQuantityOfCommittedRequests += a.getQuantity();
+			}
+		}
+		
+		int inventoryRemainingAfterComputingAvailabilityPriorToDayI = getInventoryRemainingAfterComputingAvailabilityPriorToDayI(day, dueDate);
+		
+		return Math.min(0,(k - day - dueDate)* suppliersActualCapacity - totalOfferQuantityToBeShipped + Math.min(0, 
+				inventoryRemainingAfterComputingAvailabilityPriorToDayI - totalQuantityOfCommittedRequests));
 	}
-	public void decidePriceOfComponent(Offer offer, Component c, Supplier sup){
-		double offerPrice = offer.getOfferPrice();
-		double priceDiscountFactor = 0.5;
-		double baselinePrice = c.getBasePrice();
-		int suppliersActualCapacity = getCapacity();
-		int availability = availabilityPriorToDayI() + negativeOfCapacityRequiredOnOrBeforeDayI();
+	
+	
+	
+	
+	private int getInventoryRemainingAfterComputingAvailabilityPriorToDayI(int day, int dueDate) {
+		int totalQuantityOfCommittedRequests = 0;
+		for(int j= day+1; j <= dueDate; j++){
+			for(AgentRequest a : commitedRequests){
+				totalQuantityOfCommittedRequests += a.getQuantity();
+			}
+		}
+		
+		return Math.max(0, inventory - totalQuantityOfCommittedRequests);
+		
 	}
 
+	public double decidePriceOfComponent(Offer offer, Component c, int day){
+		int offerDueDate = offer.getRFQ().getDueDate();
+		double priceDiscountFactor = 0.5;
+		double baselinePrice = c.getBasePrice();
+		// Calculate availability
+		double cPrior =  availabilityPriorToDayI(day, offerDueDate);
+		double cPost = negativeOfCapacityRequiredOnOrBeforeDayI(day, offerDueDate);
+		double availability = cPrior + cPost;
+		
+		return baselinePrice * (1 - priceDiscountFactor * (availability /baselinePrice));
+	}
+	
+	
+	
+	
 }
