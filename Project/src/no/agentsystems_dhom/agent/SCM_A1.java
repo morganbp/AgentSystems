@@ -5,6 +5,7 @@ import java.util.List;
 import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
@@ -31,15 +32,17 @@ public class SCM_A1 extends SCM_Agent{
 				}
 				
 				int time = interval % TAC_Ontology.lengthOfADay;
+				int day = interval / TAC_Ontology.lengthOfADay;
 				if(time == 0 && getStatus()){
-					int day = interval / TAC_Ontology.lengthOfADay;
 					agentView.append("\nday : " + day);
 				}
 				
 				if(time == 2 && getStatus()){
 					// Get orders from the server, 
 					// and store them.
-					activeOrders.addAll(getOrderFromServer(CLASS_NAME));
+					List<Order> newOrders = getOrderFromServer(CLASS_NAME);
+					activeOrders.addAll(newOrders);
+					computeRequirements(newOrders, day);
 				}
 				
 				if(time == 3 && getStatus()){
@@ -59,8 +62,9 @@ public class SCM_A1 extends SCM_Agent{
 				}
 				
 				if(time == 4 && getStatus()){
-					String response = sendAgentRFQs(CLASS_NAME,makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME)));
-					agentView.append("\nTodays RFQs for suppliers were sent to the server. Response: " + response);			
+					// Make agentRFQS
+					List<AgentRequest> agentRequests = makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME));
+					sendAgentRFQs(CLASS_NAME, agentRequests);
 				}
 				interval++;
 				

@@ -102,7 +102,7 @@ public class AgentRequest {
 		
 		return new AgentRequest(Integer.parseInt(AgentRequests[0]), Integer.parseInt(AgentRequests[1]),
 				Integer.parseInt(AgentRequests[2]), Integer.parseInt(AgentRequests[3]),
-				Integer.parseInt(AgentRequests[4]), Integer.parseInt(AgentRequests[5]), AgentRequests[6]);
+				Integer.parseInt(AgentRequests[4]), Double.parseDouble(AgentRequests[5]), AgentRequests[6]);
 
 	}
 
