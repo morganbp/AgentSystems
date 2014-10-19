@@ -1,5 +1,9 @@
 package no.agentsystems_dhom.supplier;
 
+import javax.swing.text.html.MinimalHTMLWriter;
+
+import no.agentsystems_dhom.server.Offer;
+import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class Component {
@@ -7,22 +11,20 @@ public class Component {
 	private int basePrice;
 	private String componentName;
 	private int capacity;
-	private int numOfComponents;
+	private int inventory;
 
 	// constructor
 	public Component(int id) {
 		this.id = id;
 		capacity = (int) (TAC_Ontology.cNominal + ((Math.random() * 70) - 35));
-		numOfComponents = 0;
+		inventory = 0;
 		initiate();
 	}
 
-	// get id
 	public int getId() {
 		return id;
 	}
 
-	// get base price
 	public int getBasePrice() {
 		return basePrice;
 	}
@@ -85,11 +87,14 @@ public class Component {
 		capacity = capacityRandomWalk();
 	}
 	
+	public int getInventory(){
+		return inventory;
+	}
 	public int capacityRandomWalk() {
 		int newComponents = (int) Math.max(1, capacity + ((((Math.random()*10)-5)/100)
 				* TAC_Ontology.cNominal) + (0.01
 				* (TAC_Ontology.cNominal - capacity)));
-		numOfComponents += newComponents;
+		inventory += newComponents;
 		return newComponents;
 	}
 
@@ -108,6 +113,35 @@ public class Component {
 		}
 		int newCapacity = (int) (0.99 * currentCapacity + 0.01 * TAC_Ontology.cNominal);
 		return getExpectedCapacity(days - 1, newCapacity);
+	}
+	
+	private int availabilityPriorToDayI(int d){
+		int suppliersActualCapacity = getCapacity();
+		int i;
+		for(int j = d +1;j <= i; j++){
+			i = j;
+		}
+		int totalOfferQuantityToBeShipped = whatafuck;
+		
+		int I = getInventory();
+		
+		
+		return suppliersActualCapacity - i *? totalOfferQuantityToBeShipped + Math.min(0, I - i *? ettellerannet)
+	}
+	private int negativeOfCapacityRequiredOnOrBeforeDayI(){
+		int suppliersActualCapacity = getCapacity();
+		int totalOfferQuantityToBeShipped = whatafuck;
+		int I = getInventory();
+		int inventoryRemainingAfterComputingAvailabilityPriorToDayI = Math.max(0, I - enSUM *? etterllerannet);
+		return Math.min(0,(k - d - i) suppliersActualCapacity - enSUM *? totalOfferQuantityToBeShipped + Math.min(0, 
+				inventoryRemainingAfterComputingAvailabilityPriorToDayI - enSUM *? ettellerannet))
+	}
+	public void decidePriceOfComponent(Offer offer, Component c, Supplier sup){
+		double offerPrice = offer.getOfferPrice();
+		double priceDiscountFactor = 0.5;
+		double baselinePrice = c.getBasePrice();
+		int suppliersActualCapacity = getCapacity();
+		int availability = availabilityPriorToDayI() + negativeOfCapacityRequiredOnOrBeforeDayI();
 	}
 
 }
