@@ -4,6 +4,7 @@ import java.util.List;
 
 import TACSCMApp.SCM;
 import no.agentsystems_dhom.customer.PC;
+import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.TAC_Ontology;
@@ -58,7 +59,11 @@ public class SCM_A2 extends SCM_Agent{
 						sendOffersToServer(CLASS_NAME);
 					}
 				}
-				
+				if(time == 4 && getStatus()){
+					// Make agentRFQS
+					List<AgentRequest> agentRequests = makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME));
+					sendAgentRFQs(CLASS_NAME, agentRequests);
+				}
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);

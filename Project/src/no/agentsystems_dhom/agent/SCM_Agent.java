@@ -194,7 +194,7 @@ public class SCM_Agent {
 		Message kqml = Util.buildKQML(TAC_Ontology.Agent_RFQs, className, kqmlContent);
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		agentView.append("#RFQs to Supplier: " + response.getContent()); 
+		agentView.append("\n#RFQs to Supplier: " + response.getContent()); 
 	}
 
 	protected int getIndex(int cId) {
