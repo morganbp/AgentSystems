@@ -3,6 +3,7 @@ package no.agentsystems_dhom.agent;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
@@ -86,106 +87,13 @@ public class SCM_Agent {
 		for (Order o : customerOrders) {
 			int sku = o.getOffer().getRFQ().getPC();
 			int offerQuantity = o.getOffer().getRFQ().getQuantity();
-			int d = o.getDueDate();			
-			switch (sku) {
-			case 1:
-				cDemand[getIndex(100)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 2:
-				cDemand[getIndex(100)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 3:
-				cDemand[getIndex(100)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 4:
-				cDemand[getIndex(100)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 5:
-				cDemand[getIndex(101)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 6:
-				cDemand[getIndex(101)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 7:
-				cDemand[getIndex(101)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 8:
-				cDemand[getIndex(101)][d] += offerQuantity;
-				cDemand[getIndex(200)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 9:
-				cDemand[getIndex(110)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 10:
-				cDemand[getIndex(110)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 11:
-				cDemand[getIndex(110)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 12:
-				cDemand[getIndex(110)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 13:
-				cDemand[getIndex(111)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 14:
-				cDemand[getIndex(111)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(300)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
-			case 15:
-				cDemand[getIndex(111)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(400)][d] += offerQuantity;
-				break;
-			case 16:
-				cDemand[getIndex(111)][d] += offerQuantity;
-				cDemand[getIndex(210)][d] += offerQuantity;
-				cDemand[getIndex(301)][d] += offerQuantity;
-				cDemand[getIndex(401)][d] += offerQuantity;
-				break;
+			int d = o.getDueDate();	
+			PC pc = new PC(sku);
+			int componentsIds[] = pc.getComponents();
+			for(int i = 0; i < componentsIds.length; i++){
+				cDemand[getIndex(componentsIds[0])][d] += offerQuantity;
 			}
-		}	
+		}
 	}
 	
 	protected void sendAgentRFQs(String className, List<AgentRequest> agentRequests)
