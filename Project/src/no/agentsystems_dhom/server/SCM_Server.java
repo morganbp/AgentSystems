@@ -67,9 +67,13 @@ public class SCM_Server extends Thread {
 	
 	private List<Order> customerOrders;
 	
-	// 
+	// Store AgentRequest from Agent
 	
 	private List<AgentRequest> agentRequests;
+	
+	// Store SupplierOffer from Supplier
+	
+	private List<SupplierOffer> supplierOffers;
 	
 	public SCM_Server() {
 		serverView = new GUI("SCM_server");
@@ -225,6 +229,8 @@ public class SCM_Server extends Thread {
 		customerOrders = new ArrayList<Order>();
 		
 		agentRequests = new ArrayList<AgentRequest>();
+		
+		supplierOffers = new ArrayList<SupplierOffer>();
 
 	}
 
@@ -466,6 +472,34 @@ public class SCM_Server extends Thread {
 		return resp;
 	}
 	
+	public synchronized Message sendSupplierOffers(Message kqml) {
+		supplierOffers.clear();
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String content = kqml.getContent();
+		List<SupplierOffer> newSupplierOffers = SupplierOffer.stringToList(content);
+		supplierOffers.addAll(supplierOffers);
+		resp.setContent(newSupplierOffers.size() + "");
+		return resp;
+	}
+
+	public synchronized Message getSupplierOffers(Message kqml) {
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		List<SupplierOffer> offersToReceiver = new ArrayList<SupplierOffer>();
+		for(SupplierOffer supOff : supplierOffers){
+			if(supOff.getReciever().equals(name)){
+				offersToReceiver.add(supOff);
+			}
+		}
+		String strSupplierOffers = SupplierOffer.listToString(offersToReceiver);
+		resp.setContent(strSupplierOffers);
+		return null;
+	}
+
+	
 	
 	// get bank account balance
 
@@ -509,6 +543,7 @@ public class SCM_Server extends Thread {
 
 	}
 
+	
 } // end of SCM_Server
 
 class TACSCMImpl extends SCMPOA {
@@ -609,6 +644,20 @@ class TACSCMImpl extends SCMPOA {
 		
 		if(performative.equals(TAC_Ontology.getAgentRFQs)){
 			Message resp = server.getAgentRFQs(kqml);
+			if(resp != null){
+				return resp.toString();
+			}
+		}
+		
+		if(performative.equals(TAC_Ontology.sendSupplierOffers)){
+			Message resp = server.sendSupplierOffers(kqml);
+			if(resp != null){
+				return resp.toString();
+			}
+		}
+		
+		if(performative.equals(TAC_Ontology.getSupplierOffers)){
+			Message resp = server.getSupplierOffers(kqml);
 			if(resp != null){
 				return resp.toString();
 			}

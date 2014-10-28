@@ -1,12 +1,21 @@
 package no.agentsystems_dhom.supplier;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
+import no.agentsystems_dhom.server.Offer;
+import no.agentsystems_dhom.server.RFQ;
+import no.agentsystems_dhom.server.SupplierOffer;
 import no.agentsystems_dhom.server.TAC_Ontology;
+import no.agentsystems_dhom.server.Util;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 
+import yinyang.Message;
 import TACSCMApp.SCM;
 import TACSCMApp.SCMHelper;
 
@@ -16,6 +25,7 @@ public class SCM_Supplier {
 	protected int interval;
 	protected SCM server;
 	protected Supplier[] suppliers;
+	protected List<SupplierOffer> supplierOffers;
 	
 	
 	
@@ -47,6 +57,9 @@ public class SCM_Supplier {
 	
 	protected void startTheGame(){
 		has_started = true;
+		
+		supplierOffers = new ArrayList<SupplierOffer>();
+		
 		initSuppliers();
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0 : interval;
 		suplView.setText("---> Time : " + interval + " seconds ");
@@ -87,6 +100,32 @@ public class SCM_Supplier {
 			comp.addComponents();
 			suplView.append("\n#"+comp.getComponentName() + ": " + comp.getCapacity());
 		}
+	}
+	
+	protected void createSupplierOffers(List<AgentRequest> agentRequests){
+		// Create offers to agents based on AgentRequests
+		// add all the offers to supplierOffers
+	}
+	
+	protected void sendYesterdaysOffers(String className){
+		if (supplierOffers == null)
+			return;
+
+		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className,
+				SupplierOffer.listToString(supplierOffers));
+		server.send(kqml.toString());
+		suplView.append("\nNumber of Supplier Offers: " + supplierOffers.size());
+		supplierOffers.clear();
+	}
+
+	protected List<AgentRequest> getAgentRequests(String className){
+		String content = "";
+		Message kqml = Util.buildKQML(TAC_Ontology.getAgentRFQs, className,
+				content);
+		String resp = server.send(kqml.toString());
+		Message response = Message.buildMessage(resp);
+		List<AgentRequest> agentRequests = AgentRequest.stringToList(response.getContent());
+		return agentRequests;
 	}
 
 }
