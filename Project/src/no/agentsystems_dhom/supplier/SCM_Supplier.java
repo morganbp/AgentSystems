@@ -102,11 +102,19 @@ public class SCM_Supplier {
 		}
 	}
 	
-	protected void createSupplierOffers(List<AgentRequest> agentRequests){
-		// Create offers to agents based on AgentRequests
-		// add all the offers to supplierOffers
+	protected void createSupplierOffers(List<AgentRequest> agentRequests, String bidder){
+		for(int i = 0; i< agentRequests.size(); i++){
+			AgentRequest agentRequest = agentRequests.get(i);
+			createSupplierOffer(agentRequest, bidder);
+		}
 	}
 	
+	protected void createSupplierOffer(AgentRequest agentRequest, String bidder){
+		String agent = agentRequest.getAgent();
+		double offerPrice = agentRequest.getPrice();
+		SupplierOffer sup = new SupplierOffer(bidder, agent, offerPrice, agentRequest);
+		supplierOffers.add(sup);
+	}
 	protected void sendYesterdaysOffers(String className){
 		if (supplierOffers == null)
 			return;

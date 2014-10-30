@@ -26,7 +26,9 @@ public class AgentRequest {
 		this.agent = agent;
 	}
 	
-	
+	public String getAgent(){
+		return agent;
+	}
 	public int getSupplierId() {
 		return supplierId;
 	}
