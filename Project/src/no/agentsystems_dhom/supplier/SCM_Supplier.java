@@ -98,7 +98,6 @@ public class SCM_Supplier {
 			int index = (int)Math.floor(i/2);
 			Component comp = suppliers[index].getComponents()[i%2];
 			comp.addComponents();
-			suplView.append("\n#"+comp.getComponentName() + ": " + comp.getCapacity());
 		}
 	}
 	
@@ -122,7 +121,7 @@ public class SCM_Supplier {
 		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className,
 				SupplierOffer.listToString(supplierOffers));
 		server.send(kqml.toString());
-		suplView.append("\nNumber of Supplier Offers: " + supplierOffers.size());
+		suplView.append("\n#SupplierOffers: " + supplierOffers.size());
 		supplierOffers.clear();
 	}
 

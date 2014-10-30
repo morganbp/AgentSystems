@@ -161,18 +161,19 @@ public class SCM_Agent {
 		if (todaysAgentOrder == null)
 			return;
 
-		Message kqml = Util.buildKQML(TAC_Ontology.sendAgentOrders,
-				className, AgentOrder.listToString(todaysAgentOrder));
+		Message kqml = Util.buildKQML(TAC_Ontology.sendAgentOrders, className,
+				AgentOrder.listToString(todaysAgentOrder));
 		server.send(kqml.toString());
-		agentView.append("\n#Number of SupplierOrders: " + todaysAgentOrder.size());
+		agentView.append("\n#Number of SupplierOrders: "
+				+ todaysAgentOrder.size());
 		todaysAgentOrder.clear();
 	}
 
 	protected List<SupplierOffer> getSupplierOffers(String className) {
 		String content = "";
+		// TAC_Ontology.getSupplierOffers
 		Message kqml = Util.buildKQML(TAC_Ontology.getSupplierOffers,
 				className, content);
-		System.out.println(kqml.toString());
 		String respond = server.send(kqml.toString());
 		Message response = Message.buildMessage(respond);
 		List<SupplierOffer> offerList = SupplierOffer.stringToList(response
@@ -186,11 +187,12 @@ public class SCM_Agent {
 		agentView.append("\n#Supplier Offers : " + offerList.size());
 		return supplierOfferList;
 	}
-	
-	protected void createAgentOrder(SupplierOffer supplierOffer){
+
+	protected void createAgentOrder(SupplierOffer supplierOffer) {
 		String customer = supplierOffer.getReciever();
 		String provider = supplierOffer.getBidder();
-		AgentOrder agentOrder = new AgentOrder(customer, provider, supplierOffer);
+		AgentOrder agentOrder = new AgentOrder(customer, provider,
+				supplierOffer);
 		todaysAgentOrder.add(agentOrder);
 	}
 

@@ -502,7 +502,7 @@ public class SCM_Server extends Thread {
 		}
 		String strSupplierOffers = SupplierOffer.listToString(offersToReceiver);
 		resp.setContent(strSupplierOffers);
-		return null;
+		return resp;
 	}
 
 	public synchronized Message sendAgentOrders(Message kqml) {
@@ -589,7 +589,7 @@ class TACSCMImpl extends SCMPOA {
 	// implement send() method
 
 	public String send(String str) {
-
+		
 		if (str == null)
 			return null;
 
