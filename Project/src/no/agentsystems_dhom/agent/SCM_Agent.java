@@ -30,7 +30,7 @@ public class SCM_Agent {
 	protected List<Offer> todaysOffers;
 	protected List<Order> activeOrders;
 	protected int cDemand[][] = new int[10][TAC_Ontology.numberOfTacDays];
-	protected int components[] = { 100, 101, 110, 111, 200, 210, 300, 301, 400,
+	protected static int components[] = { 100, 101, 110, 111, 200, 210, 300, 301, 400,
 			401 };
 	
 
@@ -105,7 +105,7 @@ public class SCM_Agent {
 		agentView.append("\n#RFQs to Supplier: " + response.getContent()); 
 	}
 
-	protected int getIndex(int cId) {
+	protected static int getIndex(int cId) {
 		for (int i = 0; i < components.length; i++) {
 			if (components[i] == cId)
 				return i;

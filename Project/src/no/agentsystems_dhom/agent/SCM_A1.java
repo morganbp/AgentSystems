@@ -46,6 +46,21 @@ public class SCM_A1 extends SCM_Agent{
 				}
 				
 				if(time == 3 && getStatus()){
+					// Get supplier offers
+					
+				}
+				
+				if(time == 4 && getStatus()){
+					// send supplier orders
+				}
+				
+				if(time == 5 && getStatus()){
+					// Make agentRFQS
+					List<AgentRequest> agentRequests = makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME));
+					sendAgentRFQs(CLASS_NAME, agentRequests);
+				}
+				
+				if(time == 6 && getStatus()){
 					// Get RFQS From server,
 					// bid and send offers
 					// back to server
@@ -57,15 +72,14 @@ public class SCM_A1 extends SCM_Agent{
 							
 							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);
 						}
-						sendOffersToServer(CLASS_NAME);
 					}
 				}
 				
-				if(time == 4 && getStatus()){
-					// Make agentRFQS
-					List<AgentRequest> agentRequests = makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME));
-					sendAgentRFQs(CLASS_NAME, agentRequests);
+				if(time == 7){
+					sendOffersToServer(CLASS_NAME);
 				}
+				
+				
 				interval++;
 				
 				Thread.sleep(TAC_Ontology.sec);

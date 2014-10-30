@@ -46,6 +46,9 @@ public class Supplier {
 		products[1] = new Component(component2_ID);
 	}
 
+	public int getSupplierID(){
+		return supplierID;
+	}
 	
 	public Component[] getComponents(){
 		return products;
