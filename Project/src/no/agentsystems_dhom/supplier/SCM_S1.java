@@ -42,6 +42,7 @@ public class SCM_S1 extends SCM_Supplier {
 				}
 				if(time == 6 && getStatus()){
 					List<AgentRequest> agentRequests = getAgentRequests(CLASS_NAME);
+					
 					createSupplierOffers(agentRequests, CLASS_NAME);
 				}
 				interval++;

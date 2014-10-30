@@ -86,8 +86,6 @@ public class AgentRequest {
 			agentRequestList.add(r);
 		}
 		
-		if(agentRequestList.size() == 0) return null;
-		
 		return agentRequestList;
 	}
 

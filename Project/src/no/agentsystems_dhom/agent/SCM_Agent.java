@@ -172,6 +172,7 @@ public class SCM_Agent {
 		String content = "";
 		Message kqml = Util.buildKQML(TAC_Ontology.getSupplierOffers,
 				className, content);
+		System.out.println(kqml.toString());
 		String respond = server.send(kqml.toString());
 		Message response = Message.buildMessage(respond);
 		List<SupplierOffer> offerList = SupplierOffer.stringToList(response
