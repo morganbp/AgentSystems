@@ -7,6 +7,7 @@ import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
+import no.agentsystems_dhom.server.SupplierOffer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import TACSCMApp.SCM;
 
@@ -47,11 +48,15 @@ public class SCM_A1 extends SCM_Agent{
 				
 				if(time == 3 && getStatus()){
 					// Get supplier offers
-					
+					List<SupplierOffer> supplierOffers = getSupplierOffers(CLASS_NAME);
+					for(SupplierOffer supplierOffer : supplierOffers){
+						createAgentOrder(supplierOffer);
+					}
 				}
 				
 				if(time == 4 && getStatus()){
 					// send supplier orders
+					sendSupplierOrders(CLASS_NAME);
 				}
 				
 				if(time == 5 && getStatus()){
