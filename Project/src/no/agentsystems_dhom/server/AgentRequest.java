@@ -1,6 +1,7 @@
 package no.agentsystems_dhom.server;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class AgentRequest {
@@ -105,5 +106,6 @@ public class AgentRequest {
 				Integer.parseInt(AgentRequests[4]), Double.parseDouble(AgentRequests[5]), AgentRequests[6]);
 
 	}
+	
 
 }

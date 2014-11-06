@@ -32,7 +32,7 @@ public class SCM_Agent {
 	protected List<Offer> todaysOffers;
 	protected List<AgentOrder> todaysAgentOrder;
 	protected List<Order> activeOrders;
-	protected int cDemand[][] = new int[10][TAC_Ontology.numberOfTacDays];
+	protected int cDemand[][];
 	protected static int components[] = { 100, 101, 110, 111, 200, 210, 300,
 			301, 400, 401 };
 
@@ -91,7 +91,7 @@ public class SCM_Agent {
 		for (Order o : customerOrders) {
 			int sku = o.getOffer().getRFQ().getPC();
 			int offerQuantity = o.getOffer().getRFQ().getQuantity();
-			int d = o.getDueDate();
+			int d = (o.getDueDate() <= 30) ? o.getDueDate() : 30;
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
 			for (int i = 0; i < componentsIds.length; i++) {
@@ -200,6 +200,8 @@ public class SCM_Agent {
 		todaysOffers = new ArrayList<Offer>();
 		todaysAgentOrder = new ArrayList<AgentOrder>();
 		activeOrders = new ArrayList<Order>();
+		//adds 1 to second dimension since the array is 0 indexed
+		cDemand = new int[10][TAC_Ontology.numberOfTacDays+1]; 
 		has_started = true;
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;

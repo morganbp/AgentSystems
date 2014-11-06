@@ -2,7 +2,16 @@ package no.agentsystems_dhom.server;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/** 
+ *
+ * @author Morgan Buckholm Pettersen
+ * @author David Helgestad
+ * @author Hans-Ole Gudim
+ *
+ * This class is spesific for Orders which are
+ * made by customers.
+ * 
+ */
 public class Order {
 	private String customer;
 	private String provider;

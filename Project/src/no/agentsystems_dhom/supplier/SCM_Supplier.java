@@ -1,8 +1,11 @@
 package no.agentsystems_dhom.supplier;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import no.agentsystems_dhom.server.AgentOrder;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
@@ -25,7 +28,11 @@ public class SCM_Supplier {
 	protected int interval;
 	protected SCM server;
 	protected Supplier[] suppliers;
+	protected List<SupplierOffer> allSupplierOffers;
+	protected List<AgentOrder> allAgentOrders;
+	
 	protected List<SupplierOffer> supplierOffers;
+	protected List<AgentOrder> activeAgentOrders;
 	
 	
 	
@@ -59,6 +66,9 @@ public class SCM_Supplier {
 		has_started = true;
 		
 		supplierOffers = new ArrayList<SupplierOffer>();
+		activeAgentOrders = new ArrayList<AgentOrder>();
+		allSupplierOffers = new ArrayList<SupplierOffer>();
+		allAgentOrders = new ArrayList<AgentOrder>();
 		
 		initSuppliers();
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0 : interval;
@@ -102,26 +112,48 @@ public class SCM_Supplier {
 	}
 	
 	protected void createSupplierOffers(List<AgentRequest> agentRequests, String bidder){
-		for(int i = 0; i< agentRequests.size(); i++){
-			AgentRequest agentRequest = agentRequests.get(i);
-			createSupplierOffer(agentRequest, bidder);
+		// Sort AgentRequests by decreasing reputation
+		Collections.sort(agentRequests, agentReputationComparator);
+		
+		// This list stores lists of agentRequests 
+		List<List<AgentRequest>> agentReputationSeperationList = new ArrayList<List<AgentRequest>>();
+		// repuation of first agent
+		double curReputation = getReputation(agentRequests.get(0).getAgent(), agentRequests.get(0).getSupplierId());
+		List<AgentRequest> curList = new ArrayList<AgentRequest>();
+		
+		// loop trough sorted list and seperate agents with different reputation on 
+		// different lists
+		for(AgentRequest agentRequest : agentRequests){
+			double reputation = getReputation(agentRequest.getAgent(), agentRequest.getSupplierId());
+			if(reputation == curReputation){
+				curList.add(agentRequest);
+			}else{
+				agentReputationSeperationList.add(curList);
+				curReputation = reputation;
+				curList = new ArrayList<AgentRequest>();
+				curList.add(agentRequest);
+			}
+		}
+		
+		for(List<AgentRequest> requestList : agentReputationSeperationList){
+			for(AgentRequest list 
 		}
 	}
 	
 	protected void createSupplierOffer(AgentRequest agentRequest, String bidder){
-		String agent = agentRequest.getAgent();
-		double offerPrice = agentRequest.getPrice();
-		SupplierOffer sup = new SupplierOffer(bidder, agent, offerPrice, agentRequest);
-		supplierOffers.add(sup);
+		//String agent = agentRequest.getAgent();
+		//double offerPrice = agentRequest.getPrice();
+		
+		//SupplierOffer sup = new SupplierOffer(bidder, agent, offerPrice, agentRequest);
+		//supplierOffers.add(sup);
 	}
 	protected void sendYesterdaysOffers(String className){
 		if (supplierOffers == null)
 			return;
-
-		Message kqml = Util.buildKQML(TAC_Ontology.agentOffers, className,
+		Message kqml = Util.buildKQML(TAC_Ontology.sendSupplierOffers, className,
 				SupplierOffer.listToString(supplierOffers));
 		server.send(kqml.toString());
-		suplView.append("\n#SupplierOffers: " + supplierOffers.size());
+		suplView.append("\n#SupplierOffersToAgents: " + supplierOffers.size());
 		supplierOffers.clear();
 	}
 
@@ -134,5 +166,47 @@ public class SCM_Supplier {
 		List<AgentRequest> agentRequests = AgentRequest.stringToList(response.getContent());
 		return agentRequests;
 	}
+	
+	/**
+	 * 
+	 * @param agent the agent which we want to get the reputation of
+	 * @return the reputation of agent 
+	 */
+	private double getReputation(String agent, int supplierID) {
+		int qPurchased = 0;
+		int qOffered = 0;
+		for(AgentOrder order : allAgentOrders){
+			if(order.getCustomer().equals(agent) && order.getSupplierOffer().getAgentRequest().getSupplierId() == supplierID){
+				qPurchased += order.getSupplierOffer().getQuantity();
+			}
+		}
+		for(SupplierOffer offer : allSupplierOffers){
+			if(offer.getReciever().equals(agent) && offer.getAgentRequest().getSupplierId()== supplierID){
+				qOffered += offer.getQuantity();
+			}
+		}
+		if(qOffered == 0) return 0;
+		return qPurchased/qOffered;
+	}
+	
+	
+	/**
+	 * A comparator for  sorting an AgentRequest List by Agents reputation.
+	 */
+	private Comparator<AgentRequest> agentReputationComparator = new Comparator<AgentRequest>() {
+
+		@Override
+		public int compare(AgentRequest a1, AgentRequest a2) {
+			double a1Rep = getReputation(a1.getAgent(),a1.getSupplierId());
+			double a2Rep = getReputation(a2.getAgent(),a2.getSupplierId());
+			if(a1Rep < a2Rep)
+				return 1;
+			else 
+				return -1;
+			
+		}
+	
+	
+	};
 
 }
