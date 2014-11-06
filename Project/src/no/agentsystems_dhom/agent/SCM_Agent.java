@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
+import no.agentsystems_dhom.server.AgentOrder;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.Order;
 import no.agentsystems_dhom.server.RFQ;
+import no.agentsystems_dhom.server.SupplierOffer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
 import no.agentsystems_dhom.supplier.Component;
@@ -28,11 +30,11 @@ public class SCM_Agent {
 	private boolean has_started;
 	protected GUI agentView;
 	protected List<Offer> todaysOffers;
+	protected List<AgentOrder> todaysAgentOrder;
 	protected List<Order> activeOrders;
-	protected int cDemand[][] = new int[10][TAC_Ontology.numberOfTacDays];
-	protected int components[] = { 100, 101, 110, 111, 200, 210, 300, 301, 400,
-			401 };
-	
+	protected int cDemand[][];
+	protected static int components[] = { 100, 101, 110, 111, 200, 210, 300,
+			301, 400, 401 };
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -59,53 +61,56 @@ public class SCM_Agent {
 		return rtnServer;
 	}
 
-	protected List<AgentRequest> makeAgentRFQs(String className, int day, List<Order> customerOrders){
+	protected List<AgentRequest> makeAgentRFQs(String className, int day,
+			List<Order> customerOrders) {
 		int numberOfSuppliers = 8;
 		List<AgentRequest> agentRFQs = new ArrayList<AgentRequest>();
-		
-		for(int sId = 0; sId < numberOfSuppliers; sId++) {
+
+		for (int sId = 0; sId < numberOfSuppliers; sId++) {
 			Supplier sup = new Supplier(sId);
 			Component prod[] = sup.getComponents();
-			for (int j = 0; j<5; j++){
-				for(int k = 0; k < 2; k++) {
-					// Send send 5 offers for each component 
+			for (int j = 0; j < 5; j++) {
+				for (int k = 0; k < 2; k++) {
+					// Send send 5 offers for each component
 					int cid = prod[k].getId();
 					int dueDate = day + 2;
 					int quantity = cDemand[getIndex(cid)][dueDate];
-					
-					AgentRequest agentReq = new AgentRequest(sId, cid, quantity, dueDate, 0 ,className);
+
+					AgentRequest agentReq = new AgentRequest(sId, cid,
+							quantity, dueDate, 0, className);
 					agentRFQs.add(agentReq);
-					cDemand[getIndex(cid)][dueDate] = 0; 			
-			      }
+					cDemand[getIndex(cid)][dueDate] = 0;
+				}
 			}
 		}
-		
+
 		return agentRFQs;
 	}
-	
-	protected void computeRequirements(List<Order> customerOrders, int day){
+
+	protected void computeRequirements(List<Order> customerOrders, int day) {
 		for (Order o : customerOrders) {
 			int sku = o.getOffer().getRFQ().getPC();
 			int offerQuantity = o.getOffer().getRFQ().getQuantity();
-			int d = o.getDueDate();	
+			int d = (o.getDueDate() <= 30) ? o.getDueDate() : 30;
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
-			for(int i = 0; i < componentsIds.length; i++){
+			for (int i = 0; i < componentsIds.length; i++) {
 				cDemand[getIndex(componentsIds[0])][d] += offerQuantity;
 			}
 		}
 	}
-	
-	protected void sendAgentRFQs(String className, List<AgentRequest> agentRequests)
-	{
+
+	protected void sendAgentRFQs(String className,
+			List<AgentRequest> agentRequests) {
 		String kqmlContent = AgentRequest.listToString(agentRequests);
-		Message kqml = Util.buildKQML(TAC_Ontology.Agent_RFQs, className, kqmlContent);
+		Message kqml = Util.buildKQML(TAC_Ontology.Agent_RFQs, className,
+				kqmlContent);
 		String resp = server.send(kqml.toString());
 		Message response = Message.buildMessage(resp);
-		agentView.append("\n#RFQs to Supplier: " + response.getContent()); 
+		agentView.append("\n#RFQs to Supplier: " + response.getContent());
 	}
 
-	protected int getIndex(int cId) {
+	protected static int getIndex(int cId) {
 		for (int i = 0; i < components.length; i++) {
 			if (components[i] == cId)
 				return i;
@@ -152,9 +157,51 @@ public class SCM_Agent {
 		return orderList;
 	}
 
+	protected void sendSupplierOrders(String className) {
+		if (todaysAgentOrder == null)
+			return;
+
+		Message kqml = Util.buildKQML(TAC_Ontology.sendAgentOrders, className,
+				AgentOrder.listToString(todaysAgentOrder));
+		server.send(kqml.toString());
+		agentView.append("\n#Number of SupplierOrders: "
+				+ todaysAgentOrder.size());
+		todaysAgentOrder.clear();
+	}
+
+	protected List<SupplierOffer> getSupplierOffers(String className) {
+		String content = "";
+		// TAC_Ontology.getSupplierOffers
+		Message kqml = Util.buildKQML(TAC_Ontology.getSupplierOffers,
+				className, content);
+		String respond = server.send(kqml.toString());
+		Message response = Message.buildMessage(respond);
+		List<SupplierOffer> offerList = SupplierOffer.stringToList(response
+				.getContent());
+		List<SupplierOffer> supplierOfferList = new ArrayList<SupplierOffer>();
+		for (SupplierOffer supplierOffer : offerList) {
+			if (supplierOffer.getReciever().equals(className)) {
+				supplierOfferList.add(supplierOffer);
+			}
+		}
+		agentView.append("\n#Supplier Offers : " + offerList.size());
+		return supplierOfferList;
+	}
+
+	protected void createAgentOrder(SupplierOffer supplierOffer) {
+		String customer = supplierOffer.getReciever();
+		String provider = supplierOffer.getBidder();
+		AgentOrder agentOrder = new AgentOrder(customer, provider,
+				supplierOffer);
+		todaysAgentOrder.add(agentOrder);
+	}
+
 	protected void startTheGame() {
 		todaysOffers = new ArrayList<Offer>();
+		todaysAgentOrder = new ArrayList<AgentOrder>();
 		activeOrders = new ArrayList<Order>();
+		//adds 1 to second dimension since the array is 0 indexed
+		cDemand = new int[10][TAC_Ontology.numberOfTacDays+1]; 
 		has_started = true;
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;

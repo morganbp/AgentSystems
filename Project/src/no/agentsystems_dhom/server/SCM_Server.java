@@ -35,7 +35,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -30;
+	private int interval = -15;
 
 	private int day = 0;
 
@@ -485,8 +485,9 @@ public class SCM_Server extends Thread {
 		resp.setReceiver(name);
 		String content = kqml.getContent();
 		List<SupplierOffer> newSupplierOffers = SupplierOffer.stringToList(content);
-		supplierOffers.addAll(supplierOffers);
+		supplierOffers.addAll(newSupplierOffers);
 		resp.setContent(newSupplierOffers.size() + "");
+		serverView.append("\nOffers from Supplier: " + supplierOffers.size());
 		return resp;
 	}
 
@@ -502,7 +503,7 @@ public class SCM_Server extends Thread {
 		}
 		String strSupplierOffers = SupplierOffer.listToString(offersToReceiver);
 		resp.setContent(strSupplierOffers);
-		return null;
+		return resp;
 	}
 
 	public synchronized Message sendAgentOrders(Message kqml) {
@@ -589,7 +590,7 @@ class TACSCMImpl extends SCMPOA {
 	// implement send() method
 
 	public String send(String str) {
-
+		
 		if (str == null)
 			return null;
 
