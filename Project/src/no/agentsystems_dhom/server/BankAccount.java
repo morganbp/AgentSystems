@@ -2,57 +2,56 @@ package no.agentsystems_dhom.server;
 
 
 public class BankAccount {
-	private Agent agent;
-	private double balance = 0;
-	private double credit = 0;
-	private double debit = 0;
+	private Agent _agent;
+	private double _balance = 0;
+	private double _credit = 0;
+	private double _debit = 0;
 	
 	
-	public BankAccount(Agent a) {
-		agent = a;
+	public BankAccount(Agent agent) {
+		_agent = agent;
 	}
 
-	public void addCredit(double c){
-		credit += c;
+	public void addCredit(double credit){
+		_credit += credit;
 	}
 	
 	public Agent getAgent() {
-		// TODO Auto-generated method stub
-		return agent;
+		return _agent;
 	}
 
 	public void updateBalance(double loanInterestRate, double interestRate) {
 		double alfa = 0;
-		if(balance <= 0){
+		if(_balance <= 0){
 			alfa = loanInterestRate;
 		}else{
 			alfa = interestRate;
 		}
-		balance = ((1 + (alfa/TAC_Ontology.numberOfTacDays))*balance) + credit - debit;
+		_balance = ((1 + (alfa/TAC_Ontology.numberOfTacDays))*_balance) + _credit - _debit;
 	}
 	
-	public void setBalance(double _balance){
-		balance = _balance;
+	public void setBalance(double balance){
+		_balance = balance;
 	}
 	
 	public double getBalance(){
-		return balance;
+		return _balance;
 	}
 
-	public void setCredit(double _credit){
-		credit = _credit;
+	public void setCredit(double credit){
+		_credit = credit;
 	}
 	
 	public double getCredit(){
-		return credit;
+		return _credit;
 	}
 	
-	public void setDebit(double _debit){
-		debit = _debit;
+	public void setDebit(double debit){
+		_debit = debit;
 	}
 	
 	public double getDebit(){
-		return debit;
+		return _debit;
 	}
 	
 

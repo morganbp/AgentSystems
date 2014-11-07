@@ -117,7 +117,7 @@ public class SCM_Supplier {
 		
 		// This list stores lists of agentRequests 
 		List<List<AgentRequest>> agentReputationSeperationList = new ArrayList<List<AgentRequest>>();
-		// repuation of first agent
+		// Repuation of first agent
 		double curReputation = getReputation(agentRequests.get(0).getAgent(), agentRequests.get(0).getSupplierId());
 		List<AgentRequest> curList = new ArrayList<AgentRequest>();
 		
@@ -143,10 +143,7 @@ public class SCM_Supplier {
 	}
 	
 	protected void createSupplierOffer(AgentRequest agentRequest, String bidder){
-		//String agent = agentRequest.getAgent();
-		//double offerPrice = agentRequest.getPrice();
-		
-		//SupplierOffer sup = new SupplierOffer(bidder, agent, offerPrice, agentRequest);
+		//SupplierOffer sup = new SupplierOffer(bidder, agentRequest.getAgent(), agentRequest.getPrice(), agentRequest.getQuantity(), agentRequest.getDueDate(), agentRequest);
 		//supplierOffers.add(sup);
 	}
 	protected void sendYesterdaysOffers(String className){

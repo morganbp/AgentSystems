@@ -528,30 +528,11 @@ public class SCM_Server extends Thread {
 	}
 	
 	
-	// get bank account balance
-
-	public double getBalance(String agentName, int id) {
-
-		ArrayList<BankAccount> accounts = bank.getBankAccounts();
-
-		for (BankAccount acc : accounts) {
-
-			Agent a = acc.getAgent();
-
-			if (a.getName().equals(agentName) && a.getId() == id)
-
-				return acc.getBalance();
-
-		}
-
-		return 0;
-
-	}
 
 	// get bank account balance
 
-	private void getBankBalance(Agent a) {
-
+	private double getBankBalance(Agent a) {
+		return bank.getBankAccount(a).getBalance();
 	}
 
 	// update balance of all bank account at the end of the day
