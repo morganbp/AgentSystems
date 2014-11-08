@@ -166,6 +166,18 @@ public class SCM_Supplier {
 		return agentRequests;
 	}
 	
+/**
+ * Adds all agentorders for the specified supplier(className) to activeAgentOrders
+ * @param className The name of the supplier
+ */
+	protected void getAgentOrders(String className) {
+		List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
+		Message msg = Util.buildKQML(TAC_Ontology.getAgentOrders, className, null);
+		String response = server.send(msg.toString());
+		agentOrders = AgentOrder.stringToList(response);
+		this.activeAgentOrders.addAll(agentOrders);
+	}
+	
 	/**
 	 * 
 	 * @param agent the agent which we want to get the reputation of
