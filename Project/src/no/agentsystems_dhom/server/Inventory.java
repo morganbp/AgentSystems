@@ -7,7 +7,7 @@ import no.agentsystems_dhom.supplier.Component;
 public class Inventory {
 	
 	Agent _agent;
-	ArrayList<AgentOrder> _agentOrders;
+	ArrayList<Component> _agentComponents;
 	
 	public Inventory(Agent agent)
 	{
@@ -19,13 +19,21 @@ public class Inventory {
 		return _agent;
 	}
 	
-	public ArrayList<AgentOrder> GetAgentOrders()
+	public ArrayList<Component> GetAgentComponents()
 	{
-		return _agentOrders;
+		return _agentComponents;
 	}
 	
-	public void AddComponent(AgentOrder agentOrder)
+	public void AddComponent(Component component)
 	{
-		_agentOrders.add(agentOrder);
+		_agentComponents.add(component);
+	}
+	
+	public void AddComponents(ArrayList<Component> components)
+	{
+		for(Component component : components)
+		{
+			this.AddComponent(component);
+		}
 	}
 }
