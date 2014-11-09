@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import no.agentsystems_dhom.agent.Inventory;
 import no.agentsystems_dhom.server.AgentOrder;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
@@ -179,6 +180,37 @@ public class SCM_Supplier {
 	}
 	
 	/**
+	 * Handles AgentOrders (activeOrders). E.g. sorts, and take out components from the order and update the inventory. 
+	 */
+	protected void handleOrders() {
+		if(this.activeAgentOrders.size() <= 0)
+			return;
+		List<AgentOrder> temp = new ArrayList<AgentOrder>();
+		//Sorting by duedate
+		Collections.sort(this.activeAgentOrders, agentOrderDueDateComparator);
+		//Gets the first element in the sorted list
+		int earliestDueDate = this.activeAgentOrders.get(0).getDueDate();
+		for(AgentOrder order : this.activeAgentOrders)
+		{
+			//adding AgentOrders with the same duedate to the temp list
+			if(order.getDueDate() == earliestDueDate)
+			{
+				temp.add(order);
+			}
+		}
+		for(AgentOrder order : temp)
+		{
+			this.activeAgentOrders.remove(order);
+			int supplierId = order.getSupplierOffer().getAgentRequest().getSupplierId();
+			int componentId = order.getSupplierOffer().getAgentRequest().getComponentId();
+			int quantity = order.getSupplierOffer().getQuantity();
+			Component component = this.suppliers[supplierId].getProduct(componentId);
+			int inventoryId = component.getInventory();
+			//IN PROGRESS
+		}
+	}
+	
+	/**
 	 * 
 	 * @param agent the agent which we want to get the reputation of
 	 * @return the reputation of agent 
@@ -211,6 +243,22 @@ public class SCM_Supplier {
 			double a1Rep = getReputation(a1.getAgent(),a1.getSupplierId());
 			double a2Rep = getReputation(a2.getAgent(),a2.getSupplierId());
 			if(a1Rep < a2Rep)
+				return 1;
+			else 
+				return -1;
+			
+		}
+	
+	
+	};
+	
+	private Comparator<AgentOrder> agentOrderDueDateComparator = new Comparator<AgentOrder>() {
+
+		@Override
+		public int compare(AgentOrder a1, AgentOrder a2) {
+			double a1dueDate = a1.getDueDate();
+			double a2dueDate = a2.getDueDate();
+			if(a1dueDate < a2dueDate)
 				return 1;
 			else 
 				return -1;

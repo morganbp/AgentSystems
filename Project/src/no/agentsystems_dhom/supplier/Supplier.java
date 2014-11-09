@@ -50,6 +50,18 @@ public class Supplier {
 		return supplierID;
 	}
 	
+	public Component getProduct(int componentId)
+	{
+		for(Component component : products)
+		{
+			if(componentId == component.getId())
+			{
+				return component;
+			}
+		}
+		return null;
+	}
+	
 	public Component[] getComponents(){
 		return products;
 	}

@@ -48,12 +48,13 @@ public class SCM_S1 extends SCM_Supplier {
 				// Not sure if time == 8
 				if (time == 8 && getStatus()) {
 					//WEEK 44 - 2
-					//Get orders from Agents
+					//Get orders from Agents and add to ActiveOrders(?)
 					getAgentOrders(CLASS_NAME);
 					
 					//WEEK 44 - 3
 					//Handle orders
 					//WRAP TO NEW CLASS? COMPONENTBUNDLE -> (agent, components)
+					
 					
 					//WEEK 44 - 3
 					//Send components to agents(server)
