@@ -3,14 +3,14 @@ package no.agentsystems_dhom.supplier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import no.agentsystems_dhom.agent.Inventory;
 import no.agentsystems_dhom.server.AgentOrder;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
-import no.agentsystems_dhom.server.Offer;
-import no.agentsystems_dhom.server.RFQ;
 import no.agentsystems_dhom.server.SupplierOffer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
@@ -116,31 +116,50 @@ public class SCM_Supplier {
 		// Sort AgentRequests by decreasing reputation
 		Collections.sort(agentRequests, agentReputationComparator);
 		
-		// This list stores lists of agentRequests 
-		List<List<AgentRequest>> agentReputationSeperationList = new ArrayList<List<AgentRequest>>();
-		// Repuation of first agent
-		double curReputation = getReputation(agentRequests.get(0).getAgent(), agentRequests.get(0).getSupplierId());
-		List<AgentRequest> curList = new ArrayList<AgentRequest>();
+		/**
+		 * This Map contains a key, which is the componentID (the component which are requested),
+		 * and a value which is another Map:
+		 * 
+		 * The other Map stores a key, which is the agent reputation, and a List with all the 
+		 * AgentRequest with the specific product and the specific reputation.
+		 *
+		*/
+		Map<Integer, Map<Double, List<AgentRequest>>> agentReputationSeperationMap = new HashMap<Integer, Map<Double, List<AgentRequest>>>();
 		
-		// loop trough sorted list and seperate agents with different reputation on 
+		// Use component IDs as keys in the Map
+		for(int componentID : Component.idList){
+			agentReputationSeperationMap.put(componentID, new HashMap<Double, List<AgentRequest>>());
+		}
+		// loop trough sorted list and separate agents with different reputation on 
 		// different lists
 		for(AgentRequest agentRequest : agentRequests){
 			double reputation = getReputation(agentRequest.getAgent(), agentRequest.getSupplierId());
-			if(reputation == curReputation){
-				curList.add(agentRequest);
+			int compID = agentRequest.getComponentId();
+			Map<Double, List<AgentRequest>> reputationMap = agentReputationSeperationMap.get(compID);
+			if(reputationMap.containsKey(reputation)){
+				// If reputationMap contains a map with the repuation as key, then 
+				// just add this AgentRequest in that List which the reputation key 
+				// is pointing to
+				reputationMap.get(reputation).add(agentRequest);
 			}else{
-				agentReputationSeperationList.add(curList);
-				curReputation = reputation;
-				curList = new ArrayList<AgentRequest>();
-				curList.add(agentRequest);
+				// If reputationMap doesn't have that key, then create a new List
+				// which has that reputation key. This list will then hold
+				// all the AgentRequests with that component and that 
+				// with that reputation.
+				List<AgentRequest> newList = new ArrayList<AgentRequest>();
+				newList.add(agentRequest);
+				reputationMap.put(reputation, newList);
 			}
 		}
 		
-		for(List<AgentRequest> requestList : agentReputationSeperationList){
-			for(AgentRequest agentRequest : requestList){
-				// TODO create action with agent request with equal reputation
-				
-				
+		for(int i = 0; i < Component.idList.length; i++){
+			int compID = Component.idList[i];
+			Map<Double, List<AgentRequest>> reputationMap = agentReputationSeperationMap.get(compID);
+			for(Entry<Double, List<AgentRequest>> agentRequestEntry : reputationMap.entrySet() ){
+				List<AgentRequest> requestList = agentRequestEntry.getValue();
+				for(AgentRequest agentRequest : requestList){
+					System.out.println("AgentRequest wow: " + agentRequest.toString());
+				}
 			}
 		}
 	}

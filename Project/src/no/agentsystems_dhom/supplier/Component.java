@@ -8,6 +8,8 @@ import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class Component {
+	
+	public final static int[] idList = {100, 101, 110, 111, 200, 210, 300, 301, 400, 401};
 	private int id; // 100, 101, 110, 111, 200, 210, 300, 301, 400, 401
 	private int basePrice;
 	private String componentName;
