@@ -138,6 +138,8 @@ public class SCM_Supplier {
 		for(List<AgentRequest> requestList : agentReputationSeperationList){
 			for(AgentRequest agentRequest : requestList){
 				// TODO create action with agent request with equal reputation
+				
+				
 			}
 		}
 	}
