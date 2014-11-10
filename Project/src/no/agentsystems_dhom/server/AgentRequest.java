@@ -33,6 +33,11 @@ public class AgentRequest {
 	public int getSupplierId() {
 		return supplierId;
 	}
+	
+	public int getComponentId() 
+	{
+		return componentId;
+	}
 
 	public void setSupplierId(int supplierId) {
 		this.supplierId = supplierId;
