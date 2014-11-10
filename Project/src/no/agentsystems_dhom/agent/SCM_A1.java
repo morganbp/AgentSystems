@@ -43,7 +43,7 @@ public class SCM_A1 extends SCM_Agent{
 					// and store them.
 					List<Order> newOrders = getOrderFromServer(CLASS_NAME);
 					activeOrders.addAll(newOrders);
-					computeRequirements(newOrders, day);
+					computeRequirements(newOrders);
 				}
 				
 				if(time == 3 && getStatus()){

@@ -76,8 +76,8 @@ public class SCM_Agent {
 					int dueDate = day + 2;
 					int quantity = cDemand[getIndex(cid)][dueDate];
 
-					AgentRequest agentReq = new AgentRequest(sId, cid,
-							quantity, dueDate, 0, className);
+					AgentRequest agentReq = new AgentRequest(sId, cid, dueDate,
+							quantity, 0, className);
 					agentRFQs.add(agentReq);
 					cDemand[getIndex(cid)][dueDate] = 0;
 				}
@@ -87,7 +87,7 @@ public class SCM_Agent {
 		return agentRFQs;
 	}
 
-	protected void computeRequirements(List<Order> customerOrders, int day) {
+	protected void computeRequirements(List<Order> customerOrders) {
 		for (Order o : customerOrders) {
 			int sku = o.getOffer().getRFQ().getPC();
 			int offerQuantity = o.getOffer().getRFQ().getQuantity();
@@ -95,7 +95,7 @@ public class SCM_Agent {
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
 			for (int i = 0; i < componentsIds.length; i++) {
-				cDemand[getIndex(componentsIds[0])][d] += offerQuantity;
+				cDemand[getIndex(componentsIds[i])][d] += offerQuantity;
 			}
 		}
 	}
@@ -200,8 +200,8 @@ public class SCM_Agent {
 		todaysOffers = new ArrayList<Offer>();
 		todaysAgentOrder = new ArrayList<AgentOrder>();
 		activeOrders = new ArrayList<Order>();
-		//adds 1 to second dimension since the array is 0 indexed
-		cDemand = new int[10][TAC_Ontology.numberOfTacDays+1]; 
+		// adds 1 to second dimension since the array is 0 indexed
+		cDemand = new int[10][TAC_Ontology.numberOfTacDays + 1];
 		has_started = true;
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;
