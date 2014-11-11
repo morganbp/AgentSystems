@@ -111,16 +111,16 @@ public class Component {
 	}
 
 	// Get the expected capacity after n days
-	public int getExpectedCapacity(int n) {
-		return getExpectedCapacity(n, capacity);
+	public int getExpectedCapacity(int day,int dueDate) {
+		return getExpectedCapacity(dueDate - day, inventory, true);
 	}
 
-	private int getExpectedCapacity(int days, int currentCapacity) {
+	private int getExpectedCapacity(int days, int currentCapacity, boolean recursion) {
 		if (days == 0) {
 			return currentCapacity;
 		}
 		int newCapacity = (int) (0.99 * currentCapacity + 0.01 * TAC_Ontology.cNominal);
-		return getExpectedCapacity(days - 1, newCapacity);
+		return getExpectedCapacity(days - 1, newCapacity, true);
 	}
 	
 	private double availabilityPriorToDayI(int day, int dueDate){
@@ -181,10 +181,10 @@ public class Component {
 		
 	}
 
-	public double decidePriceOfComponent(AgentRequest agentRequest, Component c, int day){
+	public double decidePriceOfComponent(AgentRequest agentRequest, int day){
 		int offerDueDate = agentRequest.getDueDate();
 		double priceDiscountFactor = 0.5;
-		double baselinePrice = c.getBasePrice();
+		double baselinePrice = getBasePrice();
 		// Calculate availability
 		double cPrior =  availabilityPriorToDayI(day, offerDueDate);
 		double cPost = negativeOfCapacityRequiredOnOrBeforeDayI(day, offerDueDate);
