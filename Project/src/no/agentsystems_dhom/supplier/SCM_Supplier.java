@@ -112,7 +112,7 @@ public class SCM_Supplier {
 		}
 	}
 	
-	protected void createSupplierOffers(List<AgentRequest> agentRequests, String bidder){
+	protected void createSupplierOffers(List<AgentRequest> agentRequests, String bidder, int day){
 		// Sort AgentRequests by decreasing reputation
 		Collections.sort(agentRequests, agentReputationComparator);
 		
@@ -151,14 +151,27 @@ public class SCM_Supplier {
 				reputationMap.put(reputation, newList);
 			}
 		}
-		
+		/**
+		 * Here we loop through all the requests.
+		 */
 		for(int i = 0; i < Component.idList.length; i++){
 			int compID = Component.idList[i];
 			Map<Double, List<AgentRequest>> reputationMap = agentReputationSeperationMap.get(compID);
 			for(Entry<Double, List<AgentRequest>> agentRequestEntry : reputationMap.entrySet() ){
 				List<AgentRequest> requestList = agentRequestEntry.getValue();
+				int quantity = 0;
 				for(AgentRequest agentRequest : requestList){
-					System.out.println("AgentRequest wow: " + agentRequest.toString());
+					// these requests have the same reputation and componentID
+					quantity += agentRequest.getQuantity();
+					Component comp = suppliers[agentRequest.getSupplierId()].getProduct(compID);
+					double offerPrice = comp.decidePriceOfComponent(agentRequest, comp, day);
+					double reservePrice = agentRequest.getPrice();
+					System.out.println(offerPrice + ">"+ reservePrice);
+					//TODO hvis ikke offerPrice kan være høyere enn reserve price,
+					// hvordan kan reservePrice bli satt til 0 `?
+					if(offerPrice > reservePrice){
+					
+					}
 				}
 			}
 		}
@@ -219,6 +232,8 @@ public class SCM_Supplier {
 				temp.add(order);
 			}
 		}
+		
+		
 		for(AgentOrder order : temp)
 		{
 			this.activeAgentOrders.remove(order);

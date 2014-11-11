@@ -27,9 +27,8 @@ public class SCM_S1 extends SCM_Supplier {
 				}
 
 				int time = interval % TAC_Ontology.lengthOfADay;
-
+				int day = interval / TAC_Ontology.lengthOfADay;
 				if (time == 0 && getStatus()) {
-					int day = interval / TAC_Ontology.lengthOfADay;
 					suplView.append("\nday: " + day);
 					if (day != 0)
 						addSupplierComponents();
@@ -42,8 +41,7 @@ public class SCM_S1 extends SCM_Supplier {
 				}
 				if (time == 6 && getStatus()) {
 					List<AgentRequest> agentRequests = getAgentRequests(CLASS_NAME);
-
-					createSupplierOffers(agentRequests, CLASS_NAME);
+					createSupplierOffers(agentRequests, CLASS_NAME,day );
 				}
 				// Not sure if time == 8
 				if (time == 8 && getStatus()) {

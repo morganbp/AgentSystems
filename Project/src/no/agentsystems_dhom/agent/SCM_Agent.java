@@ -65,7 +65,12 @@ public class SCM_Agent {
 			List<Order> customerOrders) {
 		int numberOfSuppliers = 8;
 		List<AgentRequest> agentRFQs = new ArrayList<AgentRequest>();
-
+		
+		// Don't send AgentRFQs if there isn't any customer orders yet
+		if(customerOrders.size() <= 0){
+			return agentRFQs;
+		}
+		
 		for (int sId = 0; sId < numberOfSuppliers; sId++) {
 			Supplier sup = new Supplier(sId);
 			Component prod[] = sup.getComponents();
@@ -75,7 +80,7 @@ public class SCM_Agent {
 					int cid = prod[k].getId();
 					int dueDate = day + 2;
 					int quantity = cDemand[getIndex(cid)][dueDate];
-
+					// TODO hva skal settes som pris??
 					AgentRequest agentReq = new AgentRequest(sId, cid, dueDate,
 							quantity, 0, className);
 					agentRFQs.add(agentReq);

@@ -181,16 +181,18 @@ public class Component {
 		
 	}
 
-	public double decidePriceOfComponent(Offer offer, Component c, int day){
-		int offerDueDate = offer.getRFQ().getDueDate();
+	public double decidePriceOfComponent(AgentRequest agentRequest, Component c, int day){
+		int offerDueDate = agentRequest.getDueDate();
 		double priceDiscountFactor = 0.5;
 		double baselinePrice = c.getBasePrice();
 		// Calculate availability
 		double cPrior =  availabilityPriorToDayI(day, offerDueDate);
 		double cPost = negativeOfCapacityRequiredOnOrBeforeDayI(day, offerDueDate);
 		double availability = cPrior + cPost;
-		
-		return baselinePrice * (1 - priceDiscountFactor * (availability /baselinePrice));
+
+		//	double expectedCapacity =  getExpectedCapacity(day);
+		System.out.println(baselinePrice + " * ( 1 - " + priceDiscountFactor + " * ( " + availability + " / " + inventory + ")");
+		return baselinePrice * (1 - priceDiscountFactor * (availability / inventory));
 	}
 	
 	
