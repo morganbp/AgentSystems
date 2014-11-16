@@ -222,11 +222,14 @@ public class SCM_Supplier {
 			int componentId = order.getSupplierOffer().getAgentRequest()
 					.getComponentId();
 			int quantity = order.getSupplierOffer().getQuantity();
-			Component component = this.suppliers[supplierId]
-					.getProduct(componentId);
-			int inventoryId = component.getInventory();
-			// IN PROGRESS
+			Supplier supplier = this.suppliers[supplierId];
+			Component chosenProduct =  supplier.getProduct(componentId);
+			//updateInventory in code from Ky
+			chosenProduct.subtractFromCapacity(quantity);
+			//THIS IS NOT SUPPOSED TO HAPPEN. IF THIS HAPPENS THEN WTF
 		}
+		
+		//TODO: Wrap in bundle and send to server
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package no.agentsystems_dhom.supplier;
 
+import no.agentsystems_dhom.server.Inventory;
+
 public class Supplier {
 	private Component[] products = new Component[2];
 	private int supplierID;
@@ -34,6 +36,8 @@ public class Supplier {
 			break;
 		}
 	}
+	
+	
 	public Supplier(int component1_ID, int component2_ID, int id)
 	{
 		setProducts(component1_ID, component2_ID);

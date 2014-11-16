@@ -109,6 +109,11 @@ public class Component {
 	public int getCapacity() {
 		return capacity;
 	}
+	
+	public void subtractFromCapacity(int quantity)
+	{
+		capacity = capacity - quantity;
+	}
 
 	// Get the expected capacity after n days
 	public int getExpectedCapacity(int day,int dueDate) {
