@@ -37,4 +37,21 @@ public class Inventory {
 	public int[] getNumberOfPCs() {
 		return numberOfPCs;
 	}
+
+	/**
+	 * 
+	 * @param sku
+	 *            the sku of the PC to check
+	 * @param quantity
+	 *            number of PCs we wanna check 
+	 * @return true if there is enough PCs, false if not.
+	 */
+	public boolean isEnoughPCs(int sku, int quantity) {
+		if (numberOfPCs[sku - 1] < quantity) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
 }

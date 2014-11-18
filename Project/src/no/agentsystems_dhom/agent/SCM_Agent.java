@@ -37,6 +37,8 @@ public class SCM_Agent {
 	protected static int components[] = { 100, 101, 110, 111, 200, 210, 300,
 			301, 400, 401 };
 	private String productSchedule;
+	protected List<Order> products;
+	protected List<Order> deliveries;
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -67,12 +69,12 @@ public class SCM_Agent {
 			List<Order> customerOrders) {
 		int numberOfSuppliers = 8;
 		List<AgentRequest> agentRFQs = new ArrayList<AgentRequest>();
-		
+
 		// Don't send AgentRFQs if there isn't any customer orders yet
-		if(customerOrders.size() <= 0){
+		if (customerOrders.size() <= 0) {
 			return agentRFQs;
 		}
-		
+
 		for (int sId = 0; sId < numberOfSuppliers; sId++) {
 			Supplier sup = new Supplier(sId);
 			Component prod[] = sup.getComponents();
@@ -102,7 +104,6 @@ public class SCM_Agent {
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
 			for (int i = 0; i < componentsIds.length; i++) {
-				System.out.println(i + " hei på deg " + d);
 				cDemand[getIndex(componentsIds[i])][d] += offerQuantity;
 			}
 		}
@@ -195,49 +196,50 @@ public class SCM_Agent {
 		agentView.append("\n#Supplier Offers : " + offerList.size());
 		return supplierOfferList;
 	}
-	
-	protected void productSchedule(String agent, int day){
+
+	protected void productSchedule(String agent, int day) {
 		// make a product schedule list
 
-        productSchedule = "null";
+		productSchedule = "null";
 
-        // sort the aggregate orders with the least dueDate comes first
-        
-        Collections.sort(activeOrders, Order.DUE_DATE_COMPARATOR);
-        
-       // the list the contains customer orders must be processed
+		// sort the aggregate orders with the least dueDate comes first
 
-       List<Order> products = new ArrayList<Order>();
+		Collections.sort(activeOrders, Order.DUE_DATE_COMPARATOR);
 
-       // Copy the orders that have the dueDate = day + 2 from aggregate orders to products and remove them from aggregate
-       // orders
+		// the list the contains customer orders must be processed
 
-       for(Order o : activeOrders){
-    	   if(o.getDueDate() == (day + 2)){
-    		   products.add(o);
-    	   }
-       }
-       
-       // convert the list to a string
-       if(products.size() > 0){
-    	   productSchedule = Order.listToString(products);
-       }
-       // send the product shedule to server
-       sendProductSchedule(agent, productSchedule);
+		products = new ArrayList<Order>();
+
+		// Copy the orders that have the dueDate = day + 2 from aggregate orders
+		// to products and remove them from aggregate
+		// orders
+
+		for (Order o : activeOrders) {
+			if (o.getDueDate() == (day + 2)) {
+				products.add(o);
+			}
+		}
+
+		// convert the list to a string
+		if (products.size() > 0) {
+			productSchedule = Order.listToString(products);
+		}
+		// send the product shedule to server
+		sendProductSchedule(agent, productSchedule);
 	}
-	
+
 	/**
 	 * 
-	 * @param agent 	The agent which sends the schedule
-	 * @param schedule	A string represantation of an List<Order> object
+	 * @param agent
+	 *            The agent which sends the schedule
+	 * @param schedule
+	 *            A string represantation of an List<Order> object
 	 */
 	private void sendProductSchedule(String agent, String schedule) {
 		Message kqml = Util.buildKQML(TAC_Ontology.productSchedule, agent,
 				schedule);
-
-		System.out.println("send schedule: " + kqml.toString());
 		server.send(kqml.toString());
-		
+
 	}
 
 	protected void createAgentOrder(SupplierOffer supplierOffer) {
@@ -247,29 +249,57 @@ public class SCM_Agent {
 				supplierOffer);
 		todaysAgentOrder.add(agentOrder);
 	}
-	/*protected void getSupplierComponents(String className)
-	{
-		String content = "";
-		Message kqml = Util.buildKQML(TAC_Ontology.getSupplierComponents,
-				className, content);
-		String responseString = server.send(kqml.toString());
-		Message response = Message.buildMessage(responseString);
-		List<AgentOrder> componentBundle = AgentOrder.stringToList(response
-				.getContent());
-		List<AgentOrder> supplierComponents = new ArrayList<AgentOrder>();
-		for (AgentOrder component : componentBundle) {
-			if (component.getCustomer().equals(className)) {
-				supplierComponents.add(component);
-			}
-		}
-		agentView.append("\n#Supplier Offers : " + supplierComponents.size());
-		//Handle inventory
-	}*/
+
+	/**
+	 * This class send a list of Orders to send, based on yesterdays list of Order
+	 * which should be put on the Assembly line.
+	 * 
+	 * @param agent
+	 *            name of the agent
+	 */
+	protected void deliverySchedule(String agent) {
+		if (products.size() == 0)
+			return;
+		deliveries.clear();
+		deliveries.addAll(products);
+		products.clear();
+		
+		sendDeliverySchedule(agent);
+	}
+
+	/*
+	 * protected void getSupplierComponents(String className) { String content =
+	 * ""; Message kqml = Util.buildKQML(TAC_Ontology.getSupplierComponents,
+	 * className, content); String responseString =
+	 * server.send(kqml.toString()); Message response =
+	 * Message.buildMessage(responseString); List<AgentOrder> componentBundle =
+	 * AgentOrder.stringToList(response .getContent()); List<AgentOrder>
+	 * supplierComponents = new ArrayList<AgentOrder>(); for (AgentOrder
+	 * component : componentBundle) { if
+	 * (component.getCustomer().equals(className)) {
+	 * supplierComponents.add(component); } }
+	 * agentView.append("\n#Supplier Offers : " + supplierComponents.size());
+	 * //Handle inventory }
+	 */
+	
+	/**
+	 * Send the delivery schedule to server
+	 * @param agent
+	 */
+	private void sendDeliverySchedule(String agent) {
+		Message kqml = Util.buildKQML(TAC_Ontology.deliverySchedule, agent,
+				Order.listToString(deliveries));
+		server.send(kqml.toString());
+		
+	}
 
 	protected void startTheGame() {
 		todaysOffers = new ArrayList<Offer>();
 		todaysAgentOrder = new ArrayList<AgentOrder>();
 		activeOrders = new ArrayList<Order>();
+		products = new ArrayList<Order>();
+		deliveries = new ArrayList<Order>();
+
 		// adds 1 to second dimension since the array is 0 indexed
 		cDemand = new int[10][TAC_Ontology.numberOfTacDays + 1];
 		has_started = true;

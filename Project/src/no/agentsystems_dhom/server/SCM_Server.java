@@ -90,6 +90,10 @@ public class SCM_Server extends Thread {
 
 	private List<Order> todaysProductSchedule;
 
+	// The delivery schedule which sends PCs to Customer
+
+	private List<Order> todaysDeliverySchedule;
+
 	// Store supplier components(in the form of AgentOrders) from supplier
 
 	private List<AgentOrder> supplierComponents;
@@ -181,6 +185,10 @@ public class SCM_Server extends Thread {
 					supplierComponents.clear();
 				}
 
+				if (time == 7) {
+					processDeliverySchedule();
+				}
+
 				if (time == 9 && isOn) {
 					processStorage();
 					updateBalance();
@@ -199,7 +207,56 @@ public class SCM_Server extends Thread {
 		} // end while
 	}
 
-	// start the game
+
+	private void processDeliverySchedule() {
+		// get information from deliverySchedule of each agent
+
+		for (Order order : todaysDeliverySchedule) {
+
+			// find the agent that receivers that delivery order
+
+			Agent a = find(order.getProvider());
+
+			// count the number of delivery order of each agent
+
+			delivery(a, order);
+			
+
+		}
+
+	}
+
+	// process delivery of an order from agent
+
+	private void delivery(Agent agent, Order order) {
+
+		// get PC from the agent's inventory
+		
+		// update the number of PC in the agent's inventory
+		
+		int sku = order.getOffer().getRFQ().getPC();
+		int quantity = order.getOffer().getRFQ().getQuantity();
+		
+		Inventory inventory = agent.getInventory();
+		if(!inventory.isEnoughPCs(sku, quantity))
+			return;
+		
+		inventory.updateNumberOfPcs(sku, -quantity); 
+		
+		// get price
+
+		double price = order.getPrice();
+
+		// the agent get pay
+
+		BankAccount ba = bank.getBankAccount(agent);
+
+		ba.addCredit(price * quantity);
+
+		// remove this order from aggregateOrders;
+		
+
+	}
 
 	private void processStorage() {
 		for (int i = 0; i <= agentList.size(); i++) {
@@ -215,21 +272,21 @@ public class SCM_Server extends Thread {
 
 	private void dealSupplierBill() {
 		for (AgentOrder agentOrder : supplierComponents) {
-			//Find agent with this order
+			// Find agent with this order
 			Agent agent = findAgent(agentOrder.getCustomer());
-			int componentId = agentOrder.getSupplierOffer().getAgentRequest().getComponentId();
+			int componentId = agentOrder.getSupplierOffer().getAgentRequest()
+					.getComponentId();
 			int quantity = agentOrder.getSupplierOffer().getQuantity();
 			agent.getInventory().updateQuantity(componentId, quantity);
 			double amount = agentOrder.getPrice();
-			bank.getBankAccount(agent).addDebit(amount*quantity);
+			bank.getBankAccount(agent).addDebit(amount * quantity);
 		}
 	}
-	
-	private Agent findAgent(String agentName)
-	{
+
+	private Agent findAgent(String agentName) {
 		for (Agent agent : agentList) {
-			if(agent.name.toLowerCase().trim() == agentName.toLowerCase().trim())
-			{
+			if (agent.name.toLowerCase().trim() == agentName.toLowerCase()
+					.trim()) {
 				return agent;
 			}
 		}
@@ -292,6 +349,8 @@ public class SCM_Server extends Thread {
 		supplierComponents = new ArrayList<AgentOrder>();
 
 		todaysProductSchedule = new ArrayList<Order>();
+
+		todaysDeliverySchedule = new ArrayList<Order>();
 	}
 
 	// end the game
@@ -614,6 +673,16 @@ public class SCM_Server extends Thread {
 		return resp;
 	}
 
+	public Message deliverySchedule(Message kqml) {
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String messageContent = kqml.getContent();
+		List<Order> deliverySchedule = Order.stringToList(messageContent);
+		todaysDeliverySchedule.addAll(deliverySchedule);
+		return resp;
+	}
+
 	/**
 	 * Send the a list over products to create to the assembly
 	 */
@@ -633,6 +702,7 @@ public class SCM_Server extends Thread {
 
 		}
 
+		todaysProductSchedule.clear();
 	}
 
 	/**
@@ -652,26 +722,28 @@ public class SCM_Server extends Thread {
 		// Inventory of the agent a
 
 		Inventory inventory = agent.getInventory();
-		
+
 		// if there is not enough assembly cycles - do nothing
-		if(!assembly.isCapacityAvailable(sku, quantity)) return;
-		
+		if (!assembly.isCapacityAvailable(sku, quantity))
+			return;
+
 		// if there is not enough components - do nothing
-		if(!inventory.isEnoughComponents(sku, quantity)) return;
-		
+		if (!inventory.isEnoughComponents(sku, quantity))
+			return;
+
 		// make q PCs
-			
+
 		// update the components that are used to build PCs in agent's inventory
 
 		PC pc = new PC(sku);
-		for(int cid : pc.getComponents()){
+		for (int cid : pc.getComponents()) {
 			inventory.updateQuantity(cid, quantity);
 		}
-		
+
 		// update the number of PCs in inventory
 
 		inventory.updateNumberOfPcs(sku, quantity);
-		
+
 		// update assembly i.e. reduce the number of cycles
 
 		assembly.updateCycle(sku, quantity);
@@ -869,6 +941,13 @@ class TACSCMImpl extends SCMPOA {
 
 		if (performative.equals(TAC_Ontology.productSchedule)) {
 			Message resp = server.productSchedule(kqml);
+			if (resp != null) {
+				return resp.toString();
+			}
+		}
+
+		if (performative.equals(TAC_Ontology.deliverySchedule)) {
+			Message resp = server.deliverySchedule(kqml);
 			if (resp != null) {
 				return resp.toString();
 			}

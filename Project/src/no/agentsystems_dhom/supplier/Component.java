@@ -202,7 +202,6 @@ public class Component {
 		double availability = cPrior + cPost;
 
 		//	double expectedCapacity =  getExpectedCapacity(day);
-		System.out.println(baselinePrice + " * ( 1 - " + priceDiscountFactor + " * ( " + availability + " / " + inventory + ")");
 		return baselinePrice * (1 - priceDiscountFactor * (availability / inventory));
 	}
 	
