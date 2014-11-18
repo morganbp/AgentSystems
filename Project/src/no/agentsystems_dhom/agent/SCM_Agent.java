@@ -198,7 +198,7 @@ public class SCM_Agent {
 	protected void productSchedule(String agent, int day){
 		// make a product schedule list
 
-        productSchedule = "";
+        productSchedule = "null";
 
         // sort the aggregate orders with the least dueDate comes first
         
@@ -208,8 +208,7 @@ public class SCM_Agent {
 
        List<Order> products = new ArrayList<Order>();
 
-       // Copy the orders that have the dueDate = day + 2 from aggregate orders to products and remove them from aggregate 
-
+       // Copy the orders that have the dueDate = day + 2 from aggregate orders to products and remove them from aggregate
        // orders
 
        for(Order o : activeOrders){
@@ -219,7 +218,9 @@ public class SCM_Agent {
        }
        
        // convert the list to a string
-       productSchedule = Order.listToString(products);
+       if(products.size() > 0){
+    	   productSchedule = Order.listToString(products);
+       }
        // send the product shedule to server
        sendProductSchedule(agent, productSchedule);
 	}
@@ -232,8 +233,9 @@ public class SCM_Agent {
 	private void sendProductSchedule(String agent, String schedule) {
 		Message kqml = Util.buildKQML(TAC_Ontology.productSchedule, agent,
 				schedule);
+
+		System.out.println("send schedule: " + kqml.toString());
 		server.send(kqml.toString());
-		System.out.println(kqml.toString());
 		
 	}
 
