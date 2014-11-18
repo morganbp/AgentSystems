@@ -24,10 +24,10 @@ public class SCM_Server extends Thread {
 	// private variables
 
 	private GUI serverView;
-	
-	//RFQ list to keep track of todays RFQs
+
+	// RFQ list to keep track of todays RFQs
 	private List<RFQ> TodaysRFQs;
-	
+
 	// gameId is the date and time for a game round
 
 	private String gameId;
@@ -63,30 +63,29 @@ public class SCM_Server extends Thread {
 	private double loanInterestRate = 0;
 
 	// Store the offers from agents
-	
+
 	private List<Offer> agentOffers;
-	
-	// Store the orders from custommer 
-	
+
+	// Store the orders from custommer
+
 	private List<Order> customerOrders;
-	
+
 	// Store AgentRequest from Agent
-	
+
 	private List<AgentRequest> agentRequests;
-	
+
 	// Store SupplierOffer from Supplier
-	
+
 	private List<SupplierOffer> supplierOffers;
-	
+
 	// Store AgentOrder from agent
-	
+
 	private List<AgentOrder> agentOrders;
-	
-	
+
 	// Store supplier components(in the form of AgentOrders) from supplier
-	
+
 	private List<AgentOrder> supplierComponents;
-	
+
 	public SCM_Server() {
 		serverView = new GUI("SCM_server");
 		bank = new Bank();
@@ -143,7 +142,7 @@ public class SCM_Server extends Thread {
 		for (;;) {
 
 			try {
-				
+
 				if (interval < 0) {
 					serverView.setText("Server is waiting ... ");
 				} else if (interval == 0
@@ -151,7 +150,7 @@ public class SCM_Server extends Thread {
 
 					startTheGame(); // start the game at a specific time
 
-				}else if (interval == TAC_Ontology.gameLength) {
+				} else if (interval == TAC_Ontology.gameLength) {
 
 					endTheGame(); // close the game
 
@@ -178,7 +177,7 @@ public class SCM_Server extends Thread {
 				}
 
 				interval++;
-				
+
 				sleep(TAC_Ontology.sec);
 
 			}
@@ -232,21 +231,21 @@ public class SCM_Server extends Thread {
 		loanInterestRate = 2 * interestRate;
 
 		bank.setLoanInterestRate(loanInterestRate);
-		
+
 		agentOffers = new ArrayList<Offer>();
-		
+
 		TodaysRFQs = new ArrayList<RFQ>();
-		
+
 		customerOrders = new ArrayList<Order>();
-		
+
 		agentRequests = new ArrayList<AgentRequest>();
-		
+
 		supplierOffers = new ArrayList<SupplierOffer>();
 
 		agentOrders = new ArrayList<AgentOrder>();
-		
+
 		supplierComponents = new ArrayList<AgentOrder>();
-		
+
 	}
 
 	// end the game
@@ -362,14 +361,13 @@ public class SCM_Server extends Thread {
 		int id = Integer.parseInt(kqml.getContent());
 
 		Agent a = new Agent(name, id);
-		
-		
+
 		if (agentRegistered(name, agentList))
 
 			name += " is already registered!";
 
 		else {
-			
+
 			agentList.add(a);
 
 			bank.getBankAccounts().add(new BankAccount(a));
@@ -385,50 +383,49 @@ public class SCM_Server extends Thread {
 		return resp;
 
 	}
-	
-	//Run this when customer RFQs have arrived 
-	public synchronized Message customer_RFQs(Message kqml)
-	{
+
+	// Run this when customer RFQs have arrived
+	public synchronized Message customer_RFQs(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String stringRFQs = kqml.getContent();
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
-		//Saving the RFQs to the server's RFQ list
+		// Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
 		serverView.append("\nRFQs from " + name + ": " + RFQs.size());
-		
+
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
 	}
 
-	//Run this when agent requests RFQs
-	public synchronized Message getCustomer_RFQs(Message kqml)
-	{
+	// Run this when agent requests RFQs
+	public synchronized Message getCustomer_RFQs(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		resp.setContent(RFQ.listToString(TodaysRFQs));
-	
+
 		return resp;
-		
+
 	}
-	
-	//Run this when we receive Offers from Agent
-	public synchronized Message agentOffers(Message kqml)
-	{
+
+	// Run this when we receive Offers from Agent
+	public synchronized Message agentOffers(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<Offer> offers = Offer.stringToList(messageContent);
 		agentOffers.addAll(offers);
-		serverView.append("\n" + name + " has sent the server " + offers.size() + " offers.");
-		resp.setContent(""+offers.size());
+		serverView.append("\n" + name + " has sent the server " + offers.size()
+				+ " offers.");
+		resp.setContent("" + offers.size());
 		return resp;
 	}
+
 	// The customer gets all the offers from agents
-	public synchronized Message getAgentOffers(Message kqml){
+	public synchronized Message getAgentOffers(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -436,8 +433,9 @@ public class SCM_Server extends Thread {
 		resp.setContent(agentOffersStr);
 		return resp;
 	}
+
 	// the customer sends orders to agents
-	public synchronized Message customerOrders(Message kqml){
+	public synchronized Message customerOrders(Message kqml) {
 		customerOrders.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
@@ -445,19 +443,21 @@ public class SCM_Server extends Thread {
 		String messageContent = kqml.getContent();
 		List<Order> orders = Order.stringToList(messageContent);
 		customerOrders.addAll(orders);
-		serverView.append("\n" + name + " has sent the server " + orders.size() + " orders.");
+		serverView.append("\n" + name + " has sent the server " + orders.size()
+				+ " orders.");
 		resp.setContent(orders.size() + "");
 		return resp;
 	}
+
 	// The agent gets the orders from customers
-	public synchronized Message getCustomerOrders(Message kqml){ 
+	public synchronized Message getCustomerOrders(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		List<Order> ordersToSender = new ArrayList<Order>();
-		// Add all orders which are intended for the Sender 
+		// Add all orders which are intended for the Sender
 		// (or the one calling this method)
-		for(Order o : customerOrders){
-			if(o.getProvider().equals(name))
+		for (Order o : customerOrders) {
+			if (o.getProvider().equals(name))
 				ordersToSender.add(o);
 		}
 		resp.setReceiver(name);
@@ -465,8 +465,8 @@ public class SCM_Server extends Thread {
 		resp.setContent(customerOrderStr);
 		return resp;
 	}
-	
-	public synchronized Message agentRFQs(Message kqml){
+
+	public synchronized Message agentRFQs(Message kqml) {
 		agentRequests.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
@@ -477,8 +477,8 @@ public class SCM_Server extends Thread {
 		resp.setContent(newAgentReq.size() + "");
 		return resp;
 	}
-	
-	public synchronized Message getAgentRFQs(Message kqml){
+
+	public synchronized Message getAgentRFQs(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -486,14 +486,15 @@ public class SCM_Server extends Thread {
 		resp.setContent(strAgentReq);
 		return resp;
 	}
-	
+
 	public synchronized Message sendSupplierOffers(Message kqml) {
 		supplierOffers.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String content = kqml.getContent();
-		List<SupplierOffer> newSupplierOffers = SupplierOffer.stringToList(content);
+		List<SupplierOffer> newSupplierOffers = SupplierOffer
+				.stringToList(content);
 		supplierOffers.addAll(newSupplierOffers);
 		resp.setContent(newSupplierOffers.size() + "");
 		serverView.append("\nOffers from Supplier: " + supplierOffers.size());
@@ -505,8 +506,8 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		List<SupplierOffer> offersToReceiver = new ArrayList<SupplierOffer>();
-		for(SupplierOffer supOff : supplierOffers){
-			if(supOff.getReciever().equals(name)){
+		for (SupplierOffer supOff : supplierOffers) {
+			if (supOff.getReciever().equals(name)) {
 				offersToReceiver.add(supOff);
 			}
 		}
@@ -535,28 +536,39 @@ public class SCM_Server extends Thread {
 		resp.setContent(strAgentOrd);
 		return resp;
 	}
-	
-	public synchronized Message sendSupplierComponents(Message kqml){
+
+	public synchronized Message sendSupplierComponents(Message kqml) {
 		supplierComponents.clear();
 		String name = kqml.getSender();
 		String messageContent = kqml.getContent();
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
-		serverView.append("\n" + name + " has sent the server " + components.size() + " components.");
+		serverView.append("\n" + name + " has sent the server "
+				+ components.size() + " components.");
 		return null;
 	}
-	
+
 	public synchronized Message getSupplierComponents(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
-		String strSupplierComponents = AgentOrder.listToString(supplierComponents);
+		String strSupplierComponents = AgentOrder
+				.listToString(supplierComponents);
 		resp.setContent(strSupplierComponents);
 		return resp;
 	}
-	
-	
 
+
+	public Message productSchedule(Message kqml) {
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		String messageContent = kqml.getContent();
+		List<Order> productSchedule = Order.stringToList(messageContent);
+		System.out.println(productSchedule);
+		return resp;
+	}
+	
 	// get bank account balance
 
 	private double getBankBalance(Agent a) {
@@ -578,8 +590,8 @@ public class SCM_Server extends Thread {
 		}
 
 	}
-	public void saveServerGuiToText()
-	{	
+
+	public void saveServerGuiToText() {
 		File outputFile = new File("C:/Users/David/agent5/agentReport_.txt");
 		String guiContent = serverView.output.getText();
 		PrintWriter out = null;
@@ -596,7 +608,7 @@ public class SCM_Server extends Thread {
 		out.close();
 	}
 
-	
+
 } // end of SCM_Server
 
 class TACSCMImpl extends SCMPOA {
@@ -616,7 +628,7 @@ class TACSCMImpl extends SCMPOA {
 	// implement send() method
 
 	public String send(String str) {
-		
+
 		if (str == null)
 			return null;
 
@@ -637,117 +649,115 @@ class TACSCMImpl extends SCMPOA {
 				return resp.toString();
 
 		}
-		
-		//server has received customer RFQs
-		if(performative.equals(TAC_Ontology.Customer_RFQs))
-		{
+
+		// server has received customer RFQs
+		if (performative.equals(TAC_Ontology.Customer_RFQs)) {
 			Message resp = server.customer_RFQs(kqml);
-			if(resp != null)
+			if (resp != null)
 				return resp.toString();
 		}
-		
-		//server has received customer RFQs
-		if(performative.equals(TAC_Ontology.getCustomer_RFQs))
-		{
+
+		// server has received customer RFQs
+		if (performative.equals(TAC_Ontology.getCustomer_RFQs)) {
 			Message resp = server.getCustomer_RFQs(kqml);
-			if(resp != null)
+			if (resp != null)
 				return resp.toString();
 		}
-				
-		//server has received offers from 
-		if(performative.equals(TAC_Ontology.agentOffers))
-		{
+
+		// server has received offers from
+		if (performative.equals(TAC_Ontology.agentOffers)) {
 			Message resp = server.agentOffers(kqml);
-			if(resp != null)
-			{
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		//Customer wants to get all the agent offers
-		if(performative.equals(TAC_Ontology.getAgentOffers)){
+		// Customer wants to get all the agent offers
+		if (performative.equals(TAC_Ontology.getAgentOffers)) {
 			Message resp = server.getAgentOffers(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
+
 		// Agent gets the orders from customers
-		if(performative.equals(TAC_Ontology.getCustomerOrders)){
+		if (performative.equals(TAC_Ontology.getCustomerOrders)) {
 			Message resp = server.getCustomerOrders(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
+
 		// Customer send orders to agent
-		if(performative.equals(TAC_Ontology.customerOrders)){
+		if (performative.equals(TAC_Ontology.customerOrders)) {
 			Message resp = server.customerOrders(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
-			
+
 		}
-		
-		if(performative.equals(TAC_Ontology.Agent_RFQs)){
+
+		if (performative.equals(TAC_Ontology.Agent_RFQs)) {
 			Message resp = server.agentRFQs(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.getAgentRFQs)){
+
+		if (performative.equals(TAC_Ontology.getAgentRFQs)) {
 			Message resp = server.getAgentRFQs(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.sendSupplierOffers)){
+
+		if (performative.equals(TAC_Ontology.sendSupplierOffers)) {
 			Message resp = server.sendSupplierOffers(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.getSupplierOffers)){
+
+		if (performative.equals(TAC_Ontology.getSupplierOffers)) {
 			Message resp = server.getSupplierOffers(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.getAgentOrders)){
+
+		if (performative.equals(TAC_Ontology.getAgentOrders)) {
 			Message resp = server.getAgentOrders(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.sendAgentOrders)){
+
+		if (performative.equals(TAC_Ontology.sendAgentOrders)) {
 			Message resp = server.sendAgentOrders(kqml);
+			if (resp != null) {
+				return resp.toString();
+			}
+		}
+
+		if (performative.equals(TAC_Ontology.supplierSendComponents)) {
+			Message resp = server.sendSupplierComponents(kqml);
+			if (resp != null) {
+				return resp.toString();
+			}
+		}
+
+		if (performative.equals(TAC_Ontology.getSupplierComponents)) {
+			Message resp = server.getSupplierComponents(kqml);
+			if (resp != null) {
+				return resp.toString();
+			}
+		}
+
+		if (performative.equals(TAC_Ontology.productSchedule)) {
+			Message resp = server.productSchedule(kqml);
 			if(resp != null){
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.supplierSendComponents))
-		{
-			Message resp = server.sendSupplierComponents(kqml);
-			if(resp != null)
-			{
-				return resp.toString();
-			}
-		}
-		
-		if(performative.equalsIgnoreCase(TAC_Ontology.getSupplierComponents))
-		{
-			Message resp = server.getSupplierComponents(kqml);
-			if(resp != null)
-			{
-				return resp.toString();
-			}
-		}
-		
 		return null;
 
 	}
