@@ -169,7 +169,7 @@ public class SCM_Server extends Thread {
 				}
 
 				if (time == 9 && isOn) {
-
+					processStorage();
 					updateBalance();
 				}
 
