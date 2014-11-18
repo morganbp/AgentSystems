@@ -560,17 +560,6 @@ public class SCM_Server extends Thread {
 		serverView.append("\n" + name + " has sent the server " + components.size() + " components.");
 		return resp;
 	}
-	
-	public synchronized Message getSupplierComponents(Message kqml) {
-		Message resp = new Message();
-		String name = kqml.getSender();
-		resp.setReceiver(name);
-		String strSupplierComponents = AgentOrder.listToString(supplierComponents);
-		resp.setContent(strSupplierComponents);
-		return resp;
-	}
-	
-	
 
 	// get bank account balance
 
@@ -748,15 +737,6 @@ class TACSCMImpl extends SCMPOA {
 		if(performative.equals(TAC_Ontology.supplierSendComponents))
 		{
 			Message resp = server.sendSupplierComponents(kqml);
-			if(resp != null)
-			{
-				return resp.toString();
-			}
-		}
-		
-		if(performative.equalsIgnoreCase(TAC_Ontology.getSupplierComponents))
-		{
-			Message resp = server.getSupplierComponents(kqml);
 			if(resp != null)
 			{
 				return resp.toString();

@@ -247,10 +247,24 @@ public class SCM_Agent {
 		todaysAgentOrder.add(agentOrder);
 	}
 	
-	protected void getSupplierComponents(String className)
+	/*protected void getSupplierComponents(String className)
 	{
-		//
-	}
+		String content = "";
+		Message kqml = Util.buildKQML(TAC_Ontology.getSupplierComponents,
+				className, content);
+		String responseString = server.send(kqml.toString());
+		Message response = Message.buildMessage(responseString);
+		List<AgentOrder> componentBundle = AgentOrder.stringToList(response
+				.getContent());
+		List<AgentOrder> supplierComponents = new ArrayList<AgentOrder>();
+		for (AgentOrder component : componentBundle) {
+			if (component.getCustomer().equals(className)) {
+				supplierComponents.add(component);
+			}
+		}
+		agentView.append("\n#Supplier Offers : " + supplierComponents.size());
+		//Handle inventory
+	}*/
 
 	protected void startTheGame() {
 		todaysOffers = new ArrayList<Offer>();

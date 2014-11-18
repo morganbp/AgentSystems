@@ -153,8 +153,6 @@ public class TAC_Ontology {
     public static String getAgentOrders = "getAgentOrders";
     // supplier sends bill and components to agents
     public static String supplierSendComponents = "supplierSendComponents";
-    // agent wants to get components from server
-    public static String getSupplierComponents = "getSupplierComponents";
     // agents send product schedule to Assembly
     public static String productSchedule = "productSchedule";
     // agents send delivery schedule to Inventory
