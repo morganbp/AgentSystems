@@ -547,13 +547,15 @@ public class SCM_Server extends Thread {
 	}
 	
 	public synchronized Message sendSupplierComponents(Message kqml){
-		supplierComponents.clear();
+		Message resp = new Message();
 		String name = kqml.getSender();
+		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
+		resp.setContent(components.size() + "");
 		serverView.append("\n" + name + " has sent the server " + components.size() + " components.");
-		return null;
+		return resp;
 	}
 	
 	public synchronized Message getSupplierComponents(Message kqml) {

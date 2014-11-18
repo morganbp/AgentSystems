@@ -246,6 +246,11 @@ public class SCM_Agent {
 				supplierOffer);
 		todaysAgentOrder.add(agentOrder);
 	}
+	
+	protected void getSupplierComponents(String className)
+	{
+		//
+	}
 
 	protected void startTheGame() {
 		todaysOffers = new ArrayList<Offer>();
