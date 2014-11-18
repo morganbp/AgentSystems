@@ -220,11 +220,7 @@ public class SCM_Server extends Thread {
 				ordersToRemove.add(order);
 			}
 		}
-		
-		for(Order order : ordersToRemove)
-		{
-			customerOrders.remove(order);
-		}
+		customerOrders.removeAll(ordersToRemove);
 	}
 
 	private void processStorage() {
