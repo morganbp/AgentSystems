@@ -188,6 +188,9 @@ public class SCM_Server extends Thread {
 				if (time == 7) {
 					processDeliverySchedule();
 				}
+				if (time == 8 && isOn) {
+					controlOrders();
+				}
 
 				if (time == 9 && isOn) {
 					processStorage();
@@ -252,10 +255,25 @@ public class SCM_Server extends Thread {
 		BankAccount ba = bank.getBankAccount(agent);
 
 		ba.addCredit(price * quantity);
+	}
 
-		// remove this order from aggregateOrders;
-		
-
+	
+	private void controlOrders()
+	{
+		List<Order> ordersToRemove = new ArrayList<Order>();
+		for(Order order : customerOrders)
+		{
+			if((day - order.getDueDate()) >= 0 || (day - order.getDueDate()) <= 4)
+			{
+				Agent agent = this.findAgent(order.getCustomer());
+				bank.getBankAccount(agent).addDebit(order.getPenalty());
+			}
+			if((day - order.getDueDate()) == 4)
+			{
+				ordersToRemove.add(order);
+			}
+		}
+		customerOrders.removeAll(ordersToRemove);
 	}
 
 	private void processStorage() {
