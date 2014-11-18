@@ -16,6 +16,10 @@ public class BankAccount {
 		_credit += credit;
 	}
 	
+	public void addDebit(double amount) {
+		_debit += amount;
+	}
+	
 	public Agent getAgent() {
 		return _agent;
 	}
