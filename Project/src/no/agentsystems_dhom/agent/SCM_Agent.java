@@ -102,6 +102,7 @@ public class SCM_Agent {
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
 			for (int i = 0; i < componentsIds.length; i++) {
+				System.out.println(i + " hei på deg " + d);
 				cDemand[getIndex(componentsIds[i])][d] += offerQuantity;
 			}
 		}
