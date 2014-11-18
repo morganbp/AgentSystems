@@ -200,7 +200,7 @@ public class SCM_Supplier {
 	 * Handles AgentOrders (activeOrders). E.g. sorts, and take out components
 	 * from the order and update the inventory.
 	 */
-	protected void handleOrders() {
+	protected void handleOrders(String className) {
 		if (this.activeAgentOrders.size() <= 0)
 			return;
 		
@@ -228,7 +228,8 @@ public class SCM_Supplier {
 			chosenProduct.subtractFromCapacity(quantity);
 		}
 		//TODO: send componentBundle to server
-		
+		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
+		server.send(kqml);
 	}
 
 	/**

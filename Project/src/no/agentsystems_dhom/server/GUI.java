@@ -30,6 +30,10 @@ public class GUI extends JFrame{
 		   output.setText(str);
 	   }
 	   
+	   public String GetText(String str) {
+		   return output.getText();
+	   }
+	   
 	   public void append(String str) {
 		   output.append(str);
 		   output.setCaretPosition(output.getDocument().getLength());
