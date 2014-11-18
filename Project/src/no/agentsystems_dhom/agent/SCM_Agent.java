@@ -1,6 +1,7 @@
 package no.agentsystems_dhom.agent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
@@ -35,6 +36,7 @@ public class SCM_Agent {
 	protected int cDemand[][];
 	protected static int components[] = { 100, 101, 110, 111, 200, 210, 300,
 			301, 400, 401 };
+	private String productSchedule;
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -191,6 +193,48 @@ public class SCM_Agent {
 		}
 		agentView.append("\n#Supplier Offers : " + offerList.size());
 		return supplierOfferList;
+	}
+	
+	protected void productSchedule(String agent, int day){
+		// make a product schedule list
+
+        productSchedule = "";
+
+        // sort the aggregate orders with the least dueDate comes first
+        
+        Collections.sort(activeOrders, Order.DUE_DATE_COMPARATOR);
+        
+       // the list the contains customer orders must be processed
+
+       List<Order> products = new ArrayList<Order>();
+
+       // Copy the orders that have the dueDate = day + 2 from aggregate orders to products and remove them from aggregate 
+
+       // orders
+
+       for(Order o : activeOrders){
+    	   if(o.getDueDate() == (day + 2)){
+    		   products.add(o);
+    	   }
+       }
+       
+       // convert the list to a string
+       productSchedule = Order.listToString(products);
+       // send the product shedule to server
+       sendProductSchedule(agent, productSchedule);
+	}
+	
+	/**
+	 * 
+	 * @param agent 	The agent which sends the schedule
+	 * @param schedule	A string represantation of an List<Order> object
+	 */
+	private void sendProductSchedule(String agent, String schedule) {
+		Message kqml = Util.buildKQML(TAC_Ontology.productSchedule, agent,
+				schedule);
+		server.send(kqml.toString());
+		System.out.println(kqml.toString());
+		
 	}
 
 	protected void createAgentOrder(SupplierOffer supplierOffer) {

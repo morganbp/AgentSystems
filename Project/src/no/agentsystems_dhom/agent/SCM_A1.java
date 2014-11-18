@@ -84,6 +84,9 @@ public class SCM_A1 extends SCM_Agent{
 					sendOffersToServer(CLASS_NAME);
 				}
 				
+				if(time == 9){
+					productSchedule(CLASS_NAME, day);
+				}
 				
 				interval++;
 				
