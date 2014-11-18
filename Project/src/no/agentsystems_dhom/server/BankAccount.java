@@ -30,6 +30,10 @@ public class BankAccount {
 		_balance = ((1 + (alfa/TAC_Ontology.numberOfTacDays))*_balance) + _credit - _debit;
 	}
 	
+	public void chargeAgent(double price){
+		_balance -= price;
+	}
+	
 	public void setBalance(double balance){
 		_balance = balance;
 	}
@@ -53,6 +57,4 @@ public class BankAccount {
 	public double getDebit(){
 		return _debit;
 	}
-	
-
 }

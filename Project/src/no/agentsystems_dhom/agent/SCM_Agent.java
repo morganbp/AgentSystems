@@ -37,7 +37,6 @@ public class SCM_Agent {
 	protected static int components[] = { 100, 101, 110, 111, 200, 210, 300,
 			301, 400, 401 };
 	private String productSchedule;
-	private Inventory _inventory;
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -247,12 +246,16 @@ public class SCM_Agent {
 				supplierOffer);
 		todaysAgentOrder.add(agentOrder);
 	}
+	
+	protected void getSupplierComponents(String className)
+	{
+		//
+	}
 
 	protected void startTheGame() {
 		todaysOffers = new ArrayList<Offer>();
 		todaysAgentOrder = new ArrayList<AgentOrder>();
 		activeOrders = new ArrayList<Order>();
-		_inventory = new Inventory();
 		// adds 1 to second dimension since the array is 0 indexed
 		cDemand = new int[10][TAC_Ontology.numberOfTacDays + 1];
 		has_started = true;
@@ -278,5 +281,4 @@ public class SCM_Agent {
 		Message response = Message.buildMessage(resp);
 		agentView.append("\n" + response.getContent());
 	}
-
 }
