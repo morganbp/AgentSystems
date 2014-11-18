@@ -39,6 +39,7 @@ public class SCM_Agent {
 	private String productSchedule;
 	protected List<Order> products;
 	protected List<Order> deliveries;
+	protected List<Order> newOrders;
 
 	public static SCM initServer(String[] args) {
 		SCM rtnServer = null;
@@ -65,13 +66,12 @@ public class SCM_Agent {
 		return rtnServer;
 	}
 
-	protected List<AgentRequest> makeAgentRFQs(String className, int day,
-			List<Order> customerOrders) {
+	protected List<AgentRequest> makeAgentRFQs(String className, int day) {
 		int numberOfSuppliers = 8;
 		List<AgentRequest> agentRFQs = new ArrayList<AgentRequest>();
 
 		// Don't send AgentRFQs if there isn't any customer orders yet
-		if (customerOrders.size() <= 0) {
+		if (newOrders.size() <= 0) {
 			return agentRFQs;
 		}
 
@@ -83,8 +83,8 @@ public class SCM_Agent {
 					// Send send 5 offers for each component
 					int cid = prod[k].getId();
 					int dueDate = day + 2;
+					if(dueDate > 30) continue;
 					int quantity = cDemand[getIndex(cid)][dueDate];
-					// TODO hva skal settes som pris??
 					AgentRequest agentReq = new AgentRequest(sId, cid, dueDate,
 							quantity, 0, className);
 					agentRFQs.add(agentReq);
@@ -92,6 +92,7 @@ public class SCM_Agent {
 				}
 			}
 		}
+		newOrders.clear();
 
 		return agentRFQs;
 	}
@@ -299,6 +300,7 @@ public class SCM_Agent {
 		activeOrders = new ArrayList<Order>();
 		products = new ArrayList<Order>();
 		deliveries = new ArrayList<Order>();
+		newOrders = new ArrayList<Order>();
 
 		// adds 1 to second dimension since the array is 0 indexed
 		cDemand = new int[10][TAC_Ontology.numberOfTacDays + 1];

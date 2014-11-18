@@ -268,11 +268,6 @@ public class SCM_Customer {
 		return o;
 	}
 
-	protected List<Order> makeOrderList() {
-		todaysOrders = Order.stringToList(TAC_Ontology.customerOrders);
-		return todaysOrders;
-	}
-
 	protected List<Offer> findBestOffers(List<Offer> offers) {
 		List<Offer> bestOffers = new ArrayList<Offer>();
 		for (Offer o : offers) {
@@ -296,9 +291,9 @@ public class SCM_Customer {
 	protected void sendOrders(String customer) {
 		if (todaysOrders == null)
 			return;
-		String allOrders = Order.listToString(todaysOrders);
+		String ordersToSend= Order.listToString(todaysOrders);
 		Message kqml = Util.buildKQML(TAC_Ontology.customerOrders, customer,
-				allOrders);
+				ordersToSend);
 		if (kqml == null)
 			return;
 		try {

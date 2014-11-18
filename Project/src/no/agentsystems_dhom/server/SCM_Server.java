@@ -178,7 +178,6 @@ public class SCM_Server extends Thread {
 
 				if (time == 0 && isOn) {
 					serverView.append("\nday: " + day);
-					agentOffers.clear();
 					TodaysRFQs.clear();
 					performProductSchedule();
 					dealSupplierBill();
@@ -277,7 +276,7 @@ public class SCM_Server extends Thread {
 	}
 
 	private void processStorage() {
-		for (int i = 0; i <= agentList.size(); i++) {
+		for (int i = 0; i < agentList.size(); i++) {
 			Agent agent = agentList.get(i);
 			int[] numberOfPCs = agent.getInventory().getNumberOfPCs();
 
@@ -554,6 +553,7 @@ public class SCM_Server extends Thread {
 		resp.setReceiver(name);
 		String agentOffersStr = Offer.listToString(agentOffers);
 		resp.setContent(agentOffersStr);
+		agentOffers.clear();
 		return resp;
 	}
 

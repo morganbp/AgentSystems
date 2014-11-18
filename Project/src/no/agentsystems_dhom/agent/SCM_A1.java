@@ -37,11 +37,10 @@ public class SCM_A1 extends SCM_Agent{
 				if(time == 0 && getStatus()){
 					agentView.append("\nday : " + day);
 				}
-				
 				if(time == 2 && getStatus()){
 					// Get orders from the server, 
 					// and store them.
-					List<Order> newOrders = getOrderFromServer(CLASS_NAME);
+					newOrders = getOrderFromServer(CLASS_NAME);
 					activeOrders.addAll(newOrders);
 					computeRequirements(newOrders);
 				}
@@ -61,7 +60,7 @@ public class SCM_A1 extends SCM_Agent{
 				
 				if(time == 5 && getStatus()){
 					// Make agentRFQS
-					List<AgentRequest> agentRequests = makeAgentRFQs(CLASS_NAME, interval/TAC_Ontology.lengthOfADay, getOrderFromServer(CLASS_NAME));
+					List<AgentRequest> agentRequests = makeAgentRFQs(CLASS_NAME, day);
 					sendAgentRFQs(CLASS_NAME, agentRequests);
 				}
 				
