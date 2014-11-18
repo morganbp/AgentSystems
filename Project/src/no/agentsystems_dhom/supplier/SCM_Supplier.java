@@ -225,11 +225,10 @@ public class SCM_Supplier {
 			int quantity = order.getSupplierOffer().getQuantity();
 			Supplier supplier = this.suppliers[supplierId];
 			Component chosenProduct =  supplier.getProduct(componentId);
-			chosenProduct.subtractFromCapacity(quantity);
+			chosenProduct.updateInventory(-quantity);
 		}
-		//TODO: send componentBundle to server
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
-		server.send(kqml);
+		server.send(kqml.toString());
 	}
 
 	/**
