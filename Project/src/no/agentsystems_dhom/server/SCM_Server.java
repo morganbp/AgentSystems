@@ -42,7 +42,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -15;
+	private int interval = -30;
 
 	private int day = 0;
 
@@ -183,9 +183,9 @@ public class SCM_Server extends Thread {
 					dealSupplierBill();
 					supplierComponents.clear();
 					
-					for(BankAccount ba : bank.getBankAccounts()){
+					/*for(BankAccount ba : bank.getBankAccounts()){
 						serverView.append("\n" + ba.getAgent().getName()+ ": " + ba.getBalance());
-					}
+					}*/
 					
 				}
 				
