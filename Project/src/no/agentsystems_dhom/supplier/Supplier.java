@@ -1,5 +1,6 @@
 package no.agentsystems_dhom.supplier;
 
+
 public class Supplier {
 	private Component[] products = new Component[2];
 	private int supplierID;
@@ -34,6 +35,8 @@ public class Supplier {
 			break;
 		}
 	}
+	
+	
 	public Supplier(int component1_ID, int component2_ID, int id)
 	{
 		setProducts(component1_ID, component2_ID);
@@ -48,6 +51,18 @@ public class Supplier {
 
 	public int getSupplierID(){
 		return supplierID;
+	}
+	
+	public Component getProduct(int componentId)
+	{
+		for(Component component : products)
+		{
+			if(componentId == component.getId())
+			{
+				return component;
+			}
+		}
+		return null;
 	}
 	
 	public Component[] getComponents(){

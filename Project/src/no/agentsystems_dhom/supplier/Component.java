@@ -8,6 +8,8 @@ import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class Component {
+	
+	public final static int[] idList = {100, 101, 110, 111, 200, 210, 300, 301, 400, 401};
 	private int id; // 100, 101, 110, 111, 200, 210, 300, 301, 400, 401
 	private int basePrice;
 	private String componentName;
@@ -84,6 +86,16 @@ public class Component {
 			break;
 		}
 	}
+	
+	/**
+	 * Updates the amount of this specific component in the suppliers inventory
+	 * Not sure if inventory is the right thing to use here.
+	 * @param quantity
+	 */
+	public void updateInventory(int quantity)
+	{
+		this.inventory += quantity;
+	}
 
 	public String toString() {
 		return id + " " + basePrice + " " + componentName;
@@ -107,18 +119,19 @@ public class Component {
 	public int getCapacity() {
 		return capacity;
 	}
+	
 
 	// Get the expected capacity after n days
-	public int getExpectedCapacity(int n) {
-		return getExpectedCapacity(n, capacity);
+	public int getExpectedCapacity(int day,int dueDate) {
+		return getExpectedCapacity(dueDate - day, inventory, true);
 	}
 
-	private int getExpectedCapacity(int days, int currentCapacity) {
+	private int getExpectedCapacity(int days, int currentCapacity, boolean recursion) {
 		if (days == 0) {
 			return currentCapacity;
 		}
 		int newCapacity = (int) (0.99 * currentCapacity + 0.01 * TAC_Ontology.cNominal);
-		return getExpectedCapacity(days - 1, newCapacity);
+		return getExpectedCapacity(days - 1, newCapacity, true);
 	}
 	
 	private double availabilityPriorToDayI(int day, int dueDate){
@@ -179,16 +192,17 @@ public class Component {
 		
 	}
 
-	public double decidePriceOfComponent(Offer offer, Component c, int day){
-		int offerDueDate = offer.getRFQ().getDueDate();
+	public double decidePriceOfComponent(AgentRequest agentRequest, int day){
+		int offerDueDate = agentRequest.getDueDate();
 		double priceDiscountFactor = 0.5;
-		double baselinePrice = c.getBasePrice();
+		double baselinePrice = getBasePrice();
 		// Calculate availability
 		double cPrior =  availabilityPriorToDayI(day, offerDueDate);
 		double cPost = negativeOfCapacityRequiredOnOrBeforeDayI(day, offerDueDate);
 		double availability = cPrior + cPost;
-		
-		return baselinePrice * (1 - priceDiscountFactor * (availability /baselinePrice));
+
+		//	double expectedCapacity =  getExpectedCapacity(day);
+		return baselinePrice * (1 - priceDiscountFactor * (availability / inventory));
 	}
 	
 	

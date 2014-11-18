@@ -1,6 +1,7 @@
 package no.agentsystems_dhom.server;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 /** 
  *
@@ -13,6 +14,7 @@ import java.util.List;
  * 
  */
 public class Order {
+	
 	private String customer;
 	private String provider;
 	private Offer offer;
@@ -99,5 +101,22 @@ public class Order {
 		return new Order(ordFields[0], ordFields[1], offer);
 	}
 	
+	/**
+	 * Comparator which is used to sort Orders after due date
+	 */
+	public static final Comparator<Order> DUE_DATE_COMPARATOR = new Comparator<Order>(){
+
+		@Override
+		public int compare(Order o1, Order o2) {
+			if(o1.getDueDate() == o2.getDueDate()){
+				return 0;
+			}else if(o1.getDueDate() < o2.getDueDate()){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
+		
+	};
 	
 }

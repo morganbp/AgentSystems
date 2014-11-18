@@ -1,0 +1,99 @@
+------------------ The TAC Game --------------------
+The Game: 2014-11-18 13:55:17
+ Start: 2014-11-18 13:55:17
+ End: 2014-11-18 14:00:17
+ Next Game: 2014-11-18 14:00:27
+----------------------------------------------------
+day: 0
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 217
+day: 1
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 194
+day: 2
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 188
+day: 3
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 194
+day: 4
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 188
+day: 5
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 195
+day: 6
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 215
+day: 7
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 170
+day: 8
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 180
+day: 9
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 180
+day: 10
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 188
+day: 11
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 162
+day: 12
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 179
+day: 13
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 204
+day: 14
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 178
+day: 15
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 173
+day: 16
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 185
+day: 17
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 153
+day: 18
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 198
+day: 19
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 187
+day: 20
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 173
+day: 21
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 203
+day: 22
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 164
+day: 23
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 200
+day: 24
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 185
+day: 25
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 177
+day: 26
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 180
+day: 27
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 189
+day: 28
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 197
+day: 29
+SCM_C1 has sent the server 0 orders.
+RFQs from SCM_C1: 184
+
+---> The TAC Game is closed
+ Next Game: 2014-11-18 14:00:27
