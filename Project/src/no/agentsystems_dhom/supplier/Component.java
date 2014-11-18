@@ -86,6 +86,16 @@ public class Component {
 			break;
 		}
 	}
+	
+	/**
+	 * Updates the amount of this specific component in the suppliers inventory
+	 * Not sure if inventory is the right thing to use here.
+	 * @param quantity
+	 */
+	public void updateInventory(int quantity)
+	{
+		this.inventory += quantity;
+	}
 
 	public String toString() {
 		return id + " " + basePrice + " " + componentName;
@@ -110,10 +120,6 @@ public class Component {
 		return capacity;
 	}
 	
-	public void subtractFromCapacity(int quantity)
-	{
-		capacity = capacity - quantity;
-	}
 
 	// Get the expected capacity after n days
 	public int getExpectedCapacity(int day,int dueDate) {

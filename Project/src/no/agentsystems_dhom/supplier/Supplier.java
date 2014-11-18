@@ -1,6 +1,5 @@
 package no.agentsystems_dhom.supplier;
 
-import no.agentsystems_dhom.server.Inventory;
 
 public class Supplier {
 	private Component[] products = new Component[2];
