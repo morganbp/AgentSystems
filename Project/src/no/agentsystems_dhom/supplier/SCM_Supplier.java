@@ -203,7 +203,8 @@ public class SCM_Supplier {
 	protected void handleOrders() {
 		if (this.activeAgentOrders.size() <= 0)
 			return;
-		List<AgentOrder> temp = new ArrayList<AgentOrder>();
+		
+		List<AgentOrder> componentBundle = new ArrayList<AgentOrder>();
 		// Sorting by duedate
 		Collections.sort(this.activeAgentOrders, agentOrderDueDateComparator);
 		// Gets the first element in the sorted list
@@ -211,11 +212,11 @@ public class SCM_Supplier {
 		for (AgentOrder order : this.activeAgentOrders) {
 			// adding AgentOrders with the same duedate to the temp list
 			if (order.getDueDate() == earliestDueDate) {
-				temp.add(order);
+				componentBundle.add(order);
 			}
 		}
-
-		for (AgentOrder order : temp) {
+		//These are the orders we are going to process today(?)
+		for (AgentOrder order : componentBundle) {
 			this.activeAgentOrders.remove(order);
 			int supplierId = order.getSupplierOffer().getAgentRequest()
 					.getSupplierId();
@@ -224,12 +225,10 @@ public class SCM_Supplier {
 			int quantity = order.getSupplierOffer().getQuantity();
 			Supplier supplier = this.suppliers[supplierId];
 			Component chosenProduct =  supplier.getProduct(componentId);
-			//updateInventory in code from Ky
 			chosenProduct.subtractFromCapacity(quantity);
-			//THIS IS NOT SUPPOSED TO HAPPEN. IF THIS HAPPENS THEN WTF
 		}
+		//TODO: send componentBundle to server
 		
-		//TODO: Wrap in bundle and send to server
 	}
 
 	/**
@@ -281,8 +280,8 @@ public class SCM_Supplier {
 
 		@Override
 		public int compare(AgentOrder a1, AgentOrder a2) {
-			double a1dueDate = a1.getDueDate();
-			double a2dueDate = a2.getDueDate();
+			int a1dueDate = a1.getDueDate();
+			int a2dueDate = a2.getDueDate();
 			if (a1dueDate < a2dueDate)
 				return 1;
 			else
