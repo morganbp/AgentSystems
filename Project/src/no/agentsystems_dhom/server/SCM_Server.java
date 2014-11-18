@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import no.agentsystems_dhom.agent.SCM_Agent;
+
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
@@ -191,6 +193,14 @@ public class SCM_Server extends Thread {
 	}
 
 	// start the game
+
+	private void processStorage() {
+		for(int i = 0; i<= agentList.size(); i++){
+			Agent agent = agentList.get(i);
+			int[] numberOfPCs = agent.get_inventory().getNumberOfPCs();
+			serverView.append("\nAgent"+i+" number of PCs: " + numberOfPCs.length);
+		}
+	}
 
 	private void startTheGame() {
 
