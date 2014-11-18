@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import no.agentsystems_dhom.agent.SCM_Agent;
+
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
@@ -190,6 +192,17 @@ public class SCM_Server extends Thread {
 	}
 
 	// start the game
+
+	private void processStorage() {
+		for(int i = 0; i<= agentList.size(); i++){
+			Agent agent = agentList.get(i);
+			int[] numberOfPCs = agent.get_inventory().getNumberOfPCs();
+			
+			bank.getBankAccount(agent).chargeAgent(storageCost);
+			
+			serverView.append("\nAgent"+i+" number of PCs: " + numberOfPCs.length);
+		}
+	}
 
 	private void startTheGame() {
 
@@ -745,25 +758,21 @@ class TACSCMImpl extends SCMPOA {
 			if (resp != null) {
 				return resp.toString();
 			}
+		
 		}
-
-		if (performative.equals(TAC_Ontology.getSupplierComponents)) {
-			Message resp = server.getSupplierComponents(kqml);
-			if (resp != null) {
-				return resp.toString();
-			}
-		}
-
+	
 		if (performative.equals(TAC_Ontology.productSchedule)) {
 			Message resp = server.productSchedule(kqml);
 			if(resp != null){
 				return resp.toString();
 			}
 		}
+
+
 		return null;
 
 	}
-
+		
 	// get status
 
 	public boolean status() {
