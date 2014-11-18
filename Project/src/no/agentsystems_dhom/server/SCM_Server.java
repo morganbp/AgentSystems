@@ -182,8 +182,13 @@ public class SCM_Server extends Thread {
 					performProductSchedule();
 					dealSupplierBill();
 					supplierComponents.clear();
+					
+					for(BankAccount ba : bank.getBankAccounts()){
+						serverView.append("\n" + ba.getAgent().getName()+ ": " + ba.getBalance());
+					}
+					
 				}
-
+				
 				if (time == 7) {
 					processDeliverySchedule();
 				}
@@ -264,7 +269,8 @@ public class SCM_Server extends Thread {
 		{
 			if((day - order.getDueDate()) >= 0 || (day - order.getDueDate()) <= 4)
 			{
-				Agent agent = this.findAgent(order.getCustomer());
+				Agent agent = this.findAgent(order.getProvider());
+				
 				bank.getBankAccount(agent).addDebit(order.getPenalty());
 			}
 			if((day - order.getDueDate()) == 4)
@@ -302,8 +308,8 @@ public class SCM_Server extends Thread {
 
 	private Agent findAgent(String agentName) {
 		for (Agent agent : agentList) {
-			if (agent.name.toLowerCase().trim() == agentName.toLowerCase()
-					.trim()) {
+			if (agent.getName().toLowerCase().trim().equals(agentName.toLowerCase()
+					.trim())) {
 				return agent;
 			}
 		}
