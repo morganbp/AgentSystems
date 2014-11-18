@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import no.agentsystems_dhom.agent.SCM_Agent;
+import no.agentsystems_dhom.agent.Assembly;
+import no.agentsystems_dhom.agent.Inventory;
+import no.agentsystems_dhom.customer.PC;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -83,6 +85,10 @@ public class SCM_Server extends Thread {
 	// Store AgentOrder from agent
 
 	private List<AgentOrder> agentOrders;
+
+	// The product schedule which tells the assembly what to build
+
+	private List<Order> todaysProductSchedule;
 
 	// Store supplier components(in the form of AgentOrders) from supplier
 
@@ -170,6 +176,7 @@ public class SCM_Server extends Thread {
 					serverView.append("\nday: " + day);
 					agentOffers.clear();
 					TodaysRFQs.clear();
+					performProductSchedule();
 					dealSupplierBill();
 					supplierComponents.clear();
 				}
@@ -223,7 +230,7 @@ public class SCM_Server extends Thread {
 	private void processStorage() {
 		for (int i = 0; i <= agentList.size(); i++) {
 			Agent agent = agentList.get(i);
-			int[] numberOfPCs = agent.get_inventory().getNumberOfPCs();
+			int[] numberOfPCs = agent.getInventory().getNumberOfPCs();
 
 			bank.getBankAccount(agent).chargeAgent(storageCost);
 
@@ -239,7 +246,7 @@ public class SCM_Server extends Thread {
 			int componentId = agentOrder.getSupplierOffer().getAgentRequest()
 					.getComponentId();
 			int quantity = agentOrder.getSupplierOffer().getQuantity();
-			agent.get_inventory().updateQuantity(componentId, quantity);
+			agent.getInventory().updateQuantity(componentId, quantity);
 			double amount = agentOrder.getPrice();
 			bank.getBankAccount(agent).addDebit(amount * quantity);
 		}
@@ -310,6 +317,7 @@ public class SCM_Server extends Thread {
 
 		supplierComponents = new ArrayList<AgentOrder>();
 
+		todaysProductSchedule = new ArrayList<Order>();
 	}
 
 	// end the game
@@ -628,12 +636,89 @@ public class SCM_Server extends Thread {
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<Order> productSchedule = Order.stringToList(messageContent);
-		System.out.println(productSchedule);
+		todaysProductSchedule.addAll(productSchedule);
 		return resp;
 	}
 
-	// get bank account balance
+	/**
+	 * Send the a list over products to create to the assembly
+	 */
+	private void performProductSchedule() {
+		if (todaysProductSchedule.size() == 0)
+			return;
 
+		for (Order order : todaysProductSchedule) {
+
+			Agent agent = find(order.getProvider());
+
+			int sku = order.getOffer().getRFQ().getPC();
+
+			int quantity = order.getOffer().getRFQ().getQuantity();
+
+			makePC(agent, sku, quantity);
+
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param agent
+	 *            the agent which makes the PC
+	 * @param sku
+	 *            the SKU number of the PC
+	 * @param quantity
+	 *            how many PCs which gonna be made.
+	 */
+	private void makePC(Agent agent, int sku, int quantity) {
+		// Assembly of the agent a
+
+		Assembly assembly = agent.getAssembly();
+
+		// Inventory of the agent a
+
+		Inventory inventory = agent.getInventory();
+		
+		// if there is not enough assembly cycles - do nothing
+		if(!assembly.isCapacityAvailable(sku, quantity)) return;
+		
+		// if there is not enough components - do nothing
+		if(!inventory.isEnoughComponents(sku, quantity)) return;
+		
+		// make q PCs
+			
+		// update the components that are used to build PCs in agent's inventory
+
+		PC pc = new PC(sku);
+		for(int cid : pc.getComponents()){
+			inventory.updateQuantity(cid, quantity);
+		}
+		
+		// update the number of PCs in inventory
+
+		inventory.updateNumberOfPcs(sku, quantity);
+		
+		// update assembly i.e. reduce the number of cycles
+
+		assembly.updateCycle(sku, quantity);
+	}
+
+	/**
+	 * 
+	 * @param provider
+	 *            the string id to the agent we want to find
+	 * @return an agent with string id equal to parameter
+	 */
+	private Agent find(String provider) {
+		for (Agent a : agentList) {
+			if (a.getName().equals(provider)) {
+				return a;
+			}
+		}
+		return null;
+	}
+
+	// get bank account balance
 	private double getBankBalance(Agent a) {
 		return bank.getBankAccount(a).getBalance();
 	}
