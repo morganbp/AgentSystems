@@ -34,7 +34,7 @@ public class Bank {
 
 	public BankAccount getBankAccount(Agent a) {
 		for(BankAccount b : _accounts){
-			if(b.getAgent().getId() == a.getId()){
+			if(b.getAgent().getName() == a.getName()){
 				return b;
 			}
 		}

@@ -170,7 +170,8 @@ public class SCM_Server extends Thread {
 					serverView.append("\nday: " + day);
 					agentOffers.clear();
 					TodaysRFQs.clear();
-
+					dealSupplierBill();
+					supplierComponents.clear();
 				}
 
 				if (time == 9 && isOn) {
@@ -194,14 +195,38 @@ public class SCM_Server extends Thread {
 	// start the game
 
 	private void processStorage() {
-		for(int i = 0; i<= agentList.size(); i++){
+		for (int i = 0; i <= agentList.size(); i++) {
 			Agent agent = agentList.get(i);
 			int[] numberOfPCs = agent.get_inventory().getNumberOfPCs();
-			
+
 			bank.getBankAccount(agent).chargeAgent(storageCost);
-			
-			serverView.append("\nAgent"+i+" number of PCs: " + numberOfPCs.length);
+
+			serverView.append("\nAgent" + i + " number of PCs: "
+					+ numberOfPCs.length);
 		}
+	}
+
+	private void dealSupplierBill() {
+		for (AgentOrder agentOrder : supplierComponents) {
+			//Find agent with this order
+			Agent agent = findAgent(agentOrder.getCustomer());
+			int componentId = agentOrder.getSupplierOffer().getAgentRequest().getComponentId();
+			int quantity = agentOrder.getSupplierOffer().getQuantity();
+			agent.get_inventory().updateQuantity(componentId, quantity);
+			double amount = agentOrder.getPrice();
+			bank.getBankAccount(agent).addDebit(amount*quantity);
+		}
+	}
+	
+	private Agent findAgent(String agentName)
+	{
+		for (Agent agent : agentList) {
+			if(agent.name.toLowerCase().trim() == agentName.toLowerCase().trim())
+			{
+				return agent;
+			}
+		}
+		return null;
 	}
 
 	private void startTheGame() {
@@ -558,21 +583,18 @@ public class SCM_Server extends Thread {
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
 		resp.setContent(components.size() + "");
-		serverView.append("\n" + name + " has sent the server " + components.size() + " components.");
+		serverView.append("\n" + name + " has sent the server "
+				+ components.size() + " components.");
 		return resp;
 	}
 
-
-	public synchronized Message getSupplierComponents(Message kqml) {
-		Message resp = new Message();
-		String name = kqml.getSender();
-		resp.setReceiver(name);
-		String strSupplierComponents = AgentOrder
-				.listToString(supplierComponents);
-		resp.setContent(strSupplierComponents);
-		return resp;
-	}
-
+	/*
+	 * public synchronized Message getSupplierComponents(Message kqml) { Message
+	 * resp = new Message(); String name = kqml.getSender();
+	 * resp.setReceiver(name); String strSupplierComponents = AgentOrder
+	 * .listToString(supplierComponents);
+	 * resp.setContent(strSupplierComponents); return resp; }
+	 */
 
 	public Message productSchedule(Message kqml) {
 		Message resp = new Message();
@@ -583,7 +605,7 @@ public class SCM_Server extends Thread {
 		System.out.println(productSchedule);
 		return resp;
 	}
-	
+
 	// get bank account balance
 
 	private double getBankBalance(Agent a) {
@@ -622,7 +644,6 @@ public class SCM_Server extends Thread {
 		out.println("\n");
 		out.close();
 	}
-
 
 } // end of SCM_Server
 
@@ -758,21 +779,20 @@ class TACSCMImpl extends SCMPOA {
 			if (resp != null) {
 				return resp.toString();
 			}
-		
+
 		}
-	
+
 		if (performative.equals(TAC_Ontology.productSchedule)) {
 			Message resp = server.productSchedule(kqml);
-			if(resp != null){
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
 
-
 		return null;
 
 	}
-		
+
 	// get status
 
 	public boolean status() {

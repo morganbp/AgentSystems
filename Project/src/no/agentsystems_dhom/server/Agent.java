@@ -18,7 +18,8 @@ public class Agent {
 		return name;
 	}
 	
-	public int getId(){
+	//WTF? Is id componentId? Why not put it in inventory?
+	public int componentId(){
 		return id;
 	}
 
