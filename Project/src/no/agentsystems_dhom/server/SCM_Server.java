@@ -1,5 +1,8 @@
 package no.agentsystems_dhom.server;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,6 +81,7 @@ public class SCM_Server extends Thread {
 	// Store AgentOrder from agent
 	
 	private List<AgentOrder> agentOrders;
+	
 	
 	// Store supplier components(in the form of AgentOrders) from supplier
 	
@@ -171,7 +175,6 @@ public class SCM_Server extends Thread {
 				if (time == 9 && isOn) {
 
 					updateBalance();
-
 				}
 
 				interval++;
@@ -257,7 +260,7 @@ public class SCM_Server extends Thread {
 		serverView.append("\n Next Game: "
 				+ df.format(tacTime(TAC_Ontology.gameInterval
 						* TAC_Ontology.sec)));
-
+		saveServerGuiToText();
 	}
 
 	public void finalize() throws Throwable {
@@ -574,6 +577,23 @@ public class SCM_Server extends Thread {
 
 		}
 
+	}
+	public void saveServerGuiToText()
+	{	
+		File outputFile = new File("C:/Users/David/agent5/agentReport_.txt");
+		String guiContent = serverView.output.getText();
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(outputFile);
+			serverView.append("\nLog saved to file: " + outputFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			serverView.append("\nCould not save to file");
+		}
+		out.println(guiContent);
+		out.println("\n");
+		out.close();
 	}
 
 	
