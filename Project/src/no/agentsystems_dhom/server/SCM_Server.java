@@ -198,6 +198,9 @@ public class SCM_Server extends Thread {
 		for(int i = 0; i<= agentList.size(); i++){
 			Agent agent = agentList.get(i);
 			int[] numberOfPCs = agent.get_inventory().getNumberOfPCs();
+			
+			bank.getBankAccount(agent).chargeAgent(storageCost);
+			
 			serverView.append("\nAgent"+i+" number of PCs: " + numberOfPCs.length);
 		}
 	}
