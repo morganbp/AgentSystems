@@ -174,6 +174,10 @@ public class SCM_Server extends Thread {
 					supplierComponents.clear();
 				}
 
+				if (time == 8 && isOn) {
+					controlOrders();
+				}
+
 				if (time == 9 && isOn) {
 					processStorage();
 					updateBalance();
@@ -193,6 +197,28 @@ public class SCM_Server extends Thread {
 	}
 
 	// start the game
+	
+	private void controlOrders()
+	{
+		List<Order> ordersToRemove = new ArrayList<Order>();
+		for(Order order : customerOrders)
+		{
+			if((day - order.getDueDate()) >= 0 || (day - order.getDueDate()) <= 4)
+			{
+				Agent agent = this.findAgent(order.getCustomer());
+				bank.getBankAccount(agent).addDebit(order.getPenalty());
+			}
+			if((day - order.getDueDate()) == 4)
+			{
+				ordersToRemove.add(order);
+			}
+		}
+		
+		for(Order order : ordersToRemove)
+		{
+			customerOrders.remove(order);
+		}
+	}
 
 	private void processStorage() {
 		for (int i = 0; i <= agentList.size(); i++) {
@@ -208,21 +234,21 @@ public class SCM_Server extends Thread {
 
 	private void dealSupplierBill() {
 		for (AgentOrder agentOrder : supplierComponents) {
-			//Find agent with this order
+			// Find agent with this order
 			Agent agent = findAgent(agentOrder.getCustomer());
-			int componentId = agentOrder.getSupplierOffer().getAgentRequest().getComponentId();
+			int componentId = agentOrder.getSupplierOffer().getAgentRequest()
+					.getComponentId();
 			int quantity = agentOrder.getSupplierOffer().getQuantity();
 			agent.get_inventory().updateQuantity(componentId, quantity);
 			double amount = agentOrder.getPrice();
-			bank.getBankAccount(agent).addDebit(amount*quantity);
+			bank.getBankAccount(agent).addDebit(amount * quantity);
 		}
 	}
-	
-	private Agent findAgent(String agentName)
-	{
+
+	private Agent findAgent(String agentName) {
 		for (Agent agent : agentList) {
-			if(agent.name.toLowerCase().trim() == agentName.toLowerCase().trim())
-			{
+			if (agent.name.toLowerCase().trim() == agentName.toLowerCase()
+					.trim()) {
 				return agent;
 			}
 		}
