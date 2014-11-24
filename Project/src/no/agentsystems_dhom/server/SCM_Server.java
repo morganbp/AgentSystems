@@ -181,6 +181,7 @@ public class SCM_Server extends Thread {
 				if (time == 0 && isOn) {
 					serverView.append("\nday: " + day);
 					TodaysRFQs.clear();
+					agentRequests.clear();
 					performProductSchedule();
 					dealSupplierBill();
 					supplierComponents.clear();
@@ -601,7 +602,6 @@ public class SCM_Server extends Thread {
 	}
 
 	public synchronized Message agentRFQs(Message kqml) {
-		agentRequests.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
