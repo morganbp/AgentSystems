@@ -99,6 +99,10 @@ public class SCM_Server extends Thread {
 	// Store supplier components(in the form of AgentOrders) from supplier
 
 	private List<AgentOrder> supplierComponents;
+	
+	//Store all text in server gui to variable
+	
+	private String guiTextResult = "";
 
 	public SCM_Server() {
 		serverView = new GUI("SCM_server");
@@ -179,9 +183,7 @@ public class SCM_Server extends Thread {
 				int time = interval % TAC_Ontology.lengthOfADay;
 
 				if (time == 0 && isOn) {
-					
-					
-					serverView.append("\nday: " + day);
+					writeToGUI("\nday: " + day);
 					TodaysRFQs.clear();
 					agentRequests.clear();
 					performProductSchedule();
@@ -204,7 +206,8 @@ public class SCM_Server extends Thread {
 				if (time == 9 && isOn) {
 					processStorage();
 					updateBalance();
-					serverView.append("\nAggregate customer orders: " + customerOrders.size());
+					//serverView.append("\nAggregate customer orders: " + customerOrders.size());
+					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
 				}
 
 				interval++;
@@ -294,7 +297,9 @@ public class SCM_Server extends Thread {
 
 			bank.getBankAccount(agent).addDebit(-storageCost);
 
-			serverView.append("\nAgent" + i + " number of PCs: "
+			/*serverView.append("\nAgent" + i + " number of PCs: "
+					+ numberOfPCs.length);*/
+			writeToGUI("\nAgent" + i + " number of PCs: "
 					+ numberOfPCs.length);
 		}
 	}
@@ -389,12 +394,16 @@ public class SCM_Server extends Thread {
 	private void endTheGame() {
 
 		isOn = false;
-
-		serverView.append("\n\n---> The TAC Game is closed");
+		
+		writeToGUI("\n\n---> The TAC Game is closed");
+		writeToGUI("\n Next Game: "
+				+ df.format(tacTime(TAC_Ontology.gameInterval
+						* TAC_Ontology.sec)));
+		/*serverView.append("\n\n---> The TAC Game is closed");
 
 		serverView.append("\n Next Game: "
 				+ df.format(tacTime(TAC_Ontology.gameInterval
-						* TAC_Ontology.sec)));
+						* TAC_Ontology.sec)));*/
 		saveServerGuiToText();
 	}
 
@@ -446,7 +455,15 @@ public class SCM_Server extends Thread {
 
 	private void tacStatus() {
 
-		serverView
+		writeToGUI("\n------------------ The TAC Game --------------------"
+					+ "\nThe Game: " + gameId
+					+ "\n Start: " + df.format(startTime)
+					+ "\n End: " + df.format(endTime)
+					+ "\n Next Game: "
+							+ df.format(tacTime(TAC_Ontology.gameInterval
+									* TAC_Ontology.sec))
+					+ "\n----------------------------------------------------\n");
+		/*serverView
 				.setText("------------------ The TAC Game --------------------");
 
 		serverView.append("\nThe Game: " + gameId);
@@ -460,7 +477,7 @@ public class SCM_Server extends Thread {
 						* TAC_Ontology.sec)));
 
 		serverView
-				.append("\n----------------------------------------------------");
+				.append("\n----------------------------------------------------");*/
 
 	}
 
@@ -514,7 +531,8 @@ public class SCM_Server extends Thread {
 
 		resp.setContent("(" + name + ")");
 
-		serverView.append("\n" + name);
+		writeToGUI("\n" + name);
+		//serverView.append("\n" + name);
 
 		return resp;
 
@@ -529,7 +547,8 @@ public class SCM_Server extends Thread {
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		// Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		serverView.append("\nRFQs from " + name + ": " + RFQs.size());
+		writeToGUI("\nRFQs from " + name + ": " + RFQs.size());
+		//serverView.append("\nRFQs from " + name + ": " + RFQs.size());
 
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
@@ -554,8 +573,10 @@ public class SCM_Server extends Thread {
 		String messageContent = kqml.getContent();
 		List<Offer> offers = Offer.stringToList(messageContent);
 		agentOffers.addAll(offers);
-		serverView.append("\n" + name + " has sent the server " + offers.size()
+		writeToGUI("\n" + name + " has sent the server " + offers.size()
 				+ " offers.");
+		/*serverView.append("\n" + name + " has sent the server " + offers.size()
+				+ " offers.");*/
 		resp.setContent("" + offers.size());
 		return resp;
 	}
@@ -580,7 +601,8 @@ public class SCM_Server extends Thread {
 		List<Order> orders = Order.stringToList(messageContent);
 		customerOrders.addAll(orders);
 		todaysCustomerOrders.addAll(orders);
-		serverView.append("\n" + name + " sends orders: " + orders.size());
+		writeToGUI("\n" + name + " sends orders: " + orders.size());
+		//serverView.append("\n" + name + " sends orders: " + orders.size());
 		resp.setContent(orders.size() + "");
 		return resp;
 	}
@@ -633,7 +655,8 @@ public class SCM_Server extends Thread {
 				.stringToList(content);
 		supplierOffers.addAll(newSupplierOffers);
 		resp.setContent(newSupplierOffers.size() + "");
-		serverView.append("\nOffers from Supplier: " + supplierOffers.size());
+		writeToGUI("\nOffers from Supplier: " + supplierOffers.size());
+		//serverView.append("\nOffers from Supplier: " + supplierOffers.size());
 		return resp;
 	}
 
@@ -681,8 +704,10 @@ public class SCM_Server extends Thread {
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
 		resp.setContent(components.size() + "");
-		serverView.append("\n" + name + " has sent the server "
+		writeToGUI("\n" + name + " has sent the server "
 				+ components.size() + " components.");
+		/*serverView.append("\n" + name + " has sent the server "
+				+ components.size() + " components.");*/
 		return resp;
 	}
 
@@ -794,6 +819,12 @@ public class SCM_Server extends Thread {
 		}
 		return null;
 	}
+	
+	//Method for writing to gui and filevariable
+	private void writeToGUI(String str){
+		serverView.append(str);
+		guiTextResult += str;
+	}
 
 	// get bank account balance
 	private double getBankBalance(Agent a) {
@@ -818,7 +849,7 @@ public class SCM_Server extends Thread {
 
 	public void saveServerGuiToText() {
 		File outputFile = new File("C:/Users/David/agent5/agentReport_.txt");
-		String guiContent = serverView.output.getText();
+		//String guiContent = serverView.output.getText();
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(outputFile);
@@ -827,8 +858,8 @@ public class SCM_Server extends Thread {
 			e.printStackTrace();
 			serverView.append("\nCould not save to file");
 		}
-		out.println(guiContent);
-		out.println("\n");
+		out.print(guiTextResult);
+		//out.println("\n");
 		out.close();
 	}
 
