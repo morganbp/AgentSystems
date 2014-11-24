@@ -32,6 +32,7 @@ public class SCM_Customer {
 	private double RFQAvgH, RFQAvgL, RFQAvgM;
 	// Trend values
 	private double trendH, trendL, trendM;
+	
 
 	public static SCM initSCMImpl(String[] args) {
 		SCM server = null;
