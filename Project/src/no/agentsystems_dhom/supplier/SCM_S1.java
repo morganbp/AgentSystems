@@ -32,6 +32,7 @@ public class SCM_S1 extends SCM_Supplier {
 					suplView.append("\nday: " + day);
 					if (day != 0)
 						addSupplierComponents();
+					printInventory();
 				}
 				if (time == 1 && getStatus()) {
 
@@ -41,7 +42,7 @@ public class SCM_S1 extends SCM_Supplier {
 				}
 				if (time == 6 && getStatus()) {
 					List<AgentRequest> agentRequests = getAgentRequests(CLASS_NAME);
-					createSupplierOffers(agentRequests, CLASS_NAME,day );
+					createSupplierOffers(agentRequests, CLASS_NAME,day);
 				}
 				// Not sure if time == 8
 				if (time == 8 && getStatus()) {

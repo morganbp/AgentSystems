@@ -74,6 +74,8 @@ public class SCM_Server extends Thread {
 
 	private List<Order> customerOrders;
 
+	
+	private List<Order> todaysCustomerOrders;
 	// Store AgentRequest from Agent
 
 	private List<AgentRequest> agentRequests;
@@ -199,6 +201,7 @@ public class SCM_Server extends Thread {
 				if (time == 9 && isOn) {
 					processStorage();
 					updateBalance();
+					serverView.append("\nAggregate customer orders: " + customerOrders.size());
 				}
 
 				interval++;
@@ -362,6 +365,8 @@ public class SCM_Server extends Thread {
 		TodaysRFQs = new ArrayList<RFQ>();
 
 		customerOrders = new ArrayList<Order>();
+		
+		todaysCustomerOrders = new ArrayList<Order>();
 
 		agentRequests = new ArrayList<AgentRequest>();
 
@@ -565,15 +570,15 @@ public class SCM_Server extends Thread {
 
 	// the customer sends orders to agents
 	public synchronized Message customerOrders(Message kqml) {
-		customerOrders.clear();
+		todaysCustomerOrders.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<Order> orders = Order.stringToList(messageContent);
 		customerOrders.addAll(orders);
-		serverView.append("\n" + name + " has sent the server " + orders.size()
-				+ " orders.");
+		todaysCustomerOrders.addAll(orders);
+		serverView.append("\n" + name + " sends orders: " + orders.size());
 		resp.setContent(orders.size() + "");
 		return resp;
 	}
@@ -585,7 +590,7 @@ public class SCM_Server extends Thread {
 		List<Order> ordersToSender = new ArrayList<Order>();
 		// Add all orders which are intended for the Sender
 		// (or the one calling this method)
-		for (Order o : customerOrders) {
+		for (Order o : todaysCustomerOrders) {
 			if (o.getProvider().equals(name))
 				ordersToSender.add(o);
 		}
@@ -601,6 +606,7 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String content = kqml.getContent();
+		System.out.println(content);
 		List<AgentRequest> newAgentReq = AgentRequest.stringToList(content);
 		agentRequests.addAll(newAgentReq);
 		resp.setContent(newAgentReq.size() + "");
@@ -817,7 +823,6 @@ public class SCM_Server extends Thread {
 			out = new PrintWriter(outputFile);
 			serverView.append("\nLog saved to file: " + outputFile);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			serverView.append("\nCould not save to file");
 		}

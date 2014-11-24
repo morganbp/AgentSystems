@@ -109,6 +109,16 @@ public class SCM_Supplier {
 			comp.addComponents();
 		}
 	}
+	
+	protected void printInventory(){
+		suplView.append("\n");
+		for(Supplier s : suppliers){
+			for(Component c : s.getComponents()){
+				int qnty = c.getInventory();
+				suplView.append(qnty + " ");
+			}
+		}
+	}
 
 	protected void createSupplierOffers(List<AgentRequest> agentRequests,
 			String bidder, int day) {
@@ -165,6 +175,7 @@ public class SCM_Supplier {
 		Message kqml = Util.buildKQML(TAC_Ontology.sendSupplierOffers,
 				className, SupplierOffer.listToString(supplierOffers));
 		server.send(kqml.toString());
+		
 		suplView.append("\n#SupplierOffersToAgents: " + supplierOffers.size());
 		supplierOffers.clear();
 	}

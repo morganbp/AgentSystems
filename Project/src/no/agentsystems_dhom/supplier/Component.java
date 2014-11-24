@@ -89,7 +89,6 @@ public class Component {
 	
 	/**
 	 * Updates the amount of this specific component in the suppliers inventory
-	 * Not sure if inventory is the right thing to use here.
 	 * @param quantity
 	 */
 	public void updateInventory(int quantity)
