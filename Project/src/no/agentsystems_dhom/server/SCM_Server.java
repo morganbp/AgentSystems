@@ -206,7 +206,6 @@ public class SCM_Server extends Thread {
 				if (time == 9 && isOn) {
 					processStorage();
 					updateBalance();
-					//serverView.append("\nAggregate customer orders: " + customerOrders.size());
 					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
 					printAgentBalance();
 				}
@@ -298,8 +297,6 @@ public class SCM_Server extends Thread {
 
 			bank.getBankAccount(agent).addDebit(-storageCost);
 
-			/*serverView.append("\nAgent" + i + " number of PCs: "
-					+ numberOfPCs.length);*/
 			writeToGUI("\nAgent" + i + " number of PCs: "
 					+ numberOfPCs.length);
 		}
@@ -400,11 +397,7 @@ public class SCM_Server extends Thread {
 		writeToGUI("\n Next Game: "
 				+ df.format(tacTime(TAC_Ontology.gameInterval
 						* TAC_Ontology.sec)));
-		/*serverView.append("\n\n---> The TAC Game is closed");
 
-		serverView.append("\n Next Game: "
-				+ df.format(tacTime(TAC_Ontology.gameInterval
-						* TAC_Ontology.sec)));*/
 		saveServerGuiToText();
 	}
 
@@ -464,21 +457,6 @@ public class SCM_Server extends Thread {
 							+ df.format(tacTime(TAC_Ontology.gameInterval
 									* TAC_Ontology.sec))
 					+ "\n----------------------------------------------------\n");
-		/*serverView
-				.setText("------------------ The TAC Game --------------------");
-
-		serverView.append("\nThe Game: " + gameId);
-
-		serverView.append("\n Start: " + df.format(startTime));
-
-		serverView.append("\n End: " + df.format(endTime));
-
-		serverView.append("\n Next Game: "
-				+ df.format(tacTime(TAC_Ontology.gameInterval
-						* TAC_Ontology.sec)));
-
-		serverView
-				.append("\n----------------------------------------------------");*/
 
 	}
 
@@ -533,7 +511,6 @@ public class SCM_Server extends Thread {
 		resp.setContent("(" + name + ")");
 
 		writeToGUI("\n" + name);
-		//serverView.append("\n" + name);
 
 		return resp;
 
@@ -549,7 +526,6 @@ public class SCM_Server extends Thread {
 		// Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
 		writeToGUI("\nRFQs from " + name + ": " + RFQs.size());
-		//serverView.append("\nRFQs from " + name + ": " + RFQs.size());
 
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
@@ -576,8 +552,7 @@ public class SCM_Server extends Thread {
 		agentOffers.addAll(offers);
 		writeToGUI("\n" + name + " has sent the server " + offers.size()
 				+ " offers.");
-		/*serverView.append("\n" + name + " has sent the server " + offers.size()
-				+ " offers.");*/
+
 		resp.setContent("" + offers.size());
 		return resp;
 	}
@@ -603,7 +578,7 @@ public class SCM_Server extends Thread {
 		customerOrders.addAll(orders);
 		todaysCustomerOrders.addAll(orders);
 		writeToGUI("\n" + name + " sends orders: " + orders.size());
-		//serverView.append("\n" + name + " sends orders: " + orders.size());
+
 		resp.setContent(orders.size() + "");
 		return resp;
 	}
@@ -657,7 +632,7 @@ public class SCM_Server extends Thread {
 		supplierOffers.addAll(newSupplierOffers);
 		resp.setContent(newSupplierOffers.size() + "");
 		writeToGUI("\nOffers from Supplier: " + supplierOffers.size());
-		//serverView.append("\nOffers from Supplier: " + supplierOffers.size());
+
 		return resp;
 	}
 
@@ -707,8 +682,7 @@ public class SCM_Server extends Thread {
 		resp.setContent(components.size() + "");
 		writeToGUI("\n" + name + " has sent the server "
 				+ components.size() + " components.");
-		/*serverView.append("\n" + name + " has sent the server "
-				+ components.size() + " components.");*/
+
 		return resp;
 	}
 
