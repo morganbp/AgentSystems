@@ -183,7 +183,6 @@ public class SCM_Server extends Thread {
 				int time = interval % TAC_Ontology.lengthOfADay;
 
 				if (time == 0 && isOn) {
-					//serverView.append("\nday: " + day);
 					writeToGUI("\nday: " + day);
 					TodaysRFQs.clear();
 					agentRequests.clear();
@@ -596,7 +595,6 @@ public class SCM_Server extends Thread {
 
 	// the customer sends orders to agents
 	public synchronized Message customerOrders(Message kqml) {
-		todaysCustomerOrders.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
