@@ -209,6 +209,7 @@ public class SCM_Server extends Thread {
 					updateBalance();
 					//serverView.append("\nAggregate customer orders: " + customerOrders.size());
 					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
+					printAgentBalance();
 				}
 
 				interval++;
@@ -826,6 +827,14 @@ public class SCM_Server extends Thread {
 	private void writeToGUI(String str){
 		serverView.append(str);
 		guiTextResult += str;
+	}
+	
+	private void printAgentBalance(){
+		for(Agent a : agentList){
+			BankAccount ba = bank.getBankAccount(a);
+			String agent = a.toString();
+			writeToGUI(a.toString() + "s balance is: "+ getBankBalance(a));
+		}
 	}
 
 	// get bank account balance
