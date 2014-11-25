@@ -200,12 +200,6 @@ public class SCM_Server extends Thread {
 					agentRequests.clear();
 					supplierComponents.clear();
 					todaysCustomerOrders.clear();
-					/*
-					 * for(BankAccount ba : bank.getBankAccounts()){
-					 * serverView.append("\n" + ba.getAgent().getName()+ ": " +
-					 * ba.getBalance()); }
-					 */
-
 				}
 
 				if (time == 7 && isOn) {
@@ -284,7 +278,7 @@ public class SCM_Server extends Thread {
 
 		// the agent get payed
 		BankAccount ba = bank.getBankAccount(agent);
-		ba.addCredit(price * quantity);
+		ba.addDebit(price * quantity);
 		finishedOrders.add(order);
 
 		return true;
@@ -297,7 +291,7 @@ public class SCM_Server extends Thread {
 					|| (day - order.getDueDate()) <= 4) {
 				Agent agent = this.findAgent(order.getProvider());
 
-				bank.getBankAccount(agent).addDebit(order.getPenalty());
+				bank.getBankAccount(agent).addCredit(order.getPenalty());
 			}
 			if ((day - order.getDueDate()) == 4) {
 				ordersToRemove.add(order);
@@ -311,7 +305,7 @@ public class SCM_Server extends Thread {
 			Agent agent = agentList.get(i);
 			int[] numberOfPCs = agent.getInventory().getNumberOfPCs();
 
-			bank.getBankAccount(agent).addDebit(-storageCost);
+			bank.getBankAccount(agent).addCredit(numberOfPCs.length * storageCost);
 		}
 	}
 
@@ -324,7 +318,7 @@ public class SCM_Server extends Thread {
 			int quantity = agentOrder.getSupplierOffer().getQuantity();
 			agent.getInventory().updateQuantity(componentId, quantity);
 			double amount = agentOrder.getPrice();
-			bank.getBankAccount(agent).addDebit(amount * quantity);
+			bank.getBankAccount(agent).addCredit(amount * quantity);
 		}
 	}
 
@@ -691,14 +685,6 @@ public class SCM_Server extends Thread {
 
 		return resp;
 	}
-
-	/*
-	 * public synchronized Message getSupplierComponents(Message kqml) { Message
-	 * resp = new Message(); String name = kqml.getSender();
-	 * resp.setReceiver(name); String strSupplierComponents = AgentOrder
-	 * .listToString(supplierComponents);
-	 * resp.setContent(strSupplierComponents); return resp; }
-	 */
 
 	public synchronized Message productSchedule(Message kqml) {
 		Message resp = new Message();

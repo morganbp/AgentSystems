@@ -12,12 +12,14 @@ public class BankAccount {
 		_agent = agent;
 	}
 
-	public void addCredit(double credit){
-		_credit += credit;
-		_balance -= credit;
+	public synchronized void addCredit(double amount){
+		System.out.println("add credit: " + amount);
+		_credit += amount;
+		_balance -= amount;
 	}
 	
-	public void addDebit(double amount) {
+	public synchronized void addDebit(double amount) {
+		System.out.println("add debit: " + amount);
 		_debit += amount;
 		_balance += amount;
 	}
