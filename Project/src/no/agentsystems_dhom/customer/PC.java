@@ -210,12 +210,4 @@ public class PC {
 		components += componentIds[componentIds.length-1] + " ";
 		return SKU + " " + components + cycles + " " + segment + " " + basePrice;
 	}
-	
-	
-	
-	// test the class
-    public static void main(String[] args) {
-    	PC a = new PC(16);
-    	System.out.println(a.toString());
-    }	
 }
