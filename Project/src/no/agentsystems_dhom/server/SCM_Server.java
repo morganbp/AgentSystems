@@ -410,7 +410,7 @@ public class SCM_Server extends Thread {
 				+"\n Next Game: "
 				+ df.format(tacTime(TAC_Ontology.gameInterval
 						* TAC_Ontology.sec)));
-		saveServerGuiToText();
+		//saveServerGuiToText();
 	}
 
 	public void finalize() throws Throwable {
