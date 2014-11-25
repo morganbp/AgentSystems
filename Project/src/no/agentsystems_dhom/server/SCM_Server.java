@@ -233,7 +233,7 @@ public class SCM_Server extends Thread {
 		for (Order order : todaysDeliverySchedule) {
 
 			// find the agent that receivers that delivery order
-
+			System.out.println("process");
 			Agent a = find(order.getProvider());
 
 			// count the number of delivery order of each agent
@@ -250,6 +250,8 @@ public class SCM_Server extends Thread {
 		// get PC from the agent's inventory
 		
 		// update the number of PC in the agent's inventory
+		
+		System.out.println("delivery");
 		
 		int sku = order.getOffer().getRFQ().getPC();
 		int quantity = order.getOffer().getRFQ().getQuantity();
