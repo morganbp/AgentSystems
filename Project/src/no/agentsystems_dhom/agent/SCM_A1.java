@@ -48,9 +48,7 @@ public class SCM_A1 extends SCM_Agent{
 				if(time == 3 && getStatus()){
 					// Get supplier offers
 					List<SupplierOffer> supplierOffers = getSupplierOffers(CLASS_NAME);
-					for(SupplierOffer supplierOffer : supplierOffers){
-						createAgentOrder(supplierOffer);
-					}
+					generateSupplierOffers(supplierOffers);
 				}
 				
 				if(time == 4 && getStatus()){
