@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import no.agentsystems_dhom.agent.Assembly;
 import no.agentsystems_dhom.agent.Inventory;
@@ -202,7 +204,7 @@ public class SCM_Server extends Thread {
 					
 				}
 				
-				if (time == 7) {
+				if (time == 7 && isOn) {
 					processDeliverySchedule();
 				}
 				if (time == 8 && isOn) {
@@ -232,38 +234,54 @@ public class SCM_Server extends Thread {
 
 	private void processDeliverySchedule() {
 		// get information from deliverySchedule of each agent
-
+		
+		Map<String, Integer> numberOfOrders = new HashMap<String, Integer>();
+		for(Agent a : agentList){
+			numberOfOrders.put(a.getName(), 0);
+		}
+		
 		for (Order order : todaysDeliverySchedule) {
 
 			// find the agent that receivers that delivery order
-
+			System.out.println("process");
 			Agent a = find(order.getProvider());
-
+			
+			
 			// count the number of delivery order of each agent
 
-			delivery(a, order);
+			if(delivery(a, order)){
+				int newValue = numberOfOrders.get(a.getName()) + 1;
+				numberOfOrders.put(a.getName(), newValue);
+			}
 			
-
+			
 		}
 
+		for(Agent a : agentList){
+			writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
+		}
 	}
 
 	// process delivery of an order from agent
 
-	private void delivery(Agent agent, Order order) {
+	private boolean delivery(Agent agent, Order order) {
 
 		// get PC from the agent's inventory
 		
 		// update the number of PC in the agent's inventory
+		
+		System.out.println("delivery");
 		
 		int sku = order.getOffer().getRFQ().getPC();
 		int quantity = order.getOffer().getRFQ().getQuantity();
 		
 		Inventory inventory = agent.getInventory();
 		if(!inventory.isEnoughPCs(sku, quantity))
-			return;
+			return false;
 		
 		inventory.updateNumberOfPcs(sku, -quantity); 
+		
+		
 		
 		// get price
 
@@ -275,6 +293,8 @@ public class SCM_Server extends Thread {
 
 		ba.addCredit(price * quantity);
 		finishedOrders.add(order);
+		return true;
+
 	}
 
 	
@@ -309,7 +329,7 @@ public class SCM_Server extends Thread {
 		}
 	}
 
-	private void dealSupplierBill() {
+	private synchronized void dealSupplierBill() {
 		for (AgentOrder agentOrder : supplierComponents) {
 			// Find agent with this order
 			Agent agent = findAgent(agentOrder.getCustomer());
@@ -613,7 +633,6 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String content = kqml.getContent();
-		System.out.println(content);
 		List<AgentRequest> newAgentReq = AgentRequest.stringToList(content);
 		agentRequests.addAll(newAgentReq);
 		resp.setContent(newAgentReq.size() + "");
@@ -700,7 +719,7 @@ public class SCM_Server extends Thread {
 	 * resp.setContent(strSupplierComponents); return resp; }
 	 */
 
-	public Message productSchedule(Message kqml) {
+	public synchronized Message productSchedule(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -710,7 +729,7 @@ public class SCM_Server extends Thread {
 		return resp;
 	}
 
-	public Message deliverySchedule(Message kqml) {
+	public synchronized Message deliverySchedule(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -732,7 +751,7 @@ public class SCM_Server extends Thread {
 	/**
 	 * Send the a list over products to create to the assembly
 	 */
-	private void performProductSchedule() {
+	private synchronized void performProductSchedule() {
 		if (todaysProductSchedule.size() == 0)
 			return;
 
