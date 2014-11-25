@@ -78,6 +78,7 @@ public class SCM_Server extends Thread {
 
 	
 	private List<Order> todaysCustomerOrders;
+	
 	// Store AgentRequest from Agent
 
 	private List<AgentRequest> agentRequests;
@@ -190,18 +191,19 @@ public class SCM_Server extends Thread {
 				if (time == 0 && isOn) {
 					writeToGUI("\nday: " + day);
 					
+					
+					performProductSchedule();
+					dealSupplierBill();
 					//Clearing lists
 					supplierOffers.clear();
 					agentOffers.clear();
 					agentOrders.clear();
 					TodaysRFQs.clear();
 					agentRequests.clear();
-					///////////////////////////////
-					///////////////////////////////
-					performProductSchedule();
-					dealSupplierBill();
 					supplierComponents.clear();
-					
+					todaysCustomerOrders.clear();
+					///////////////////////////////
+					///////////////////////////////
 					/*for(BankAccount ba : bank.getBankAccounts()){
 						serverView.append("\n" + ba.getAgent().getName()+ ": " + ba.getBalance());
 					}*/

@@ -229,7 +229,6 @@ public class SCM_Supplier {
 				componentBundle.add(order);
 			}
 		}
-		System.out.println("størrelse på activeAgentOrders før: " + activeAgentOrders.size());
 		//These are the orders we are going to process today(?)
 		for (AgentOrder order : componentBundle) {
 			this.activeAgentOrders.remove(order);
@@ -247,7 +246,6 @@ public class SCM_Supplier {
 				highPriorityOrders.add(order);
 			}
 		}
-		System.out.println("størrelse på activeAgentOrders etter: " + activeAgentOrders.size());
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
 		server.send(kqml.toString());
 	}
