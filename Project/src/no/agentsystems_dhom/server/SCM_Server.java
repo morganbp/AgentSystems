@@ -485,7 +485,6 @@ public class SCM_Server extends Thread {
 							+ df.format(tacTime(TAC_Ontology.gameInterval
 									* TAC_Ontology.sec))
 					+ "\n----------------------------------------------------\n");
-
 	}
 
 	// compute the time from now after a long interval i
@@ -884,7 +883,7 @@ public class SCM_Server extends Thread {
 	}
 
 	public void saveServerGuiToText() {
-		File outputFile = new File("src/agentReport.txt");
+		File outputFile = new File("src/Report/agentReport.txt");
 		//String guiContent = serverView.output.getText();
 		PrintWriter out = null;
 		try {
