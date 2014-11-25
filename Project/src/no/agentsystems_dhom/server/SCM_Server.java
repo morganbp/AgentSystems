@@ -227,7 +227,7 @@ public class SCM_Server extends Thread {
 	}
 
 
-	private void processDeliverySchedule() {
+	private synchronized void processDeliverySchedule() {
 		// get information from deliverySchedule of each agent
 
 		for (Order order : todaysDeliverySchedule) {
