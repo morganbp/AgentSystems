@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -883,7 +885,12 @@ public class SCM_Server extends Thread {
 	}
 
 	public void saveServerGuiToText() {
-		File outputFile = new File("src/Report/agentReport.txt");
+		Calendar currentDate = new GregorianCalendar();
+		int hourOfDay = currentDate.HOUR_OF_DAY;
+		int year = currentDate.YEAR;
+		int month = currentDate.MONTH;
+		int day = currentDate.DAY_OF_MONTH;
+		File outputFile = new File("src/Report/" + hourOfDay + "_" + day + "/" + month + "/" + year + "_agentReport.txt");
 		//String guiContent = serverView.output.getText();
 		PrintWriter out = null;
 		try {
