@@ -244,6 +244,24 @@ public class SCM_Customer {
 		custView.append("\n#Offers: " + offersList.size());
 		return offersList;
 	}
+	
+	protected List<Order> getFinishedOrders(String className)
+	{
+		Message kqml = Util.buildKQML(TAC_Ontology.finishedOrders, className, "");
+		String resp = server.send(kqml.toString());
+		Message responseMessage = Message.buildMessage(resp);
+		return Order.stringToList(responseMessage.getContent());
+	}
+	
+	protected void printFinishedOrders(List<Order> finishedOrders)
+	{
+		int quantity = 0;
+		for(Order order : finishedOrders)
+		{
+			quantity += order.getOffer().getRFQ().getQuantity();
+		}
+		custView.append("\n Customer received : " + quantity + " pcs from agents");
+	}
 
 	private List<String> getBidders(List<Offer> offersList) {
 		List<String> bidders = new ArrayList<String>();
