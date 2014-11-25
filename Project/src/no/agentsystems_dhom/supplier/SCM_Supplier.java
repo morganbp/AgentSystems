@@ -34,6 +34,7 @@ public class SCM_Supplier {
 
 	protected List<SupplierOffer> supplierOffers;
 	protected List<AgentOrder> activeAgentOrders;
+	protected List<AgentOrder> highPriorityOrders;
 
 	public static SCM initServer(String[] args) {
 		SCM server;
@@ -66,6 +67,7 @@ public class SCM_Supplier {
 		activeAgentOrders = new ArrayList<AgentOrder>();
 		allSupplierOffers = new ArrayList<SupplierOffer>();
 		allAgentOrders = new ArrayList<AgentOrder>();
+		highPriorityOrders = new ArrayList<AgentOrder>();
 		initSuppliers();
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;
@@ -216,6 +218,10 @@ public class SCM_Supplier {
 			return;
 		
 		List<AgentOrder> componentBundle = new ArrayList<AgentOrder>();
+		// add the orders with high priority at the start of the list
+		for(AgentOrder order : highPriorityOrders){
+			componentBundle.add(order);
+		}
 		// Sorting by duedate
 		Collections.sort(this.activeAgentOrders, agentOrderDueDateComparator);
 		// Gets the first element in the sorted list
@@ -226,6 +232,7 @@ public class SCM_Supplier {
 				componentBundle.add(order);
 			}
 		}
+		System.out.println("størrelse på activeAgentOrders før: " + activeAgentOrders.size());
 		//These are the orders we are going to process today(?)
 		for (AgentOrder order : componentBundle) {
 			this.activeAgentOrders.remove(order);
@@ -236,8 +243,14 @@ public class SCM_Supplier {
 			int quantity = order.getSupplierOffer().getQuantity();
 			Supplier supplier = this.suppliers[supplierId];
 			Component chosenProduct =  supplier.getProduct(componentId);
-			chosenProduct.updateInventory(-quantity);
+			boolean valueUpdated = chosenProduct.updateInventory(-quantity);
+			if(!valueUpdated){
+				// if there is no components left in inventory, add this order
+				// to high priority orders 
+				highPriorityOrders.add(order);
+			}
 		}
+		System.out.println("størrelse på activeAgentOrders etter: " + activeAgentOrders.size());
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
 		server.send(kqml.toString());
 	}

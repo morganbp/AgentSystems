@@ -90,10 +90,16 @@ public class Component {
 	/**
 	 * Updates the amount of this specific component in the suppliers inventory
 	 * @param quantity
+	 * @return true if update is successful, false if inventory is 
 	 */
-	public void updateInventory(int quantity)
+	public boolean updateInventory(int quantity)
 	{
-		this.inventory += quantity;
+		if((quantity + inventory) < 0){
+			// will return false if inventory is less than 0 
+			return false;
+		}
+		inventory += quantity;
+		return true;
 	}
 
 	public String toString() {

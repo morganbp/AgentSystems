@@ -250,7 +250,7 @@ public class SCM_Server extends Thread {
 			// find the agent that receivers that delivery order
 			Agent a = find(order.getProvider());
 			
-			
+			 
 			// count the number of delivery order of each agent
 
 			if(delivery(a, order)){
@@ -260,7 +260,7 @@ public class SCM_Server extends Thread {
 			
 		}
 		for(Agent a : agentList){
-			if(numberOfOrders.get(a) != 0)
+			if(numberOfOrders.get(a.getName()) != 0)
 				writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
 		}
 		todaysDeliverySchedule.clear();
@@ -325,9 +325,6 @@ public class SCM_Server extends Thread {
 			int[] numberOfPCs = agent.getInventory().getNumberOfPCs();
 
 			bank.getBankAccount(agent).addDebit(-storageCost);
-
-			writeToGUI("\nAgent" + i + " number of PCs: "
-					+ numberOfPCs.length);
 		}
 	}
 
