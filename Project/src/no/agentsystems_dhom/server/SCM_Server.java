@@ -184,6 +184,9 @@ public class SCM_Server extends Thread {
 
 				if (time == 0 && isOn) {
 					writeToGUI("\nday: " + day);
+					supplierOffers.clear();
+					agentOffers.clear();
+					agentOrders.clear();
 					TodaysRFQs.clear();
 					agentRequests.clear();
 					performProductSchedule();
@@ -196,7 +199,7 @@ public class SCM_Server extends Thread {
 					
 				}
 				
-				if (time == 7) {
+				if (time == 7 && isOn) {
 					processDeliverySchedule();
 				}
 				if (time == 8 && isOn) {
@@ -564,7 +567,6 @@ public class SCM_Server extends Thread {
 		resp.setReceiver(name);
 		String agentOffersStr = Offer.listToString(agentOffers);
 		resp.setContent(agentOffersStr);
-		agentOffers.clear();
 		return resp;
 	}
 
@@ -605,7 +607,6 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String content = kqml.getContent();
-		System.out.println(content);
 		List<AgentRequest> newAgentReq = AgentRequest.stringToList(content);
 		agentRequests.addAll(newAgentReq);
 		resp.setContent(newAgentReq.size() + "");
@@ -622,7 +623,6 @@ public class SCM_Server extends Thread {
 	}
 
 	public synchronized Message sendSupplierOffers(Message kqml) {
-		supplierOffers.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -652,7 +652,6 @@ public class SCM_Server extends Thread {
 	}
 
 	public synchronized Message sendAgentOrders(Message kqml) {
-		agentOrders.clear();
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);

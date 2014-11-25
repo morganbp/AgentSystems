@@ -62,12 +62,10 @@ public class SCM_Supplier {
 
 	protected void startTheGame() {
 		has_started = true;
-
 		supplierOffers = new ArrayList<SupplierOffer>();
 		activeAgentOrders = new ArrayList<AgentOrder>();
 		allSupplierOffers = new ArrayList<SupplierOffer>();
 		allAgentOrders = new ArrayList<AgentOrder>();
-
 		initSuppliers();
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;
