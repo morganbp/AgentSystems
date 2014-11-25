@@ -219,14 +219,10 @@ public class SCM_Server extends Thread {
 					processStorage();
 					updateBalance();
 					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
-					if(day == 9) {
-						printAgentBalance();
+					printAgentBalance();
+					if(day == 29) 
 						announceAWinningAgent();
-					}
-					else
-						printAgentBalance();
 				}
-
 				interval++;
 
 				sleep(TAC_Ontology.sec);
@@ -252,7 +248,6 @@ public class SCM_Server extends Thread {
 		for (Order order : todaysDeliverySchedule) {
 
 			// find the agent that receivers that delivery order
-			System.out.println("process");
 			Agent a = find(order.getProvider());
 			
 			
@@ -263,11 +258,10 @@ public class SCM_Server extends Thread {
 				numberOfOrders.put(a.getName(), newValue);
 			}
 			
-			
 		}
-
 		for(Agent a : agentList){
-			writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
+			if(numberOfOrders.get(a) != 0)
+				writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
 		}
 		todaysDeliverySchedule.clear();
 	}
@@ -279,9 +273,7 @@ public class SCM_Server extends Thread {
 		// get PC from the agent's inventory
 		
 		// update the number of PC in the agent's inventory
-		
-		System.out.println("delivery");
-		
+				
 		int sku = order.getOffer().getRFQ().getPC();
 		int quantity = order.getOffer().getRFQ().getQuantity();
 		
@@ -867,12 +859,8 @@ public class SCM_Server extends Thread {
 	
 	
 	private void printAgentBalance(){
-		double currentAgentsBankBalance = 0;
 		for(Agent a : agentList){
 			String agent = a.toString();
-			currentAgentsBankBalance = getBankBalance(a);
-			if(currentAgentsBankBalance != 0)
-				writeToGUI("\n" + a.getName() + "s balance is: "+ getBankBalance(a));
 		}
 	}
 
