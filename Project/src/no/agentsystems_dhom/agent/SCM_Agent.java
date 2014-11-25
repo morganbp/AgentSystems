@@ -63,6 +63,38 @@ public class SCM_Agent {
 		return rtnServer;
 	}
 
+	protected void generateSupplierOffers(List<SupplierOffer> supplierOffers) {
+		if (supplierOffers.size() == 0)
+			return;
+
+		List<SupplierOffer> bestOffers = new ArrayList<SupplierOffer>();
+
+		for (SupplierOffer currentSO : supplierOffers) {
+			for (SupplierOffer earlierSO : bestOffers) {
+				if (currentSO.getAgentRequest().getComponentId() == earlierSO
+						.getAgentRequest().getComponentId()) {
+					if(!currentSO.getBidder().equals(earlierSO.getBidder())){
+						if(currentSO.getQuantity() == earlierSO.getQuantity()){
+							// checks if this supplier offer is the same component
+							// not the same bidder (supplier) with same amount of components
+							continue;
+						}
+					}
+				}
+				// add the supplier offer if there is none similar supplier offer
+				// from a competing supplier
+				bestOffers.add(currentSO);
+			}
+		}
+		createAgentOrders(bestOffers);
+	}
+
+	private void createAgentOrders(List<SupplierOffer> supplierOffers) {
+		for (SupplierOffer supplierOffer : supplierOffers) {
+			createAgentOrder(supplierOffer);
+		}
+	}
+
 	protected List<AgentRequest> makeAgentRFQs(String className, int day) {
 		int numberOfSuppliers = 8;
 		List<AgentRequest> agentRFQs = new ArrayList<AgentRequest>();
@@ -77,18 +109,50 @@ public class SCM_Agent {
 			Component prod[] = sup.getComponents();
 			for (int j = 0; j < 5; j++) {
 				for (int k = 0; k < 2; k++) {
-					// Send send 5 offers for each component
+					// Send send 5 offers for each component if component is
+					// needed
 					int cid = prod[k].getId();
 					int dueDate = day + 2;
-					if(dueDate > TAC_Ontology.numberOfTacDays) continue;
+					if (dueDate > TAC_Ontology.numberOfTacDays)
+						continue;
 					int quantity = cDemand[getIndex(cid)][dueDate];
-					AgentRequest agentReq = new AgentRequest(sId, cid, dueDate,
-							quantity, 0, className);
-					agentRFQs.add(agentReq);
-					cDemand[getIndex(cid)][dueDate] = 0;
+					if (quantity > 0) {
+						AgentRequest agentReq = new AgentRequest(sId, cid,
+								dueDate, quantity, 0, className);
+						agentRFQs.add(agentReq);
+						//cDemand[getIndex(cid)][dueDate] = 0;
+					}
 				}
 			}
 		}
+		/*
+		for(int cid : components){
+			List<Supplier> suppliers = new ArrayList<Supplier>();
+			for(int sID = 0; sID < numberOfSuppliers; sID++){
+				Supplier s = new Supplier(sID);
+				for(Component c : s.getComponents()){
+					if(c.getId() == cid){
+						suppliers.add(s);
+						break;
+					}
+				}
+			}
+			int dueDate = day + 2;
+			for(Supplier s :suppliers){
+				for(int i = 0; i < 5; i++){
+					
+					if(dueDate > TAC_Ontology.numberOfTacDays) continue;
+					int quantity = cDemand[getIndex(cID)][dueDate];
+					if(quantity > 0){
+						AgentRequest agentReq = new AgentRequest(sId, cid,
+								dueDate, quantity, 0, className);
+						agentRFQs.add(agentReq);
+					}
+				}
+			}
+
+			cDemand[getIndex(cid)][dueDate] = 0;
+		}*/
 		newOrders.clear();
 
 		return agentRFQs;
@@ -98,7 +162,8 @@ public class SCM_Agent {
 		for (Order o : customerOrders) {
 			int sku = o.getOffer().getRFQ().getPC();
 			int offerQuantity = o.getOffer().getRFQ().getQuantity();
-			int d = (o.getDueDate() <= TAC_Ontology.numberOfTacDays) ? o.getDueDate() : TAC_Ontology.numberOfTacDays;
+			int d = (o.getDueDate() <= TAC_Ontology.numberOfTacDays) ? o
+					.getDueDate() : TAC_Ontology.numberOfTacDays;
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
 			for (int i = 0; i < componentsIds.length; i++) {
@@ -199,8 +264,6 @@ public class SCM_Agent {
 		// make a product schedule list
 		productSchedule = "null";
 
-
-
 		// Copy the orders that have the dueDate = day + 2 from aggregate orders
 		// to products and remove them from aggregate
 		// orders
@@ -211,7 +274,7 @@ public class SCM_Agent {
 		}
 
 		activeOrders.removeAll(products);
-		
+
 		// convert the list to a string
 		if (products.size() > 0) {
 			productSchedule = Order.listToString(products);
@@ -243,8 +306,8 @@ public class SCM_Agent {
 	}
 
 	/**
-	 * This class send a list of Orders to send, based on yesterdays list of Order
-	 * which should be put on the Assembly line.
+	 * This class send a list of Orders to send, based on yesterdays list of
+	 * Order which should be put on the Assembly line.
 	 * 
 	 * @param agent
 	 *            name of the agent
@@ -255,7 +318,7 @@ public class SCM_Agent {
 		deliveries.clear();
 		deliveries.addAll(products);
 		products.clear();
-		
+
 		sendDeliverySchedule(agent);
 	}
 
@@ -273,9 +336,10 @@ public class SCM_Agent {
 	 * agentView.append("\n#Supplier Offers : " + supplierComponents.size());
 	 * //Handle inventory }
 	 */
-	
+
 	/**
 	 * Send the delivery schedule to server
+	 * 
 	 * @param agent
 	 */
 	private void sendDeliverySchedule(String agent) {
