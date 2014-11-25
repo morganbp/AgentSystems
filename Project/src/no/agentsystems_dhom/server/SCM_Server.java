@@ -212,7 +212,10 @@ public class SCM_Server extends Thread {
 					processStorage();
 					updateBalance();
 					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
-					printAgentBalance();
+					if(day == 9)
+						announceAWinningAgent();
+					else
+						printAgentBalance();
 				}
 
 				interval++;
@@ -818,6 +821,26 @@ public class SCM_Server extends Thread {
 		serverView.append(str);
 		guiTextResult += str;
 	}
+	
+	private void announceAWinningAgent(){
+		double winningBalance = 0;
+		double currentAgentBalance;
+		Agent winningAgent = null;
+		for(Agent a : agentList){
+			currentAgentBalance = getBankBalance(a);
+				if(winningBalance == 0){
+					winningBalance = currentAgentBalance;
+					winningAgent = a;
+				}
+				if(currentAgentBalance > winningBalance){
+					winningBalance = getBankBalance(a);
+					winningAgent = a;
+				}
+				
+			}
+			writeToGUI("\n" + winningAgent.getName() + " is the winner!");
+		}
+	
 	
 	private void printAgentBalance(){
 		for(Agent a : agentList){
