@@ -100,6 +100,9 @@ public class SCM_Server extends Thread {
 
 	private List<AgentOrder> supplierComponents;
 	
+	//Store daily finished pcs
+	private List<Order> finishedOrders;
+	
 	//Store all text in server gui to variable
 	
 	private String guiTextResult = "";
@@ -271,6 +274,7 @@ public class SCM_Server extends Thread {
 		BankAccount ba = bank.getBankAccount(agent);
 
 		ba.addCredit(price * quantity);
+		finishedOrders.add(order);
 	}
 
 	
@@ -388,6 +392,8 @@ public class SCM_Server extends Thread {
 		todaysProductSchedule = new ArrayList<Order>();
 
 		todaysDeliverySchedule = new ArrayList<Order>();
+		
+		finishedOrders = new ArrayList<Order>();
 	}
 
 	// end the game
@@ -713,6 +719,15 @@ public class SCM_Server extends Thread {
 		todaysDeliverySchedule.addAll(deliverySchedule);
 		return resp;
 	}
+	
+	public Message sendFinishedOrders(Message kqml) {
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		resp.setContent(Order.listToString(finishedOrders));
+		finishedOrders.clear();
+		return resp;
+	}
 
 	/**
 	 * Send the a list over products to create to the assembly
@@ -992,6 +1007,13 @@ class TACSCMImpl extends SCMPOA {
 		if (performative.equals(TAC_Ontology.deliverySchedule)) {
 			Message resp = server.deliverySchedule(kqml);
 			if (resp != null) {
+				return resp.toString();
+			}
+		}
+		
+		if(performative.equals(TAC_Ontology.finishedOrders)) {
+			Message resp = server.sendFinishedOrders(kqml);
+			if(resp != null) {
 				return resp.toString();
 			}
 		}
