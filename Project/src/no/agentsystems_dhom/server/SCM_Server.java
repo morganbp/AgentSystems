@@ -895,7 +895,7 @@ public class SCM_Server extends Thread {
 		Date date = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm");
 		/* + hourOfDay + "_" + day + "/" + month + "/" + year + */
-		File outputFile = new File("Report" + dateFormat.format(date) +"_agentReport.txt");
+		File outputFile = new File("Report/" + dateFormat.format(date) +"_agentReport.txt");
 		//String guiContent = serverView.output.getText();
 		PrintWriter out = null;
 		try {
