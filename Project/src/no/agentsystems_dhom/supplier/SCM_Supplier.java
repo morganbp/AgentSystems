@@ -224,7 +224,6 @@ public class SCM_Supplier {
 				componentBundle.add(order);
 			}
 		}
-		System.out.println("size of this : " + componentBundle.size());
 		//These are the orders we are going to process today(?)
 		for (AgentOrder order : componentBundle) {
 			this.activeAgentOrders.remove(order);
@@ -237,7 +236,17 @@ public class SCM_Supplier {
 			Component chosenProduct =  supplier.getProduct(componentId);
 			chosenProduct.updateInventory(-quantity);
 		}
+		System.out.println(className);
+		System.out.println(AgentOrder.listToString(componentBundle));
+		System.out.println();
+		for(AgentOrder ao : componentBundle){
+			System.out.println(ao);
+		}
+		System.out.println();
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
+		System.out.println("hei");
+		System.out.println(kqml.toString());
+		System.out.println("hei");
 		server.send(kqml.toString());
 	}
 

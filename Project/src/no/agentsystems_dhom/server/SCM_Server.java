@@ -705,6 +705,7 @@ public class SCM_Server extends Thread {
 	public synchronized Message sendSupplierComponents(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
+	
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
