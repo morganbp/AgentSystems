@@ -1,6 +1,7 @@
 package no.agentsystems_dhom.customer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -288,6 +289,9 @@ public class SCM_Customer {
 	}
 
 	protected List<Offer> findBestOffers(List<Offer> offers) {
+		// shuffle the in case one agent will get advantage of
+		// sending RFQs a very small amount of time in advance
+		Collections.shuffle(offers);
 		List<Offer> bestOffers = new ArrayList<Offer>();
 		for (Offer o : offers) {
 			if (isBestOffer(o, bestOffers)) {
@@ -300,7 +304,8 @@ public class SCM_Customer {
 	private boolean isBestOffer(Offer offer, List<Offer> offers) {
 		for(Offer o : offers){
 			if(offer.getRFQ().getRFQId() != o.getRFQ().getRFQId()) continue;
-			
+			// If current offer price is greater or equal to 
+			// one of the offers to the same RFQ, then the old is preferred
 			if(offer.getOfferPrice() >= o.getOfferPrice()) 
 				return false;
 		}
