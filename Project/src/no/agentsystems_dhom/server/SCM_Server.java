@@ -307,7 +307,7 @@ public class SCM_Server extends Thread {
 		}
 	}
 
-	private void dealSupplierBill() {
+	private synchronized void dealSupplierBill() {
 		for (AgentOrder agentOrder : supplierComponents) {
 			// Find agent with this order
 			Agent agent = findAgent(agentOrder.getCustomer());
@@ -718,7 +718,7 @@ public class SCM_Server extends Thread {
 	/**
 	 * Send the a list over products to create to the assembly
 	 */
-	private void performProductSchedule() {
+	private synchronized void performProductSchedule() {
 		if (todaysProductSchedule.size() == 0)
 			return;
 
