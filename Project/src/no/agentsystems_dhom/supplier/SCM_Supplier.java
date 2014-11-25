@@ -199,9 +199,13 @@ public class SCM_Supplier {
 	protected void getAgentOrders(String className) {
 		List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
 		Message msg = Util.buildKQML(TAC_Ontology.getAgentOrders, className,
-				null);
-		String response = server.send(msg.toString());
-		agentOrders = AgentOrder.stringToList(response);
+				"");
+		String resp = server.send(msg.toString());
+		Message response = Message.buildMessage(resp);
+		agentOrders = AgentOrder.stringToList(response.getContent());
+		for(int i = 0; i < agentOrders.size(); i++){
+			System.out.println(i + ": " + agentOrders.get(i));
+		}
 		this.activeAgentOrders.addAll(agentOrders);
 	}
 
@@ -236,17 +240,7 @@ public class SCM_Supplier {
 			Component chosenProduct =  supplier.getProduct(componentId);
 			chosenProduct.updateInventory(-quantity);
 		}
-		System.out.println(className);
-		System.out.println(AgentOrder.listToString(componentBundle));
-		System.out.println();
-		for(AgentOrder ao : componentBundle){
-			System.out.println(ao);
-		}
-		System.out.println();
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
-		System.out.println("hei");
-		System.out.println(kqml.toString());
-		System.out.println("hei");
 		server.send(kqml.toString());
 	}
 
