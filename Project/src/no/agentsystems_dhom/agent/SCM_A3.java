@@ -82,15 +82,15 @@ public class SCM_A3 extends SCM_Agent{
 					}
 				}
 				
-				if(time == 7){
+				if(time == 7 && getStatus()){
 					sendOffersToServer(CLASS_NAME);
 				}
 				
-				if(time == 8){
+				if(time == 8 && getStatus()){
 					deliverySchedule(CLASS_NAME);
 				}
 				
-				if(time == 9){
+				if(time == 9 && getStatus()){
 					productSchedule(CLASS_NAME, day);
 				}
 			

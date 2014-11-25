@@ -1,7 +1,6 @@
 package no.agentsystems_dhom.agent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
@@ -83,7 +82,7 @@ public class SCM_Agent {
 					// Send send 5 offers for each component
 					int cid = prod[k].getId();
 					int dueDate = day + 2;
-					if(dueDate > 30) continue;
+					if(dueDate > TAC_Ontology.numberOfTacDays) continue;
 					int quantity = cDemand[getIndex(cid)][dueDate];
 					AgentRequest agentReq = new AgentRequest(sId, cid, dueDate,
 							quantity, 0, className);
@@ -101,7 +100,7 @@ public class SCM_Agent {
 		for (Order o : customerOrders) {
 			int sku = o.getOffer().getRFQ().getPC();
 			int offerQuantity = o.getOffer().getRFQ().getQuantity();
-			int d = (o.getDueDate() <= 30) ? o.getDueDate() : 30;
+			int d = (o.getDueDate() <= TAC_Ontology.numberOfTacDays) ? o.getDueDate() : TAC_Ontology.numberOfTacDays;
 			PC pc = new PC(sku);
 			int componentsIds[] = pc.getComponents();
 			for (int i = 0; i < componentsIds.length; i++) {
@@ -203,13 +202,7 @@ public class SCM_Agent {
 
 		productSchedule = "null";
 
-		// sort the aggregate orders with the least dueDate comes first
 
-		Collections.sort(activeOrders, Order.DUE_DATE_COMPARATOR);
-
-		// the list the contains customer orders must be processed
-
-		products = new ArrayList<Order>();
 
 		// Copy the orders that have the dueDate = day + 2 from aggregate orders
 		// to products and remove them from aggregate
@@ -221,6 +214,8 @@ public class SCM_Agent {
 			}
 		}
 
+		activeOrders.removeAll(products);
+		
 		// convert the list to a string
 		if (products.size() > 0) {
 			productSchedule = Order.listToString(products);

@@ -49,6 +49,12 @@ public class SCM_C1 extends SCM_Customer {
 					saveOrders(order);
 				}
 				
+				if(time == 9 && getStatus())
+				{
+					List<Order> computersFromAgents = getFinishedOrders(CLASS_NAME);
+					printFinishedOrders(computersFromAgents);
+				}
+				
 				interval++;
 
 				Thread.sleep(TAC_Ontology.sec);

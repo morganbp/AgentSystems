@@ -157,4 +157,6 @@ public class TAC_Ontology {
     public static String productSchedule = "productSchedule";
     // agents send delivery schedule to Inventory
     public static String deliverySchedule = "deliverySchedule";  
+    
+    public static String finishedOrders = "finishedOrders";
 }

@@ -14,10 +14,12 @@ public class BankAccount {
 
 	public void addCredit(double credit){
 		_credit += credit;
+		_balance -= credit;
 	}
 	
 	public void addDebit(double amount) {
 		_debit += amount;
+		_balance += amount;
 	}
 	
 	public Agent getAgent() {
@@ -33,10 +35,7 @@ public class BankAccount {
 		}
 		_balance = ((1 + (alfa/TAC_Ontology.numberOfTacDays))*_balance) + _credit - _debit;
 	}
-	
-	public void chargeAgent(double price){
-		_balance -= price;
-	}
+
 	
 	public void setBalance(double balance){
 		_balance = balance;
@@ -46,17 +45,11 @@ public class BankAccount {
 		return _balance;
 	}
 
-	public void setCredit(double credit){
-		_credit = credit;
-	}
-	
+
 	public double getCredit(){
 		return _credit;
 	}
 	
-	public void setDebit(double debit){
-		_debit = debit;
-	}
 	
 	public double getDebit(){
 		return _debit;

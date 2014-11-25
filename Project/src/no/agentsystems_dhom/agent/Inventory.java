@@ -48,9 +48,9 @@ public class Inventory {
 	 */
 	public boolean isEnoughPCs(int sku, int quantity) {
 		if (numberOfPCs[sku - 1] < quantity) {
-			return false;
-		} else {
 			return true;
+		} else {
+			return false;
 		}
 
 	}

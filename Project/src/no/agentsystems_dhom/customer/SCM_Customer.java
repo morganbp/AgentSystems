@@ -1,6 +1,7 @@
 package no.agentsystems_dhom.customer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -32,6 +33,7 @@ public class SCM_Customer {
 	private double RFQAvgH, RFQAvgL, RFQAvgM;
 	// Trend values
 	private double trendH, trendL, trendM;
+	
 
 	public static SCM initSCMImpl(String[] args) {
 		SCM server = null;
@@ -243,6 +245,24 @@ public class SCM_Customer {
 		custView.append("\n#Offers: " + offersList.size());
 		return offersList;
 	}
+	
+	protected List<Order> getFinishedOrders(String className)
+	{
+		Message kqml = Util.buildKQML(TAC_Ontology.finishedOrders, className, "");
+		String resp = server.send(kqml.toString());
+		Message responseMessage = Message.buildMessage(resp);
+		return Order.stringToList(responseMessage.getContent());
+	}
+	
+	protected void printFinishedOrders(List<Order> finishedOrders)
+	{
+		int quantity = 0;
+		for(Order order : finishedOrders)
+		{
+			quantity += order.getOffer().getRFQ().getQuantity();
+		}
+		custView.append("\n Customer received : " + quantity + " pcs from agents");
+	}
 
 	private List<String> getBidders(List<Offer> offersList) {
 		List<String> bidders = new ArrayList<String>();
@@ -269,6 +289,9 @@ public class SCM_Customer {
 	}
 
 	protected List<Offer> findBestOffers(List<Offer> offers) {
+		// shuffle the in case one agent will get advantage of
+		// sending RFQs a very small amount of time in advance
+		Collections.shuffle(offers);
 		List<Offer> bestOffers = new ArrayList<Offer>();
 		for (Offer o : offers) {
 			if (isBestOffer(o, bestOffers)) {
@@ -281,7 +304,8 @@ public class SCM_Customer {
 	private boolean isBestOffer(Offer offer, List<Offer> offers) {
 		for(Offer o : offers){
 			if(offer.getRFQ().getRFQId() != o.getRFQ().getRFQId()) continue;
-			
+			// If current offer price is greater or equal to 
+			// one of the offers to the same RFQ, then the old is preferred
 			if(offer.getOfferPrice() >= o.getOfferPrice()) 
 				return false;
 		}

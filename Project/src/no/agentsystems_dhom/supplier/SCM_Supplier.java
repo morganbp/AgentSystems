@@ -3,10 +3,7 @@ package no.agentsystems_dhom.supplier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import no.agentsystems_dhom.server.AgentOrder;
 import no.agentsystems_dhom.server.AgentRequest;
@@ -34,6 +31,7 @@ public class SCM_Supplier {
 
 	protected List<SupplierOffer> supplierOffers;
 	protected List<AgentOrder> activeAgentOrders;
+	protected List<AgentOrder> highPriorityOrders;
 
 	public static SCM initServer(String[] args) {
 		SCM server;
@@ -62,12 +60,11 @@ public class SCM_Supplier {
 
 	protected void startTheGame() {
 		has_started = true;
-
 		supplierOffers = new ArrayList<SupplierOffer>();
 		activeAgentOrders = new ArrayList<AgentOrder>();
 		allSupplierOffers = new ArrayList<SupplierOffer>();
 		allAgentOrders = new ArrayList<AgentOrder>();
-
+		highPriorityOrders = new ArrayList<AgentOrder>();
 		initSuppliers();
 		interval = (interval < 0 || interval > TAC_Ontology.gameLength) ? 0
 				: interval;
@@ -107,6 +104,16 @@ public class SCM_Supplier {
 			int index = (int) Math.floor(i / 2);
 			Component comp = suppliers[index].getComponents()[i % 2];
 			comp.addComponents();
+		}
+	}
+	
+	protected void printInventory(){
+		suplView.append("\n");
+		for(Supplier s : suppliers){
+			for(Component c : s.getComponents()){
+				int qnty = c.getInventory();
+				suplView.append(qnty + " ");
+			}
 		}
 	}
 
@@ -165,6 +172,7 @@ public class SCM_Supplier {
 		Message kqml = Util.buildKQML(TAC_Ontology.sendSupplierOffers,
 				className, SupplierOffer.listToString(supplierOffers));
 		server.send(kqml.toString());
+		
 		suplView.append("\n#SupplierOffersToAgents: " + supplierOffers.size());
 		supplierOffers.clear();
 	}
@@ -190,9 +198,11 @@ public class SCM_Supplier {
 	protected void getAgentOrders(String className) {
 		List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
 		Message msg = Util.buildKQML(TAC_Ontology.getAgentOrders, className,
-				null);
-		String response = server.send(msg.toString());
-		agentOrders = AgentOrder.stringToList(response);
+				"");
+		String resp = server.send(msg.toString());
+		Message response = Message.buildMessage(resp);
+		agentOrders = AgentOrder.stringToList(response.getContent());
+	
 		this.activeAgentOrders.addAll(agentOrders);
 	}
 
@@ -201,10 +211,14 @@ public class SCM_Supplier {
 	 * from the order and update the inventory.
 	 */
 	protected void handleOrders(String className) {
-		if (this.activeAgentOrders.size() <= 0)
+		if (this.activeAgentOrders.size() == 0)
 			return;
 		
 		List<AgentOrder> componentBundle = new ArrayList<AgentOrder>();
+		// add the orders with high priority at the start of the list
+		for(AgentOrder order : highPriorityOrders){
+			componentBundle.add(order);
+		}
 		// Sorting by duedate
 		Collections.sort(this.activeAgentOrders, agentOrderDueDateComparator);
 		// Gets the first element in the sorted list
@@ -215,6 +229,7 @@ public class SCM_Supplier {
 				componentBundle.add(order);
 			}
 		}
+		System.out.println("størrelse på activeAgentOrders før: " + activeAgentOrders.size());
 		//These are the orders we are going to process today(?)
 		for (AgentOrder order : componentBundle) {
 			this.activeAgentOrders.remove(order);
@@ -225,8 +240,14 @@ public class SCM_Supplier {
 			int quantity = order.getSupplierOffer().getQuantity();
 			Supplier supplier = this.suppliers[supplierId];
 			Component chosenProduct =  supplier.getProduct(componentId);
-			chosenProduct.updateInventory(-quantity);
+			boolean valueUpdated = chosenProduct.updateInventory(-quantity);
+			if(!valueUpdated){
+				// if there is no components left in inventory, add this order
+				// to high priority orders 
+				highPriorityOrders.add(order);
+			}
 		}
+		System.out.println("størrelse på activeAgentOrders etter: " + activeAgentOrders.size());
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
 		server.send(kqml.toString());
 	}
@@ -258,23 +279,6 @@ public class SCM_Supplier {
 		return qPurchased / qOffered;
 	}
 
-	/**
-	 * A comparator for sorting an AgentRequest List by Agents reputation.
-	 */
-	private Comparator<AgentRequest> agentReputationComparator = new Comparator<AgentRequest>() {
-
-		@Override
-		public int compare(AgentRequest a1, AgentRequest a2) {
-			double a1Rep = getReputation(a1.getAgent(), a1.getSupplierId());
-			double a2Rep = getReputation(a2.getAgent(), a2.getSupplierId());
-			if (a1Rep < a2Rep)
-				return 1;
-			else
-				return -1;
-
-		}
-
-	};
 
 	private Comparator<AgentOrder> agentOrderDueDateComparator = new Comparator<AgentOrder>() {
 
@@ -284,8 +288,10 @@ public class SCM_Supplier {
 			int a2dueDate = a2.getDueDate();
 			if (a1dueDate < a2dueDate)
 				return 1;
-			else
+			else if(a1dueDate > a2dueDate)
 				return -1;
+			else
+				return 0;
 
 		}
 
