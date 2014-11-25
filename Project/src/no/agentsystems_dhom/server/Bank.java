@@ -20,12 +20,10 @@ public class Bank {
 	
 	public void setInterestRate(double interestRate) {
 		_interestRate = interestRate;
-		
 	}
 
 	public void setLoanInterestRate(double loanInterestRate) {
 		_loanInterestRate = loanInterestRate;
-		
 	}
 
 	public ArrayList<BankAccount> getBankAccounts() {
@@ -40,5 +38,4 @@ public class Bank {
 		}
 		return null;
 	}
-
 }

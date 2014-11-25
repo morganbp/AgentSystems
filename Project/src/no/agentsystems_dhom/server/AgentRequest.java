@@ -1,7 +1,6 @@
 package no.agentsystems_dhom.server;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class AgentRequest {
@@ -9,7 +8,6 @@ public class AgentRequest {
 	private int id, supplierId, componentId, dueDate, quantity;
 	private double price;
 	private String agent;
-	private static final String CLASSNAME = "AgentRequest";
 	private static final String AGENTREQUEST_DIVIDER = "<AGENTREQUEST_DIVIDER>";
 	public static final String AGENTREQUEST_FIELDS_DIVIDER = "<AGENTREQUEST_FIELDS_DIVIDER>";
 	
@@ -91,7 +89,6 @@ public class AgentRequest {
 			if(r == null) continue;
 			agentRequestList.add(r);
 		}
-		
 		return agentRequestList;
 	}
 
@@ -109,8 +106,5 @@ public class AgentRequest {
 		return new AgentRequest(Integer.parseInt(AgentRequests[0]), Integer.parseInt(AgentRequests[1]),
 				Integer.parseInt(AgentRequests[2]), Integer.parseInt(AgentRequests[3]),
 				Integer.parseInt(AgentRequests[4]), Double.parseDouble(AgentRequests[5]), AgentRequests[6]);
-
 	}
-	
-
 }

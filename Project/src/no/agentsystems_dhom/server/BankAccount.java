@@ -36,7 +36,6 @@ public class BankAccount {
 		_balance = ((1 + (alfa/TAC_Ontology.numberOfTacDays))*_balance) + _credit - _debit;
 	}
 
-	
 	public void setBalance(double balance){
 		_balance = balance;
 	}
@@ -45,11 +44,9 @@ public class BankAccount {
 		return _balance;
 	}
 
-
 	public double getCredit(){
 		return _credit;
 	}
-	
 	
 	public double getDebit(){
 		return _debit;
