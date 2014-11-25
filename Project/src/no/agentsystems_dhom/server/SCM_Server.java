@@ -102,6 +102,9 @@ public class SCM_Server extends Thread {
 
 	private List<AgentOrder> supplierComponents;
 	
+	//Store daily finished pcs
+	private List<Order> finishedOrders;
+	
 	//Store all text in server gui to variable
 	
 	private String guiTextResult = "";
@@ -186,11 +189,15 @@ public class SCM_Server extends Thread {
 
 				if (time == 0 && isOn) {
 					writeToGUI("\nday: " + day);
+					
+					//Clearing lists
 					supplierOffers.clear();
 					agentOffers.clear();
 					agentOrders.clear();
 					TodaysRFQs.clear();
 					agentRequests.clear();
+					///////////////////////////////
+					///////////////////////////////
 					performProductSchedule();
 					dealSupplierBill();
 					supplierComponents.clear();
@@ -260,6 +267,7 @@ public class SCM_Server extends Thread {
 		for(Agent a : agentList){
 			writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
 		}
+		todaysDeliverySchedule.clear();
 	}
 
 	// process delivery of an order from agent
@@ -292,7 +300,9 @@ public class SCM_Server extends Thread {
 		BankAccount ba = bank.getBankAccount(agent);
 
 		ba.addCredit(price * quantity);
+		finishedOrders.add(order);
 		return true;
+
 	}
 
 	
@@ -410,6 +420,8 @@ public class SCM_Server extends Thread {
 		todaysProductSchedule = new ArrayList<Order>();
 
 		todaysDeliverySchedule = new ArrayList<Order>();
+		
+		finishedOrders = new ArrayList<Order>();
 	}
 
 	// end the game
@@ -696,6 +708,7 @@ public class SCM_Server extends Thread {
 	public synchronized Message sendSupplierComponents(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
+	
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
@@ -732,6 +745,15 @@ public class SCM_Server extends Thread {
 		String messageContent = kqml.getContent();
 		List<Order> deliverySchedule = Order.stringToList(messageContent);
 		todaysDeliverySchedule.addAll(deliverySchedule);
+		return resp;
+	}
+	
+	public Message sendFinishedOrders(Message kqml) {
+		Message resp = new Message();
+		String name = kqml.getSender();
+		resp.setReceiver(name);
+		resp.setContent(Order.listToString(finishedOrders));
+		finishedOrders.clear();
 		return resp;
 	}
 
@@ -1033,6 +1055,13 @@ class TACSCMImpl extends SCMPOA {
 		if (performative.equals(TAC_Ontology.deliverySchedule)) {
 			Message resp = server.deliverySchedule(kqml);
 			if (resp != null) {
+				return resp.toString();
+			}
+		}
+		
+		if(performative.equals(TAC_Ontology.finishedOrders)) {
+			Message resp = server.sendFinishedOrders(kqml);
+			if(resp != null) {
 				return resp.toString();
 			}
 		}

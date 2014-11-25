@@ -1,5 +1,9 @@
 package no.agentsystems_dhom.customer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
 import no.agentsystems_dhom.supplier.Component;
@@ -12,6 +16,8 @@ public class PC {
 	private int cycles;
 	private int segment;
 	private int componentIds[] = new int[4];
+	public static String PC_FIELD_SEPERATOR = "<pc_field_seperator>";
+	public static String PC_OBJECT_SEPERATOR = "<pc_object_seperator>";
 	// constructor
 	public PC(int SKU) {
 		this.SKU = SKU;
@@ -29,6 +35,7 @@ public class PC {
 	public int getComponent(int index) {
 		return componentIds[index];
 	}
+
 	// initiate
 	private void initiate() {
 		switch(SKU) {
@@ -210,6 +217,8 @@ public class PC {
 		components += componentIds[componentIds.length-1] + " ";
 		return SKU + " " + components + cycles + " " + segment + " " + basePrice;
 	}
+	
+	
 	
 	// test the class
     public static void main(String[] args) {

@@ -1,7 +1,6 @@
 package no.agentsystems_dhom.agent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import no.agentsystems_dhom.customer.PC;
@@ -203,13 +202,7 @@ public class SCM_Agent {
 
 		productSchedule = "null";
 
-		// sort the aggregate orders with the least dueDate comes first
 
-		Collections.sort(activeOrders, Order.DUE_DATE_COMPARATOR);
-
-		// the list the contains customer orders must be processed
-
-		products = new ArrayList<Order>();
 
 		// Copy the orders that have the dueDate = day + 2 from aggregate orders
 		// to products and remove them from aggregate
@@ -221,6 +214,8 @@ public class SCM_Agent {
 			}
 		}
 
+		activeOrders.removeAll(products);
+		
 		// convert the list to a string
 		if (products.size() > 0) {
 			productSchedule = Order.listToString(products);
