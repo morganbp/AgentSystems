@@ -232,6 +232,8 @@ public class SCM_Server extends Thread {
 	}
 
 	private void processDeliverySchedule() {
+		if(todaysDeliverySchedule.size() == 0) return;
+		
 		// get information from deliverySchedule of each agent
 		Map<String, Integer> numberOfOrders = new HashMap<String, Integer>();
 		for (Agent a : agentList) {
@@ -278,7 +280,7 @@ public class SCM_Server extends Thread {
 
 		// the agent get payed
 		BankAccount ba = bank.getBankAccount(agent);
-		ba.addDebit(price * quantity);
+		ba.addCredit(price * quantity);
 		finishedOrders.add(order);
 
 		return true;
@@ -288,10 +290,10 @@ public class SCM_Server extends Thread {
 		List<Order> ordersToRemove = new ArrayList<Order>();
 		for (Order order : customerOrders) {
 			if ((day - order.getDueDate()) >= 0
-					|| (day - order.getDueDate()) <= 4) {
+					&& (day - order.getDueDate()) <= 4) {
 				Agent agent = this.findAgent(order.getProvider());
 
-				bank.getBankAccount(agent).addCredit(order.getPenalty());
+				bank.getBankAccount(agent).addDebit(order.getPenalty());
 			}
 			if ((day - order.getDueDate()) == 4) {
 				ordersToRemove.add(order);
@@ -304,8 +306,13 @@ public class SCM_Server extends Thread {
 		for (int i = 0; i < agentList.size(); i++) {
 			Agent agent = agentList.get(i);
 			int[] numberOfPCs = agent.getInventory().getNumberOfPCs();
-
-			bank.getBankAccount(agent).addCredit(numberOfPCs.length * storageCost);
+			int numPCs = 0;
+			for(int q : numberOfPCs){
+				numPCs += q;
+			}
+			if(numPCs > 0){
+				bank.getBankAccount(agent).addDebit(numberOfPCs.length * storageCost);
+			}
 		}
 	}
 
@@ -318,7 +325,7 @@ public class SCM_Server extends Thread {
 			int quantity = agentOrder.getSupplierOffer().getQuantity();
 			agent.getInventory().updateQuantity(componentId, quantity);
 			double amount = agentOrder.getPrice();
-			bank.getBankAccount(agent).addCredit(amount * quantity);
+			bank.getBankAccount(agent).addDebit(amount * quantity);
 		}
 	}
 

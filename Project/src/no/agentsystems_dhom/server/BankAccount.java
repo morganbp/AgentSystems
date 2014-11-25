@@ -3,25 +3,23 @@ package no.agentsystems_dhom.server;
 
 public class BankAccount {
 	private Agent _agent;
-	private double _balance = 0;
-	private double _credit = 0;
-	private double _debit = 0;
+	private double _balance = 0.0;
+	private double _credit = 0.0;
+	private double _debit = 0.0;
 	
 	
 	public BankAccount(Agent agent) {
 		_agent = agent;
 	}
 
-	public synchronized void addCredit(double amount){
-		System.out.println("add credit: " + amount);
+	public void addCredit(double amount){
 		_credit += amount;
-		_balance -= amount;
+		_balance += amount;
 	}
 	
-	public synchronized void addDebit(double amount) {
-		System.out.println("add debit: " + amount);
+	public void addDebit(double amount) {
 		_debit += amount;
-		_balance += amount;
+		_balance -= amount;
 	}
 	
 	public Agent getAgent() {
