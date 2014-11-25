@@ -199,7 +199,7 @@ public class SCM_Server extends Thread {
 					
 				}
 				
-				if (time == 7) {
+				if (time == 7 && isOn) {
 					processDeliverySchedule();
 				}
 				if (time == 8 && isOn) {
@@ -607,7 +607,6 @@ public class SCM_Server extends Thread {
 		String name = kqml.getSender();
 		resp.setReceiver(name);
 		String content = kqml.getContent();
-		System.out.println(content);
 		List<AgentRequest> newAgentReq = AgentRequest.stringToList(content);
 		agentRequests.addAll(newAgentReq);
 		resp.setContent(newAgentReq.size() + "");
