@@ -3,7 +3,6 @@ package no.agentsystems_dhom.agent;
 import java.util.List;
 
 import TACSCMApp.SCM;
-import no.agentsystems_dhom.customer.PC;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.RFQ;
@@ -73,7 +72,6 @@ public class SCM_A2 extends SCM_Agent{
 					List<RFQ> RFQList = getRFQsFromServer(CLASS_NAME);
 					if(RFQList != null){
 						for(RFQ rfq : RFQList){
-							PC pc = new PC(rfq.getPC());
 							if(rfq.getQuantity() < 10) continue;
 							
 							createOffer(CLASS_NAME, Integer.toString(rfq.getRFQId()), (double)rfq.getReservePrice(), rfq);

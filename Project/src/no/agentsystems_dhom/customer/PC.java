@@ -1,9 +1,5 @@
 package no.agentsystems_dhom.customer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 import no.agentsystems_dhom.server.Util;
 import no.agentsystems_dhom.supplier.Component;
@@ -24,11 +20,9 @@ public class PC {
 		initiate();
 		compBasePrice();
 	}
-	// get SKU
 	public int getSKU() {
 		return SKU;
 	}
-	// get components
 	public int[] getComponents() {
 		return componentIds;
 	}
@@ -36,7 +30,6 @@ public class PC {
 		return componentIds[index];
 	}
 
-	// initiate
 	private void initiate() {
 		switch(SKU) {
 		case 1: 

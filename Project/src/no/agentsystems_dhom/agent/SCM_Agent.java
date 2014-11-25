@@ -49,8 +49,6 @@ public class SCM_Agent {
 			// get the root naming context
 			org.omg.CORBA.Object objRef = orb
 					.resolve_initial_references("NameService");
-			// Use NamingContextExt instead of NamingContext. This is
-			// part of the naming Service.
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
 			// resolve the Object Reference in Naming
@@ -110,7 +108,7 @@ public class SCM_Agent {
 	}
 
 	protected void sendAgentRFQs(String className,
-			List<AgentRequest> agentRequests) {
+		List<AgentRequest> agentRequests) {
 		String kqmlContent = AgentRequest.listToString(agentRequests);
 		Message kqml = Util.buildKQML(TAC_Ontology.Agent_RFQs, className,
 				kqmlContent);
@@ -199,7 +197,6 @@ public class SCM_Agent {
 
 	protected void productSchedule(String agent, int day) {
 		// make a product schedule list
-
 		productSchedule = "null";
 
 
@@ -207,7 +204,6 @@ public class SCM_Agent {
 		// Copy the orders that have the dueDate = day + 2 from aggregate orders
 		// to products and remove them from aggregate
 		// orders
-
 		for (Order o : activeOrders) {
 			if (o.getDueDate() == (day + 2)) {
 				products.add(o);
@@ -220,7 +216,7 @@ public class SCM_Agent {
 		if (products.size() > 0) {
 			productSchedule = Order.listToString(products);
 		}
-		// send the product shedule to server
+		// send the product schedule to server
 		sendProductSchedule(agent, productSchedule);
 	}
 
@@ -229,7 +225,7 @@ public class SCM_Agent {
 	 * @param agent
 	 *            The agent which sends the schedule
 	 * @param schedule
-	 *            A string represantation of an List<Order> object
+	 *            A string representation of an List<Order> object
 	 */
 	private void sendProductSchedule(String agent, String schedule) {
 		Message kqml = Util.buildKQML(TAC_Ontology.productSchedule, agent,
@@ -286,7 +282,6 @@ public class SCM_Agent {
 		Message kqml = Util.buildKQML(TAC_Ontology.deliverySchedule, agent,
 				Order.listToString(deliveries));
 		server.send(kqml.toString());
-		
 	}
 
 	protected void startTheGame() {

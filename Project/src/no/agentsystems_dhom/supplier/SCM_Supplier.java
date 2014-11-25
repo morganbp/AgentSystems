@@ -118,7 +118,7 @@ public class SCM_Supplier {
 	}
 
 	protected void createSupplierOffers(List<AgentRequest> agentRequests,
-			String bidder, int day) {
+		String bidder, int day) {
 		// Sort AgentRequests by decreasing reputation
 		// Collections.sort(agentRequests, agentReputationComparator);
 		for (AgentRequest agentRequest : agentRequests) {

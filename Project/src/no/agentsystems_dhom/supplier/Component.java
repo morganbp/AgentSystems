@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import no.agentsystems_dhom.server.AgentRequest;
-import no.agentsystems_dhom.server.Offer;
 import no.agentsystems_dhom.server.TAC_Ontology;
 
 public class Component {
 	
 	public final static int[] idList = {100, 101, 110, 111, 200, 210, 300, 301, 400, 401};
-	private int id; // 100, 101, 110, 111, 200, 210, 300, 301, 400, 401
+	private int id;
 	private int basePrice;
 	private String componentName;
 	private int capacity;
@@ -18,7 +17,6 @@ public class Component {
 	private List<AgentRequest> considerations;
 	private List<AgentRequest> commitedRequests;
 
-	// constructor
 	public Component(int id) {
 		this.id = id;
 		capacity = (int) (TAC_Ontology.cNominal + ((Math.random() * 70) - 35));
@@ -95,7 +93,6 @@ public class Component {
 	public boolean updateInventory(int quantity)
 	{
 		if((quantity + inventory) < 0){
-			// will return false if inventory is less than 0 
 			return false;
 		}
 		inventory += quantity;

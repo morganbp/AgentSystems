@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,9 +76,8 @@ public class SCM_Server extends Thread {
 
 	private List<Order> customerOrders;
 
-	
 	private List<Order> todaysCustomerOrders;
-	
+
 	// Store AgentRequest from Agent
 
 	private List<AgentRequest> agentRequests;
@@ -104,12 +101,12 @@ public class SCM_Server extends Thread {
 	// Store supplier components(in the form of AgentOrders) from supplier
 
 	private List<AgentOrder> supplierComponents;
-	
-	//Store daily finished pcs
+
+	// Store daily finished pcs
 	private List<Order> finishedOrders;
-	
-	//Store all text in server gui to variable
-	
+
+	// Store all text in server gui to variable
+
 	private String guiTextResult = "";
 
 	public SCM_Server() {
@@ -192,11 +189,10 @@ public class SCM_Server extends Thread {
 
 				if (time == 0 && isOn) {
 					writeToGUI("\nday: " + day);
-					
-					
+
 					performProductSchedule();
 					dealSupplierBill();
-					//Clearing lists
+					// Clearing lists
 					supplierOffers.clear();
 					agentOffers.clear();
 					agentOrders.clear();
@@ -204,14 +200,14 @@ public class SCM_Server extends Thread {
 					agentRequests.clear();
 					supplierComponents.clear();
 					todaysCustomerOrders.clear();
-					///////////////////////////////
-					///////////////////////////////
-					/*for(BankAccount ba : bank.getBankAccounts()){
-						serverView.append("\n" + ba.getAgent().getName()+ ": " + ba.getBalance());
-					}*/
-					
+					/*
+					 * for(BankAccount ba : bank.getBankAccounts()){
+					 * serverView.append("\n" + ba.getAgent().getName()+ ": " +
+					 * ba.getBalance()); }
+					 */
+
 				}
-				
+
 				if (time == 7 && isOn) {
 					processDeliverySchedule();
 				}
@@ -222,9 +218,10 @@ public class SCM_Server extends Thread {
 				if (time == 9 && isOn) {
 					processStorage();
 					updateBalance();
-					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
+					writeToGUI("\nAggregate customer orders: "
+							+ customerOrders.size());
 					printAgentBalance();
-					if(day == 29) 
+					if (day == 29)
 						announceAWinningAgent();
 				}
 				interval++;
@@ -237,86 +234,72 @@ public class SCM_Server extends Thread {
 				e.printStackTrace();
 			}
 
-		} // end while
+		}
 	}
-
 
 	private void processDeliverySchedule() {
 		// get information from deliverySchedule of each agent
-		
 		Map<String, Integer> numberOfOrders = new HashMap<String, Integer>();
-		for(Agent a : agentList){
+		for (Agent a : agentList) {
 			numberOfOrders.put(a.getName(), 0);
 		}
-		
+
 		for (Order order : todaysDeliverySchedule) {
 
 			// find the agent that receivers that delivery order
 			Agent a = find(order.getProvider());
-			
-			 
-			// count the number of delivery order of each agent
 
-			if(delivery(a, order)){
+			// count the number of delivery order of each agent
+			if (delivery(a, order)) {
 				int newValue = numberOfOrders.get(a.getName()) + 1;
 				numberOfOrders.put(a.getName(), newValue);
 			}
-			
+
 		}
-		for(Agent a : agentList){
-			if(numberOfOrders.get(a.getName()) != 0)
-				writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
+		for (Agent a : agentList) {
+			if (numberOfOrders.get(a.getName()) != 0)
+				writeToGUI("\n" + a.getName() + " delivers for "
+						+ numberOfOrders.get(a.getName()) + " orders");
 		}
 		todaysDeliverySchedule.clear();
 	}
 
 	// process delivery of an order from agent
-
 	private boolean delivery(Agent agent, Order order) {
 
 		// get PC from the agent's inventory
-		
+
 		// update the number of PC in the agent's inventory
-				
+
 		int sku = order.getOffer().getRFQ().getPC();
 		int quantity = order.getOffer().getRFQ().getQuantity();
-		
+
 		Inventory inventory = agent.getInventory();
-		if(!inventory.isEnoughPCs(sku, quantity))
+		if (!inventory.isEnoughPCs(sku, quantity))
 			return false;
-		
-		inventory.updateNumberOfPcs(sku, -quantity); 
-		
-		
-		
-		// get price
+
+		inventory.updateNumberOfPcs(sku, -quantity);
 
 		double price = order.getPrice();
 
-		// the agent get pay
-
+		// the agent get payed
 		BankAccount ba = bank.getBankAccount(agent);
-
 		ba.addCredit(price * quantity);
 		finishedOrders.add(order);
-		return true;
 
+		return true;
 	}
 
-	
-	private void controlOrders()
-	{
+	private void controlOrders() {
 		List<Order> ordersToRemove = new ArrayList<Order>();
-		for(Order order : customerOrders)
-		{
-			if((day - order.getDueDate()) >= 0 || (day - order.getDueDate()) <= 4)
-			{
+		for (Order order : customerOrders) {
+			if ((day - order.getDueDate()) >= 0
+					|| (day - order.getDueDate()) <= 4) {
 				Agent agent = this.findAgent(order.getProvider());
-				
+
 				bank.getBankAccount(agent).addDebit(order.getPenalty());
 			}
-			if((day - order.getDueDate()) == 4)
-			{
+			if ((day - order.getDueDate()) == 4) {
 				ordersToRemove.add(order);
 			}
 		}
@@ -347,8 +330,8 @@ public class SCM_Server extends Thread {
 
 	private Agent findAgent(String agentName) {
 		for (Agent agent : agentList) {
-			if (agent.getName().toLowerCase().trim().equals(agentName.toLowerCase()
-					.trim())) {
+			if (agent.getName().toLowerCase().trim()
+					.equals(agentName.toLowerCase().trim())) {
 				return agent;
 			}
 		}
@@ -401,7 +384,7 @@ public class SCM_Server extends Thread {
 		TodaysRFQs = new ArrayList<RFQ>();
 
 		customerOrders = new ArrayList<Order>();
-		
+
 		todaysCustomerOrders = new ArrayList<Order>();
 
 		agentRequests = new ArrayList<AgentRequest>();
@@ -415,29 +398,24 @@ public class SCM_Server extends Thread {
 		todaysProductSchedule = new ArrayList<Order>();
 
 		todaysDeliverySchedule = new ArrayList<Order>();
-		
+
 		finishedOrders = new ArrayList<Order>();
 	}
-
-	// end the game
 
 	private void endTheGame() {
 
 		isOn = false;
-		
-		writeToGUI("\n\n---> The TAC Game is closed");
-		writeToGUI("\n Next Game: "
+
+		writeToGUI("\n\n---> The TAC Game is closed"
+				+"\n Next Game: "
 				+ df.format(tacTime(TAC_Ontology.gameInterval
 						* TAC_Ontology.sec)));
-
 		saveServerGuiToText();
 	}
 
 	public void finalize() throws Throwable {
 
 	}
-
-	// compute storage cost
 
 	public void storageCost() {
 
@@ -456,7 +434,6 @@ public class SCM_Server extends Thread {
 	}
 
 	// check if an agent is registered in the agent list
-
 	private boolean agentRegistered(String name, ArrayList<Agent> list) {
 
 		if (list.isEmpty())
@@ -482,17 +459,19 @@ public class SCM_Server extends Thread {
 	private void tacStatus() {
 		serverView.setText("");
 		writeToGUI("\n------------------ The TAC Game --------------------"
-					+ "\nThe Game: " + gameId
-					+ "\n Start: " + df.format(startTime)
-					+ "\n End: " + df.format(endTime)
-					+ "\n Next Game: "
-							+ df.format(tacTime(TAC_Ontology.gameInterval
-									* TAC_Ontology.sec))
-					+ "\n----------------------------------------------------\n");
+				+ "\nThe Game: "
+				+ gameId
+				+ "\n Start: "
+				+ df.format(startTime)
+				+ "\n End: "
+				+ df.format(endTime)
+				+ "\n Next Game: "
+				+ df.format(tacTime(TAC_Ontology.gameInterval
+						* TAC_Ontology.sec))
+				+ "\n----------------------------------------------------\n");
 	}
 
 	// compute the time from now after a long interval i
-
 	private Date tacTime(long i) {
 
 		Date d = new Date();
@@ -512,7 +491,6 @@ public class SCM_Server extends Thread {
 	}
 
 	// agents register
-
 	public synchronized Message agentRegistering(Message kqml) {
 
 		Message resp = new Message();
@@ -702,14 +680,14 @@ public class SCM_Server extends Thread {
 	public synchronized Message sendSupplierComponents(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
-	
+
 		resp.setReceiver(name);
 		String messageContent = kqml.getContent();
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
 		resp.setContent(components.size() + "");
-		writeToGUI("\n" + name + " has sent the server "
-				+ components.size() + " components.");
+		writeToGUI("\n" + name + " has sent the server " + components.size()
+				+ " components.");
 
 		return resp;
 	}
@@ -741,7 +719,7 @@ public class SCM_Server extends Thread {
 		todaysDeliverySchedule.addAll(deliverySchedule);
 		return resp;
 	}
-	
+
 	public Message sendFinishedOrders(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
@@ -831,47 +809,47 @@ public class SCM_Server extends Thread {
 		}
 		return null;
 	}
-	
-	//Method for writing to gui and filevariable
-	private void writeToGUI(String str){
+
+	// Method for writing to gui and variable for saving to file
+	private void writeToGUI(String str) {
 		serverView.append(str);
 		guiTextResult += str;
 	}
-	
-	private void announceAWinningAgent(){
+
+	private void announceAWinningAgent() {
 		double winningBalance = 0;
 		double currentAgentBalance;
 		Agent winningAgent = null;
-		for(Agent a : agentList){
+		for (Agent a : agentList) {
 			currentAgentBalance = getBankBalance(a);
-				if(winningBalance == 0){
-					winningBalance = currentAgentBalance;
-					winningAgent = a;
-				}
-				if(currentAgentBalance > winningBalance){
-					winningBalance = getBankBalance(a);
-					winningAgent = a;
-				}
-				
+			if (winningBalance == 0) {
+				winningBalance = currentAgentBalance;
+				winningAgent = a;
 			}
-			writeToGUI("\n" + winningAgent.getName() + " is the winner!");
+			if (currentAgentBalance > winningBalance) {
+				winningBalance = getBankBalance(a);
+				winningAgent = a;
+			}
+
 		}
-	
-	
-	private void printAgentBalance(){
-		for(Agent a : agentList){
-			String agent = a.toString();
-			writeToGUI("\n-->" + a.getName() + ": " + getBankBalance(a));
+		writeToGUI("\n" + winningAgent.getName() + " is the winner!");
+	}
+
+	private void printAgentBalance() {
+		for (Agent a : agentList) {
+			double currentAgentBankBalance = getBankBalance(a);
+			String formattedBalance = String.format("%.3f",
+					currentAgentBankBalance);
+			writeToGUI("\n-->" + a.getName() + ": " + formattedBalance + "   "
+					+ "-->" + currentAgentBankBalance);
 		}
 	}
 
-	// get bank account balance
 	private double getBankBalance(Agent a) {
 		return bank.getBankAccount(a).getBalance();
 	}
 
 	// update balance of all bank account at the end of the day
-
 	public void updateBalance() {
 
 		for (Agent a : agentList) {
@@ -881,22 +859,14 @@ public class SCM_Server extends Thread {
 			ba.updateBalance(loanInterestRate, interestRate);
 
 			getBankBalance(a);
-
 		}
-
 	}
 
 	public void saveServerGuiToText() {
-		/*Calendar currentDate = new GregorianCalendar();
-		int hourOfDay = currentDate.HOUR_OF_DAY;
-		int year = currentDate.YEAR;
-		int month = currentDate.MONTH;
-		int day = currentDate.DAY_OF_MONTH;*/
 		Date date = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm");
-		/* + hourOfDay + "_" + day + "/" + month + "/" + year + */
-		File outputFile = new File("Report/" + dateFormat.format(date) +"_agentReport.txt");
-		//String guiContent = serverView.output.getText();
+		File outputFile = new File("Report/" + dateFormat.format(date)
+				+ "_agentReport.txt");
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(outputFile);
@@ -904,9 +874,8 @@ public class SCM_Server extends Thread {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			serverView.append("\nCould not save to file");
-		}finally{
+		} finally {
 			out.print(guiTextResult);
-			//out.println("\n");
 			out.close();
 		}
 	}
@@ -927,8 +896,6 @@ class TACSCMImpl extends SCMPOA {
 
 	}
 
-	// implement send() method
-
 	public String send(String str) {
 
 		if (str == null)
@@ -944,12 +911,9 @@ class TACSCMImpl extends SCMPOA {
 		// agent registering
 
 		if (performative.equals(TAC_Ontology.agent_registering)) {
-
 			Message resp = server.agentRegistering(kqml);
-
 			if (resp != null)
 				return resp.toString();
-
 		}
 
 		// server has received customer RFQs
@@ -1061,56 +1025,39 @@ class TACSCMImpl extends SCMPOA {
 				return resp.toString();
 			}
 		}
-		
-		if(performative.equals(TAC_Ontology.finishedOrders)) {
+
+		if (performative.equals(TAC_Ontology.finishedOrders)) {
 			Message resp = server.sendFinishedOrders(kqml);
-			if(resp != null) {
+			if (resp != null) {
 				return resp.toString();
 			}
 		}
 
 		return null;
-
 	}
 
 	// get status
-
 	public boolean status() {
-
 		return server.getStatus();
-
 	}
 
 	// getTime interval in second
-
 	public short getTime() {
-
 		return (short) server.getTime();
-
 	}
 
 	// get interest rate from the bank
-
 	public double getInterestRate() {
-
 		return server.getInterestRate();
-
 	}
 
 	// get interest rate from the bank
-
 	public double getLoanInterestRate() {
-
 		return server.getLoanInterestRate();
-
 	}
 
 	// get interest rate from the bank
-
 	public double getStorageCost() {
-
 		return server.getStorageCosts();
-
 	}
-
 }

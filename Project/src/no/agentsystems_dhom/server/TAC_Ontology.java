@@ -15,7 +15,7 @@ public class TAC_Ontology {
 	// Ontology name
 	public static String ontology = "TAC_SCM_Ontology";
 
-    // agent name
+    // agent names
     public static String SCM_A1 = "SCM_A1"; 
     public static String SCM_A2 = "SCM_A2"; 
     public static String SCM_A3 = "SCM_A3"; 
@@ -40,11 +40,9 @@ public class TAC_Ontology {
 	// the minute = 60 seconds
 	public static int min = 60*sec;
     // numbers of TAC days
-//  public static int numberOfTacDays = 220; 
-	public static int numberOfTacDays = 10; 
+	public static int numberOfTacDays = 30; 
     // The length of a TAC day in second
-//  public static int lengthOfADay = 15; 
-  public static int lengthOfADay = 10; 
+    public static int lengthOfADay = 10; 
     // the game length in seconds
 	public static int gameLength= numberOfTacDays*lengthOfADay;
     // the game interval in seconds
@@ -58,7 +56,6 @@ public class TAC_Ontology {
 	// maximum of PC type 16
 	public static int maxPCType = 16;
 	// Nominal capacity of all suppliers assembly lines per day
-//	public static int cNominal = 550;
 	public static int cNominal = 450;
 	// Number of Agent cell capacity per day
 	public static int agentCellCapacity = 2000;
