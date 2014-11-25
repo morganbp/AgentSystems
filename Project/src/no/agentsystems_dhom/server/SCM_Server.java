@@ -858,6 +858,7 @@ public class SCM_Server extends Thread {
 	private void printAgentBalance(){
 		for(Agent a : agentList){
 			String agent = a.toString();
+			writeToGUI("\n-->" + a.getName() + ": " + getBankBalance(a));
 		}
 	}
 
