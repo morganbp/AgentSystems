@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import no.agentsystems_dhom.agent.Assembly;
 import no.agentsystems_dhom.agent.Inventory;
@@ -229,23 +231,37 @@ public class SCM_Server extends Thread {
 
 	private void processDeliverySchedule() {
 		// get information from deliverySchedule of each agent
-
+		
+		Map<String, Integer> numberOfOrders = new HashMap<String, Integer>();
+		for(Agent a : agentList){
+			numberOfOrders.put(a.getName(), 0);
+		}
+		
 		for (Order order : todaysDeliverySchedule) {
 
 			// find the agent that receivers that delivery order
 			System.out.println("process");
 			Agent a = find(order.getProvider());
-
+			
+			
 			// count the number of delivery order of each agent
 
-			delivery(a, order);
+			if(delivery(a, order)){
+				int newValue = numberOfOrders.get(a.getName()) + 1;
+				numberOfOrders.put(a.getName(), newValue);
+			}
+			
+			
 		}
 
+		for(Agent a : agentList){
+			writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
+		}
 	}
 
 	// process delivery of an order from agent
 
-	private void delivery(Agent agent, Order order) {
+	private boolean delivery(Agent agent, Order order) {
 
 		// get PC from the agent's inventory
 		
@@ -258,11 +274,11 @@ public class SCM_Server extends Thread {
 		
 		Inventory inventory = agent.getInventory();
 		if(!inventory.isEnoughPCs(sku, quantity))
-			return;
+			return false;
 		
 		inventory.updateNumberOfPcs(sku, -quantity); 
 		
-		writeToGUI("\n"+ agent + " delivers for " + quantity + " orders");
+		
 		
 		// get price
 
@@ -273,6 +289,7 @@ public class SCM_Server extends Thread {
 		BankAccount ba = bank.getBankAccount(agent);
 
 		ba.addCredit(price * quantity);
+		return true;
 	}
 
 	
