@@ -426,7 +426,7 @@ public class SCM_Server extends Thread {
 				+ df.format(tacTime(TAC_Ontology.gameInterval
 						* TAC_Ontology.sec)));
 
-		saveServerGuiToText();
+		//saveServerGuiToText();
 	}
 
 	public void finalize() throws Throwable {
@@ -892,10 +892,11 @@ public class SCM_Server extends Thread {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			serverView.append("\nCould not save to file");
+		}finally{
+			out.print(guiTextResult);
+			//out.println("\n");
+			out.close();
 		}
-		out.print(guiTextResult);
-		//out.println("\n");
-		out.close();
 	}
 
 } // end of SCM_Server
