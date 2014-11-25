@@ -219,8 +219,10 @@ public class SCM_Server extends Thread {
 					processStorage();
 					updateBalance();
 					writeToGUI("\nAggregate customer orders: " + customerOrders.size());
-					if(day == 9)
+					if(day == 9) {
+						printAgentBalance();
 						announceAWinningAgent();
+					}
 					else
 						printAgentBalance();
 				}
@@ -865,9 +867,12 @@ public class SCM_Server extends Thread {
 	
 	
 	private void printAgentBalance(){
+		double currentAgentsBankBalance = 0;
 		for(Agent a : agentList){
 			String agent = a.toString();
-			writeToGUI("\n" + a.getName() + "s balance is: "+ getBankBalance(a));
+			currentAgentsBankBalance = getBankBalance(a);
+			if(currentAgentsBankBalance != 0)
+				writeToGUI("\n" + a.getName() + "s balance is: "+ getBankBalance(a));
 		}
 	}
 
