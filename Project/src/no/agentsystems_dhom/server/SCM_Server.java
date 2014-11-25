@@ -292,7 +292,7 @@ public class SCM_Server extends Thread {
 			if ((day - order.getDueDate()) >= 0
 					&& (day - order.getDueDate()) <= 4) {
 				Agent agent = this.findAgent(order.getProvider());
-
+				
 				bank.getBankAccount(agent).addDebit(order.getPenalty());
 			}
 			if ((day - order.getDueDate()) == 4) {
@@ -311,7 +311,7 @@ public class SCM_Server extends Thread {
 				numPCs += q;
 			}
 			if(numPCs > 0){
-				bank.getBankAccount(agent).addDebit(numberOfPCs.length * storageCost);
+				bank.getBankAccount(agent).addDebit(numPCs * storageCost);
 			}
 		}
 	}
@@ -728,7 +728,7 @@ public class SCM_Server extends Thread {
 	private synchronized void performProductSchedule() {
 		if (todaysProductSchedule.size() == 0)
 			return;
-
+		
 		for (Order order : todaysProductSchedule) {
 
 			Agent agent = find(order.getProvider());
@@ -833,8 +833,7 @@ public class SCM_Server extends Thread {
 			double currentAgentBankBalance = getBankBalance(a);
 			String formattedBalance = String.format("%.3f",
 					currentAgentBankBalance);
-			writeToGUI("\n-->" + a.getName() + ": " + formattedBalance + "   "
-					+ "-->" + currentAgentBankBalance);
+			writeToGUI("\n-->" + a.getName() + ": " + formattedBalance);
 		}
 	}
 
