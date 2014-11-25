@@ -105,8 +105,6 @@ public class TAC_Ontology {
 	public static int TShort = 5;
 	// Daily reduction in supplier available capacity for long-term commitments 0.5%
 	public static double zR = 0.5/100;
-
-	// Performative
 	
     // agent registering. Sender: agent's name, Content: agent'id
     public static String agent_registering = "agent_registering"; 

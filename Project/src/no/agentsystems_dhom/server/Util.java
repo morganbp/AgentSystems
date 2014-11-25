@@ -1,7 +1,6 @@
 package no.agentsystems_dhom.server;
 
 import java.util.Random;
-
 import yinyang.Message;
 
 public class Util {
@@ -67,5 +66,4 @@ public class Util {
 			kqml.setOntology(TAC_Ontology.ontology);
 			return kqml;
 		}
-		
 }
