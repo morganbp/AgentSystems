@@ -2,7 +2,6 @@ package no.agentsystems_dhom.supplier;
 
 import java.util.List;
 
-import no.agentsystems_dhom.server.AgentOrder;
 import no.agentsystems_dhom.server.AgentRequest;
 import no.agentsystems_dhom.server.GUI;
 import no.agentsystems_dhom.server.TAC_Ontology;

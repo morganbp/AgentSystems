@@ -224,6 +224,7 @@ public class SCM_Supplier {
 				componentBundle.add(order);
 			}
 		}
+		System.out.println("size of this : " + componentBundle.size());
 		//These are the orders we are going to process today(?)
 		for (AgentOrder order : componentBundle) {
 			this.activeAgentOrders.remove(order);

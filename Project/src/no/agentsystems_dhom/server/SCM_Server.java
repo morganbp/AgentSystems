@@ -186,11 +186,15 @@ public class SCM_Server extends Thread {
 
 				if (time == 0 && isOn) {
 					writeToGUI("\nday: " + day);
+					
+					//Clearing lists
 					supplierOffers.clear();
 					agentOffers.clear();
 					agentOrders.clear();
 					TodaysRFQs.clear();
 					agentRequests.clear();
+					///////////////////////////////
+					///////////////////////////////
 					performProductSchedule();
 					dealSupplierBill();
 					supplierComponents.clear();
@@ -257,6 +261,7 @@ public class SCM_Server extends Thread {
 		for(Agent a : agentList){
 			writeToGUI("\n"+ a.getName() + " delivers for " + numberOfOrders.get(a.getName()) + " orders");
 		}
+		todaysDeliverySchedule.clear();
 	}
 
 	// process delivery of an order from agent
