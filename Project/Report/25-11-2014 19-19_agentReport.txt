@@ -1,0 +1,147 @@
+
+------------------ The TAC Game --------------------
+The Game: 2014-11-25 19:17:35
+ Start: 2014-11-25 19:17:35
+ End: 2014-11-25 19:19:15
+ Next Game: 2014-11-25 19:19:25
+----------------------------------------------------
+
+day: 0
+SCM_A3 is registered! Your id is 1512633
+SCM_A1 is registered! Your id is 1512631
+SCM_C1 sends orders: 0
+SCM_A2 is registered! Your id is 1512632
+RFQs from SCM_C1: 167
+Offers from Supplier: 0
+SCM_A3 has sent the server 92 offers.
+SCM_A1 has sent the server 92 offers.
+SCM_A2 has sent the server 92 offers.
+Aggregate customer orders: 0
+-->SCM_A3: -0,000   -->-4.200000000000037E-4
+-->SCM_A1: -0,000   -->-4.200000000000037E-4
+-->SCM_A2: -0,000   -->-4.200000000000037E-4
+day: 1
+SCM_C1 sends orders: 92
+RFQs from SCM_C1: 161
+Offers from Supplier: 0
+SCM_A3 has sent the server 88 offers.
+SCM_A1 has sent the server 88 offers.
+SCM_A2 has sent the server 88 offers.
+Aggregate customer orders: 92
+-->SCM_A3: 15,661   -->15.661367899999732
+-->SCM_A1: 12,596   -->12.596367899999677
+-->SCM_A2: 8,416   -->8.416367899999614
+day: 2
+SCM_C1 sends orders: 88
+RFQs from SCM_C1: 171
+Offers from Supplier: 240
+SCM_A3 has sent the server 88 offers.
+SCM_A1 has sent the server 88 offers.
+SCM_A2 has sent the server 88 offers.
+SCM_S1 has sent the server 240 components.
+Aggregate customer orders: 180
+-->SCM_A3: -3077,692   -->-3077.691535260503
+-->SCM_A1: -2466,307   -->-2466.3068602605026
+-->SCM_A2: -1646,693   -->-1646.6927602605006
+day: 3
+SCM_C1 sends orders: 88
+RFQs from SCM_C1: 161
+Offers from Supplier: 240
+SCM_A3 has sent the server 81 offers.
+SCM_A1 has sent the server 81 offers.
+SCM_A2 has sent the server 81 offers.
+SCM_S1 has sent the server 240 components.
+Aggregate customer orders: 268
+-->SCM_A3: -12270,059   -->-12270.059202936809
+-->SCM_A1: -11332,543   -->-11332.542604561808
+-->SCM_A2: -7252,140   -->-7252.140434061805
+day: 4
+SCM_C1 sends orders: 81
+RFQs from SCM_C1: 165
+Offers from Supplier: 240
+SCM_A3 has sent the server 90 offers.
+SCM_A1 has sent the server 90 offers.
+SCM_A2 has sent the server 90 offers.
+SCM_S1 has sent the server 240 components.
+Aggregate customer orders: 349
+-->SCM_A3: -30285,082   -->-30285.082214966176
+-->SCM_A1: -29629,070   -->-29629.070450607425
+-->SCM_A2: -19008,373   -->-19008.373346232114
+day: 5
+SCM_C1 sends orders: 90
+RFQs from SCM_C1: 185
+Offers from Supplier: 240
+SCM_A3 has sent the server 98 offers.
+SCM_A1 has sent the server 98 offers.
+SCM_A2 has sent the server 98 offers.
+SCM_A3 delivers for 3 orders
+SCM_A1 delivers for 1 orders
+SCM_A2 delivers for 2 orders
+SCM_S1 has sent the server 240 components.
+Aggregate customer orders: 439
+-->SCM_A3: -59243,526   -->-59243.52579257283
+-->SCM_A1: -59400,041   -->-59400.040522408584
+-->SCM_A2: -38692,654   -->-38692.65436601566
+day: 6
+SCM_C1 sends orders: 98
+RFQs from SCM_C1: 158
+Offers from Supplier: 240
+SCM_A3 has sent the server 79 offers.
+SCM_A1 has sent the server 79 offers.
+SCM_A2 has sent the server 79 offers.
+SCM_A3 delivers for 8 orders
+SCM_A1 delivers for 4 orders
+SCM_A2 delivers for 10 orders
+SCM_S1 has sent the server 240 components.
+Aggregate customer orders: 537
+-->SCM_A3: -98741,002   -->-98741.00178659799
+-->SCM_A1: -87743,082   -->-87743.08175363751
+-->SCM_A2: -87231,467   -->-87231.46654850917
+day: 7
+SCM_C1 sends orders: 79
+RFQs from SCM_C1: 186
+Offers from Supplier: 240
+SCM_A3 has sent the server 87 offers.
+SCM_A1 has sent the server 87 offers.
+SCM_A2 has sent the server 87 offers.
+SCM_A3 delivers for 4 orders
+SCM_A1 delivers for 12 orders
+SCM_A2 delivers for 6 orders
+SCM_S1 has sent the server 240 components.
+Aggregate customer orders: 616
+-->SCM_A3: -73620,369   -->-73620.36907203635
+-->SCM_A1: -117873,540   -->-117873.54009908935
+-->SCM_A2: -144833,913   -->-144833.9129615838
+day: 8
+SCM_C1 sends orders: 87
+RFQs from SCM_C1: 185
+Offers from Supplier: 240
+SCM_A3 has sent the server 103 offers.
+SCM_A1 has sent the server 103 offers.
+SCM_A2 has sent the server 103 offers.
+SCM_A3 delivers for 5 orders
+SCM_A1 delivers for 4 orders
+SCM_A2 delivers for 5 orders
+SCM_S1 has sent the server 160 components.
+Aggregate customer orders: 703
+-->SCM_A3: -140664,917   -->-140664.91692209546
+-->SCM_A1: -197303,905   -->-197303.90532181654
+-->SCM_A2: -253882,875   -->-253882.87494747108
+day: 9
+SCM_C1 sends orders: 103
+RFQs from SCM_C1: 184
+Offers from Supplier: 240
+SCM_A3 has sent the server 94 offers.
+SCM_A1 has sent the server 94 offers.
+SCM_A3 delivers for 15 orders
+SCM_A1 delivers for 11 orders
+SCM_A2 delivers for 5 orders
+SCM_A2 has sent the server 94 offers.
+SCM_S1 has sent the server 160 components.
+Aggregate customer orders: 800
+-->SCM_A3: -358161,883   -->-358161.88349730766
+-->SCM_A1: -401040,149   -->-401040.1494111479
+-->SCM_A2: -533999,434   -->-533999.4336327903
+
+---> The TAC Game is closed
+ Next Game: 2014-11-25 19:19:25

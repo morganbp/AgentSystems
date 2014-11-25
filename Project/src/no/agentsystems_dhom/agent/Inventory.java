@@ -3,8 +3,7 @@ package no.agentsystems_dhom.agent;
 import no.agentsystems_dhom.customer.PC;
 
 public class Inventory {
-	private int components[] = { 100, 101, 110, 111, 200, 210, 200, 301, 400,
-			401 };
+
 	int[] quantity = new int[10];
 	int[] numberOfPCs = new int[16];
 
