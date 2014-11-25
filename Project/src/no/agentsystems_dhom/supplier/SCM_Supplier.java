@@ -119,6 +119,8 @@ public class SCM_Supplier {
 
 	protected void createSupplierOffers(List<AgentRequest> agentRequests,
 		String bidder, int day) {
+		
+		Collections.shuffle(agentRequests);
 		// Sort AgentRequests by decreasing reputation
 		// Collections.sort(agentRequests, agentReputationComparator);
 		for (AgentRequest agentRequest : agentRequests) {
@@ -249,34 +251,6 @@ public class SCM_Supplier {
 		Message kqml = Util.buildKQML(TAC_Ontology.supplierSendComponents, className, AgentOrder.listToString(componentBundle));
 		server.send(kqml.toString());
 	}
-
-	/**
-	 * 
-	 * @param agent
-	 *            the agent which we want to get the reputation of
-	 * @return the reputation of agent
-	 */
-	private double getReputation(String agent, int supplierID) {
-		int qPurchased = 0;
-		int qOffered = 0;
-		for (AgentOrder order : allAgentOrders) {
-			if (order.getCustomer().equals(agent)
-					&& order.getSupplierOffer().getAgentRequest()
-							.getSupplierId() == supplierID) {
-				qPurchased += order.getSupplierOffer().getQuantity();
-			}
-		}
-		for (SupplierOffer offer : allSupplierOffers) {
-			if (offer.getReciever().equals(agent)
-					&& offer.getAgentRequest().getSupplierId() == supplierID) {
-				qOffered += offer.getQuantity();
-			}
-		}
-		if (qOffered == 0)
-			return 0;
-		return qPurchased / qOffered;
-	}
-
 
 	private Comparator<AgentOrder> agentOrderDueDateComparator = new Comparator<AgentOrder>() {
 
