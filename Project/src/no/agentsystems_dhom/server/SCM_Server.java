@@ -236,8 +236,6 @@ public class SCM_Server extends Thread {
 			// count the number of delivery order of each agent
 
 			delivery(a, order);
-			
-
 		}
 
 	}
@@ -258,6 +256,8 @@ public class SCM_Server extends Thread {
 			return;
 		
 		inventory.updateNumberOfPcs(sku, -quantity); 
+		
+		writeToGUI("\n"+ agent + " delivers for " + quantity + " orders");
 		
 		// get price
 
