@@ -426,7 +426,7 @@ public class SCM_Server extends Thread {
 				+ df.format(tacTime(TAC_Ontology.gameInterval
 						* TAC_Ontology.sec)));
 
-		//saveServerGuiToText();
+		saveServerGuiToText();
 	}
 
 	public void finalize() throws Throwable {
@@ -858,6 +858,7 @@ public class SCM_Server extends Thread {
 	private void printAgentBalance(){
 		for(Agent a : agentList){
 			String agent = a.toString();
+			writeToGUI("\n-->" + a.getName() + ": " + getBankBalance(a));
 		}
 	}
 
@@ -883,7 +884,7 @@ public class SCM_Server extends Thread {
 	}
 
 	public void saveServerGuiToText() {
-		File outputFile = new File("C:/Users/David/agent5/agentReport_.txt");
+		File outputFile = new File("src/agentReport.txt");
 		//String guiContent = serverView.output.getText();
 		PrintWriter out = null;
 		try {
