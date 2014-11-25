@@ -478,7 +478,7 @@ public class SCM_Server extends Thread {
 	}
 
 	private void tacStatus() {
-
+		serverView.setText("");
 		writeToGUI("\n------------------ The TAC Game --------------------"
 					+ "\nThe Game: " + gameId
 					+ "\n Start: " + df.format(startTime)
