@@ -887,12 +887,15 @@ public class SCM_Server extends Thread {
 	}
 
 	public void saveServerGuiToText() {
-		Calendar currentDate = new GregorianCalendar();
+		/*Calendar currentDate = new GregorianCalendar();
 		int hourOfDay = currentDate.HOUR_OF_DAY;
 		int year = currentDate.YEAR;
 		int month = currentDate.MONTH;
-		int day = currentDate.DAY_OF_MONTH;
-		File outputFile = new File("src/Report/" + hourOfDay + "_" + day + "/" + month + "/" + year + "_agentReport.txt");
+		int day = currentDate.DAY_OF_MONTH;*/
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm");
+		/* + hourOfDay + "_" + day + "/" + month + "/" + year + */
+		File outputFile = new File("Report" + dateFormat.format(date) +"_agentReport.txt");
 		//String guiContent = serverView.output.getText();
 		PrintWriter out = null;
 		try {
