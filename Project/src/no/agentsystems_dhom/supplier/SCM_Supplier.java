@@ -203,9 +203,7 @@ public class SCM_Supplier {
 		String resp = server.send(msg.toString());
 		Message response = Message.buildMessage(resp);
 		agentOrders = AgentOrder.stringToList(response.getContent());
-		for(int i = 0; i < agentOrders.size(); i++){
-			System.out.println(i + ": " + agentOrders.get(i));
-		}
+	
 		this.activeAgentOrders.addAll(agentOrders);
 	}
 
@@ -271,23 +269,6 @@ public class SCM_Supplier {
 		return qPurchased / qOffered;
 	}
 
-	/**
-	 * A comparator for sorting an AgentRequest List by Agents reputation.
-	 */
-	private Comparator<AgentRequest> agentReputationComparator = new Comparator<AgentRequest>() {
-
-		@Override
-		public int compare(AgentRequest a1, AgentRequest a2) {
-			double a1Rep = getReputation(a1.getAgent(), a1.getSupplierId());
-			double a2Rep = getReputation(a2.getAgent(), a2.getSupplierId());
-			if (a1Rep < a2Rep)
-				return 1;
-			else
-				return -1;
-
-		}
-
-	};
 
 	private Comparator<AgentOrder> agentOrderDueDateComparator = new Comparator<AgentOrder>() {
 
@@ -297,8 +278,10 @@ public class SCM_Supplier {
 			int a2dueDate = a2.getDueDate();
 			if (a1dueDate < a2dueDate)
 				return 1;
-			else
+			else if(a1dueDate > a2dueDate)
 				return -1;
+			else
+				return 0;
 
 		}
 
