@@ -11,7 +11,7 @@ public class RFQ {
 	private int dueDate;
 	private int penalty;
 	private int reservePrice;
-	private String tenderer; //anbyder
+	private String bidder; //anbyder
 
 	public static final String RFQ_DIVIDER = "<RFQ_DIVIDER>";
 	public static final String RFQ_FIELDS_DIVIDER = "<RFQ_FIELDS_DIVIDER>";
@@ -24,7 +24,7 @@ public class RFQ {
 		this.dueDate = dueDate;
 		this.penalty = penalty;
 		this.reservePrice = reservePrice;
-		this.tenderer = tenderer;
+		this.bidder = tenderer;
 	}
 
 	public RFQ(int id, int PC, int quantity, int dueDate, int penalty,
@@ -36,7 +36,7 @@ public class RFQ {
 		this.dueDate = dueDate;
 		this.penalty = penalty;
 		this.reservePrice = reservePrice;
-		this.tenderer = tenderer;
+		this.bidder = tenderer;
 	}
 	
 	public int getRFQId(){
@@ -85,9 +85,7 @@ public class RFQ {
 			if(r == null) continue;
 			rfqList.add(r);
 		}
-		
 		if(rfqList.size() == 0) return null;
-		
 		return rfqList;
 	}
 
@@ -95,7 +93,7 @@ public class RFQ {
 	public String toString() {
 		return RFQId + RFQ_FIELDS_DIVIDER + PC + RFQ_FIELDS_DIVIDER + quantity
 				+ RFQ_FIELDS_DIVIDER + dueDate + RFQ_FIELDS_DIVIDER + penalty
-				+ RFQ_FIELDS_DIVIDER + reservePrice + RFQ_FIELDS_DIVIDER + tenderer;
+				+ RFQ_FIELDS_DIVIDER + reservePrice + RFQ_FIELDS_DIVIDER + bidder;
 	}
 
 	public static RFQ toRFQ(String rfqstring) {
@@ -104,8 +102,6 @@ public class RFQ {
 		
 		return new RFQ(Integer.parseInt(RFQs[0]), Integer.parseInt(RFQs[1]),
 				Integer.parseInt(RFQs[2]), Integer.parseInt(RFQs[3]),
-				Integer.parseInt(RFQs[4]), Integer.parseInt(RFQs[5]), RFQs[6]);
-
+	     		Integer.parseInt(RFQs[4]), Integer.parseInt(RFQs[5]), RFQs[6]);
 	}
-
 }

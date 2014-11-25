@@ -95,7 +95,7 @@ public class SupplierOffer {
 
 		return new SupplierOffer(offFields[0], offFields[1],
 				Double.parseDouble(offFields[2]),
-				Integer.parseInt(offFields[3]), Integer.parseInt(offFields[4]), agentRequest);
+				Integer.parseInt(offFields[3]), Integer.parseInt(offFields[4]),
+				agentRequest);
 	}
-
 }

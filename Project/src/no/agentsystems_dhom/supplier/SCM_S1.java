@@ -55,12 +55,10 @@ public class SCM_S1 extends SCM_Supplier {
 			System.out.println("ERROR : " + e);
 			e.printStackTrace();
 		}
-
 	}
 
 	public static void main(String[] args) {
 		SCM ser = initServer(args);
 		new SCM_S1(ser);
 	}
-
 }
