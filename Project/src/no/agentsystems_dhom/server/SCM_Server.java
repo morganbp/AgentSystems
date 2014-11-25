@@ -227,7 +227,7 @@ public class SCM_Server extends Thread {
 	}
 
 
-	private synchronized void processDeliverySchedule() {
+	private void processDeliverySchedule() {
 		// get information from deliverySchedule of each agent
 
 		for (Order order : todaysDeliverySchedule) {
@@ -695,7 +695,7 @@ public class SCM_Server extends Thread {
 	 * resp.setContent(strSupplierComponents); return resp; }
 	 */
 
-	public Message productSchedule(Message kqml) {
+	public synchronized Message productSchedule(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
@@ -705,7 +705,7 @@ public class SCM_Server extends Thread {
 		return resp;
 	}
 
-	public Message deliverySchedule(Message kqml) {
+	public synchronized Message deliverySchedule(Message kqml) {
 		Message resp = new Message();
 		String name = kqml.getSender();
 		resp.setReceiver(name);
