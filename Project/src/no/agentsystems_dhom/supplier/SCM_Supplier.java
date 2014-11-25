@@ -214,7 +214,7 @@ public class SCM_Supplier {
 	 * from the order and update the inventory.
 	 */
 	protected void handleOrders(String className) {
-		if (this.activeAgentOrders.size() <= 0)
+		if (this.activeAgentOrders.size() == 0)
 			return;
 		
 		List<AgentOrder> componentBundle = new ArrayList<AgentOrder>();
