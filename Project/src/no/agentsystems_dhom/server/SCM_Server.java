@@ -611,8 +611,6 @@ public class SCM_Server extends Thread {
 		String messageContent = kqml.getContent();
 		List<Offer> offers = Offer.stringToList(messageContent);
 		agentOffers.addAll(offers);
-		writeToGUI("\n" + name + " has sent the server " + offers.size()
-				+ " offers.");
 
 		resp.setContent("" + offers.size());
 		return resp;
@@ -689,8 +687,6 @@ public class SCM_Server extends Thread {
 				.stringToList(content);
 		supplierOffers.addAll(newSupplierOffers);
 		resp.setContent(newSupplierOffers.size() + "");
-		writeToGUI("\nOffers from Supplier: " + supplierOffers.size());
-
 		return resp;
 	}
 
