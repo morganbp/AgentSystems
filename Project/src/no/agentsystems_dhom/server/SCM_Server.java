@@ -315,7 +315,6 @@ private void printNumberOfPCs()
 
 	private void printUnprocessedOrders() {
 		int numOrders = todaysCustomerOrders.size();
-		System.out.println("hei " + numOrders);
 		writeToGUI("\nUnprocessed orders: " + numOrders );
 		
 	}
@@ -625,8 +624,7 @@ private void printNumberOfPCs()
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		// Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		writeToGUI("\nRFQs from " + name + ": " + RFQs.size());
-
+		
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
 	}
