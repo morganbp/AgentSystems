@@ -12,7 +12,12 @@ import java.util.Map;
 
 import no.agentsystems_dhom.agent.Assembly;
 import no.agentsystems_dhom.agent.Inventory;
+import no.agentsystems_dhom.agent.SCM_A1;
+import no.agentsystems_dhom.agent.SCM_A2;
+import no.agentsystems_dhom.agent.SCM_A3;
 import no.agentsystems_dhom.customer.PC;
+import no.agentsystems_dhom.customer.SCM_C1;
+import no.agentsystems_dhom.supplier.SCM_S1;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -37,6 +42,10 @@ public class SCM_Server extends Thread {
 	// gameId is the date and time for a game round
 
 	private String gameId;
+	
+	//Main args
+	
+	private static String[] mainArgs;
 
 	// date format
 
@@ -44,7 +53,7 @@ public class SCM_Server extends Thread {
 
 	// the clock count in seconds
 
-	private int interval = -30;
+	private int interval = -5;
 
 	private int day = 0;
 
@@ -116,6 +125,7 @@ public class SCM_Server extends Thread {
 
 	public static void main(String[] args) {
 		try {
+			mainArgs = args;
 			SCM_Server server = new SCM_Server();
 			server.start();
 
@@ -149,8 +159,10 @@ public class SCM_Server extends Thread {
 			ncRef.rebind(path, href);
 			System.out.println("TACServer starting ...");
 
+			startClients();
 			// wait for invocations from clients
 			orb.run();
+			
 
 		} catch (Exception e) {
 			System.err.println("ERROR: " + e);
@@ -158,6 +170,43 @@ public class SCM_Server extends Thread {
 		}
 
 		System.out.println("TACServer Exiting ...");
+	}
+	
+	public static void startClients()
+	{
+		try{
+			new Thread() {
+				public void run() {
+					SCM_A1.main(mainArgs);
+				}
+			}.start();
+			new Thread() {
+				public void run() {
+					SCM_A2.main(mainArgs);
+				}
+			}.start();
+			new Thread() {
+				public void run() {
+					SCM_A3.main(mainArgs);
+				}
+			}.start();
+			new Thread() {
+				public void run() {
+					SCM_S1.main(mainArgs);
+				}
+			}.start();
+			new Thread() {
+				public void run() {
+					SCM_C1.main(mainArgs);
+				}
+			}.start();
+		}
+		catch(Exception ex)
+		{
+			System.err.println("ERROR: " + ex);
+			ex.printStackTrace(System.out);
+		}
+		
 	}
 
 	@Override
