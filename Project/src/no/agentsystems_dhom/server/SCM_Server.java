@@ -266,6 +266,7 @@ public class SCM_Server extends Thread {
 					writeToGUI("\nAggregate customer orders: "
 							+ customerOrders.size());
 					printAgentBalance();
+					printUnprocessedOrders();
 					if (day == 29)
 						announceAWinningAgent();
 				}
@@ -280,6 +281,12 @@ public class SCM_Server extends Thread {
 			}
 
 		}
+	}
+
+	private void printUnprocessedOrders() {
+		int numOrders = customerOrders.size() - todaysCustomerOrders.size();
+		writeToGUI("\nUnprocessed orders: " + numOrders );
+		
 	}
 
 	private void processDeliverySchedule() {
