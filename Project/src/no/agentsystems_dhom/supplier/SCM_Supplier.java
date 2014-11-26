@@ -222,6 +222,7 @@ public class SCM_Supplier {
 		for(AgentOrder order : highPriorityOrders){
 			componentBundle.add(order);
 		}
+		highPriorityOrders.clear();
 		// Sorting by duedate
 		Collections.sort(this.activeAgentOrders, agentOrderDueDateComparator);
 		// Gets the first element in the sorted list
