@@ -159,7 +159,9 @@ public class SCM_Server extends Thread {
 			ncRef.rebind(path, href);
 			System.out.println("TACServer starting ...");
 
+			// Starts the clients
 			startClients();
+			
 			// wait for invocations from clients
 			orb.run();
 			

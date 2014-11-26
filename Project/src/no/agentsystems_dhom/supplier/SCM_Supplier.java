@@ -121,22 +121,7 @@ public class SCM_Supplier {
 		String bidder, int day) {
 		
 		Collections.shuffle(agentRequests);
-		List<String> agents = new ArrayList<String>();
-		for(AgentRequest a : agentRequests){
-			boolean newAgent = true;
-			for(String name : agents){
-				if(a.getAgent().equals(name)){
-					newAgent = false;
-				}
-			}
-			if(newAgent){
-				agents.add(a.getAgent());
-			}
-		}
-		System.out.println("agents which sent rfqs:");
-		for(String a : agents){
-			System.out.println(a);
-		}
+
 		// Sort AgentRequests by decreasing reputation
 		// Collections.sort(agentRequests, agentReputationComparator);
 		for (AgentRequest agentRequest : agentRequests) {
