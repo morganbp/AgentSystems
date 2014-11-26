@@ -264,7 +264,7 @@ public class SCM_Server extends Thread {
 					processStorage();
 					updateBalance();
 					writeToGUI("\nAggregate customer orders: "
-							+ todaysCustomerOrders.size());
+							+ customerOrders.size());
 					printAgentBalance();
 					printUnprocessedOrders();
 					
@@ -285,7 +285,7 @@ public class SCM_Server extends Thread {
 	}
 
 	private void printUnprocessedOrders() {
-		int numOrders = customerOrders.size();
+		int numOrders = todaysCustomerOrders.size();
 		System.out.println("hei " + numOrders);
 		writeToGUI("\nUnprocessed orders: " + numOrders );
 		
