@@ -120,7 +120,7 @@ public class SCM_Agent {
 						AgentRequest agentReq = new AgentRequest(sId, cid,
 								dueDate, quantity, 0, className);
 						agentRFQs.add(agentReq);
-						//cDemand[getIndex(cid)][dueDate] = 0;
+						cDemand[getIndex(cid)][dueDate] = 0;
 					}
 				}
 			}
@@ -234,7 +234,7 @@ public class SCM_Agent {
 
 	protected void productSchedule(String agent, int day) {
 		// make a product schedule list
-		productSchedule = "null";
+		productSchedule = "";
 
 		// Copy the orders that have the dueDate = day + 2 from aggregate orders
 		// to products and remove them from aggregate
