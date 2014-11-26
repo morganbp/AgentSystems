@@ -261,6 +261,7 @@ public class SCM_Server extends Thread {
 				}
 
 				if (time == 9 && isOn) {
+					printNumberOfPCs();
 					processStorage();
 					updateBalance();
 					writeToGUI("\nAggregate customer orders: "
@@ -270,7 +271,7 @@ public class SCM_Server extends Thread {
 					
 					if (day == 29)
 						announceAWinningAgent();
-				}
+			}
 				interval++;
 
 				sleep(TAC_Ontology.sec);
@@ -284,12 +285,41 @@ public class SCM_Server extends Thread {
 		}
 	}
 
+
+private void printNumberOfPCs()
+{
+	StringBuilder builder = new StringBuilder();
+	builder.append("\nNumber of PCs: ");
+	
+	boolean firstRun = true;
+	for(Agent agent : agentList)
+	{
+		if(firstRun)
+		{
+			firstRun = false;
+		}
+		else
+		{
+			builder.append(", ");
+		}
+		int[] numberOfPCs = agent.getInventory().getNumberOfPCs();
+		int numPCs = 0;
+		for(int q : numberOfPCs){
+			numPCs += q;
+		}
+		builder.append(agent.getName() + ": " + numPCs);
+	}
+	writeToGUI(builder.toString());
+	
+}
+
 	private void printUnprocessedOrders() {
 		int numOrders = todaysCustomerOrders.size();
 		System.out.println("hei " + numOrders);
 		writeToGUI("\nUnprocessed orders: " + numOrders );
 		
 	}
+
 
 	private void processDeliverySchedule() {
 		if(todaysDeliverySchedule.size() == 0) return;

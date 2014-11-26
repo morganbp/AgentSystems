@@ -46,7 +46,7 @@ public class Inventory {
 	 * @return true if there is enough PCs, false if not.
 	 */
 	public boolean isEnoughPCs(int sku, int quantity) {
-		if (numberOfPCs[sku - 1] < quantity) {
+		if (numberOfPCs[sku - 1] > quantity) {
 			return true;
 		} else {
 			return false;
