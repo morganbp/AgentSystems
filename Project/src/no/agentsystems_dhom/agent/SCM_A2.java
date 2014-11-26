@@ -75,7 +75,7 @@ public class SCM_A2 extends SCM_Agent {
 							// less.
 							// If the quantity is more, then the due_date must
 							// be greater
-							// than 7 days after the day we are at now.
+							// than 7 days and the must be more than the remaining days of the game.
 							if (rfq.getQuantity() < 15) {
 								createOffer(CLASS_NAME,
 										Integer.toString(rfq.getRFQId()),

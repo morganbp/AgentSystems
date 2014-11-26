@@ -27,6 +27,7 @@ public class SCM_A1 extends SCM_Agent {
 					startTheGame();
 					agentRegistering(CLASS_NAME, 1512631);
 				} else if (interval == TAC_Ontology.gameLength) {
+					numberOfOffers = 0;
 					closeTheGame();
 				}
 

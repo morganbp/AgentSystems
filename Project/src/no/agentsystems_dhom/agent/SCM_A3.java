@@ -83,7 +83,7 @@ public class SCM_A3 extends SCM_Agent {
 											(double) rfq.getReservePrice(), rfq);
 								}
 							} else {
-								if (rfq.getQuantity() > 13) {
+								if (rfq.getQuantity() >= 10) {
 									createOffer(CLASS_NAME,
 											Integer.toString(rfq.getRFQId()),
 											(double) rfq.getReservePrice(), rfq);
