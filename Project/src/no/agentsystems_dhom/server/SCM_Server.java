@@ -267,6 +267,8 @@ public class SCM_Server extends Thread {
 					writeToGUI("\nAggregate customer orders: "
 							+ customerOrders.size());
 					printAgentBalance();
+					printUnprocessedOrders();
+					
 					if (day == 29)
 						announceAWinningAgent();
 			}
@@ -283,9 +285,9 @@ public class SCM_Server extends Thread {
 		}
 	}
 
+
 private void printNumberOfPCs()
 {
-	Agent currentAgent;
 	StringBuilder builder = new StringBuilder();
 	builder.append("\nNumber of PCs: ");
 	
@@ -310,6 +312,14 @@ private void printNumberOfPCs()
 	writeToGUI(builder.toString());
 	
 }
+
+	private void printUnprocessedOrders() {
+		int numOrders = todaysCustomerOrders.size();
+		System.out.println("hei " + numOrders);
+		writeToGUI("\nUnprocessed orders: " + numOrders );
+		
+	}
+
 
 	private void processDeliverySchedule() {
 		if(todaysDeliverySchedule.size() == 0) return;
