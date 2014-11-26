@@ -21,11 +21,6 @@ public class Agent {
 	public String getName(){
 		return name;
 	}
-	
-	//WTF? Is id componentId? Why not put it in inventory?
-	public int componentId(){
-		return id;
-	}
 
 	public Inventory getInventory() {
 		return _inventory;

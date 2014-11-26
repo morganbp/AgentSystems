@@ -120,39 +120,11 @@ public class SCM_Agent {
 						AgentRequest agentReq = new AgentRequest(sId, cid,
 								dueDate, quantity, 0, className);
 						agentRFQs.add(agentReq);
-						//cDemand[getIndex(cid)][dueDate] = 0;
+						cDemand[getIndex(cid)][dueDate] = 0;
 					}
 				}
 			}
 		}
-		/*
-		for(int cid : components){
-			List<Supplier> suppliers = new ArrayList<Supplier>();
-			for(int sID = 0; sID < numberOfSuppliers; sID++){
-				Supplier s = new Supplier(sID);
-				for(Component c : s.getComponents()){
-					if(c.getId() == cid){
-						suppliers.add(s);
-						break;
-					}
-				}
-			}
-			int dueDate = day + 2;
-			for(Supplier s :suppliers){
-				for(int i = 0; i < 5; i++){
-					
-					if(dueDate > TAC_Ontology.numberOfTacDays) continue;
-					int quantity = cDemand[getIndex(cID)][dueDate];
-					if(quantity > 0){
-						AgentRequest agentReq = new AgentRequest(sId, cid,
-								dueDate, quantity, 0, className);
-						agentRFQs.add(agentReq);
-					}
-				}
-			}
-
-			cDemand[getIndex(cid)][dueDate] = 0;
-		}*/
 		newOrders.clear();
 
 		return agentRFQs;
@@ -262,7 +234,7 @@ public class SCM_Agent {
 
 	protected void productSchedule(String agent, int day) {
 		// make a product schedule list
-		productSchedule = "null";
+		productSchedule = "";
 
 		// Copy the orders that have the dueDate = day + 2 from aggregate orders
 		// to products and remove them from aggregate
@@ -321,21 +293,6 @@ public class SCM_Agent {
 
 		sendDeliverySchedule(agent);
 	}
-
-	/*
-	 * protected void getSupplierComponents(String className) { String content =
-	 * ""; Message kqml = Util.buildKQML(TAC_Ontology.getSupplierComponents,
-	 * className, content); String responseString =
-	 * server.send(kqml.toString()); Message response =
-	 * Message.buildMessage(responseString); List<AgentOrder> componentBundle =
-	 * AgentOrder.stringToList(response .getContent()); List<AgentOrder>
-	 * supplierComponents = new ArrayList<AgentOrder>(); for (AgentOrder
-	 * component : componentBundle) { if
-	 * (component.getCustomer().equals(className)) {
-	 * supplierComponents.add(component); } }
-	 * agentView.append("\n#Supplier Offers : " + supplierComponents.size());
-	 * //Handle inventory }
-	 */
 
 	/**
 	 * Send the delivery schedule to server
