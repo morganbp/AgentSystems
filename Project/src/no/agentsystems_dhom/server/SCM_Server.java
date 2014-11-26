@@ -771,8 +771,6 @@ private void printNumberOfPCs()
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
 		resp.setContent(components.size() + "");
-		writeToGUI("\n" + name + " has sent the server " + components.size()
-				+ " components.");
 
 		return resp;
 	}
