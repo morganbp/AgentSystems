@@ -315,7 +315,6 @@ private void printNumberOfPCs()
 
 	private void printUnprocessedOrders() {
 		int numOrders = todaysCustomerOrders.size();
-		System.out.println("hei " + numOrders);
 		writeToGUI("\nUnprocessed orders: " + numOrders );
 		
 	}
@@ -625,8 +624,7 @@ private void printNumberOfPCs()
 		List<RFQ> RFQs = RFQ.stringToList(stringRFQs);
 		// Saving the RFQs to the server's RFQ list
 		TodaysRFQs = RFQs;
-		writeToGUI("\nRFQs from " + name + ": " + RFQs.size());
-
+		
 		resp.setContent(TodaysRFQs.size() + "");
 		return resp;
 	}
@@ -650,8 +648,6 @@ private void printNumberOfPCs()
 		String messageContent = kqml.getContent();
 		List<Offer> offers = Offer.stringToList(messageContent);
 		agentOffers.addAll(offers);
-		writeToGUI("\n" + name + " has sent the server " + offers.size()
-				+ " offers.");
 
 		resp.setContent("" + offers.size());
 		return resp;
@@ -728,8 +724,6 @@ private void printNumberOfPCs()
 				.stringToList(content);
 		supplierOffers.addAll(newSupplierOffers);
 		resp.setContent(newSupplierOffers.size() + "");
-		writeToGUI("\nOffers from Supplier: " + supplierOffers.size());
-
 		return resp;
 	}
 
@@ -777,8 +771,6 @@ private void printNumberOfPCs()
 		List<AgentOrder> components = AgentOrder.stringToList(messageContent);
 		supplierComponents.addAll(components);
 		resp.setContent(components.size() + "");
-		writeToGUI("\n" + name + " has sent the server " + components.size()
-				+ " components.");
 
 		return resp;
 	}
